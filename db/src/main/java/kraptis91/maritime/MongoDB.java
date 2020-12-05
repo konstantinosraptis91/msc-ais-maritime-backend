@@ -8,7 +8,7 @@ public enum MongoDB {
 
   MARITIME("maritime");
 
-  private MongoDatabase database;
+  private final MongoDatabase database;
 
   MongoDB(String dbName) {
     MongoClient mongoClient = new MongoClient("localhost", 27017);
