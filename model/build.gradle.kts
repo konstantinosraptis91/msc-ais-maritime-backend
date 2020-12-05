@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     testImplementation("junit:junit:4.13")
-    api("org.apache.commons:commons-math3:3.6.1")
-    implementation("com.google.guava:guava:29.0-jre")
+    implementation("javax.validation:validation-api:2.0.1.Final")
+    implementation("org.hibernate.validator:hibernate-validator:6.1.6.Final")
+    implementation("org.glassfish:javax.el:3.0.0")
 }

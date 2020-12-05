@@ -1,5 +1,9 @@
 package kraptis91.maritime.model;
 
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.*;
+
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public class Vessel {
 
@@ -10,67 +14,60 @@ public class Vessel {
    * identifying a ship. It is programmed into all AIS systems and VHF electronics on board of the
    * vessel and provides an internationally standardized number for contacting the vessel.
    */
+  @Range(
+      min = 100000000,
+      max = 999999999,
+      message = "Invalid maritime mobile service identity. The MMSI should be a 9 digit number.")
   private final int mmsi;
 
   /** IMO ship identification number (7 digits). */
+  @Range(
+      min = 1000000,
+      max = 9999999,
+      message = "Invalid ship identification number. The IMO should be a 7 digit number.")
   private final int imo;
 
   /** Name of the vessel (max 20 characters). */
-  private final String vesselName;
+  @NotNull private final String vesselName;
 
   /**
    * International radio call sign (max 7 characters), assigned to the vessel by its country of
    * registry.
    */
-  private String callSign;
+  @NotNull private final String callSign;
 
   /**
    * ETA (estimated time of arrival) in format dd-mm hh:mm (day, month, hour, minute) – UTC time
    * zone.
    */
-  private String eta;
+  @NotNull private final String eta;
 
   /** Allowed values: 0.1-25.5 meters */
-  private double draught;
+  @DecimalMin(value = "0.1", message = "Invalid draught value, draught cannot be less than 0.1")
+  @DecimalMax(value = "25.5", message = "Invalid draught value, draught cannot be more than 25.5")
+  private final double draught;
 
-  private int shipType;
+  private final int shipType;
 
   /** Destination of this trip (manually entered). */
-  private String destination;
-
-  private double speed;
+  @NotNull private final String destination;
 
   private VesselTrajectory vesselTrajectory;
 
-  public Vessel(int mmsi, int imo, String vesselName) {
-    this.mmsi = mmsi;
-    this.imo = imo;
-    this.vesselName = vesselName;
+  private Vessel(Builder builder) {
+    this.mmsi = builder.mmsi;
+    this.imo = builder.imo;
+    this.vesselName = builder.vesselName;
+    this.callSign = builder.callSign;
+    this.eta = builder.eta;
+    this.draught = builder.draught;
+    this.shipType = builder.shipType;
+    this.destination = builder.destination;
   }
 
-  public void setCallSign(String callSign) {
-    this.callSign = callSign;
-  }
-
-  public void setEta(String eta) {
-    this.eta = eta;
-  }
-
-  public void setDraught(double draught) {
-    this.draught = draught;
-  }
-
-  public void setShipType(int shipType) {
-    this.shipType = shipType;
-  }
-
-  public void setDestination(String destination) {
-    this.destination = destination;
-  }
-
-  public void setSpeed(double speed) {
-    this.speed = speed;
-  }
+  // -------------------------------------------------------------------------------------------------------------------
+  // Getters
+  // -------------------------------------------------------------------------------------------------------------------
 
   public int getMmsi() {
     return mmsi;
@@ -104,16 +101,16 @@ public class Vessel {
     return destination;
   }
 
-  public double getSpeed() {
-    return speed;
-  }
-
   public VesselTrajectory getVesselTrajectory() {
     if (vesselTrajectory == null) {
       vesselTrajectory = new VesselTrajectory();
     }
     return vesselTrajectory;
   }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // toString
+  // -------------------------------------------------------------------------------------------------------------------
 
   @Override
   public String toString() {
@@ -138,10 +135,132 @@ public class Vessel {
         + ", destination='"
         + destination
         + '\''
-        + ", speed="
-        + speed
         + ", vesselTrajectory="
-        + getVesselTrajectory()
+        + vesselTrajectory
         + '}';
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Fluent API interfaces
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public interface VesselCallSign {
+    VesselEta withCallSign(String callSign);
+  }
+
+  public interface VesselEta {
+    VesselDraught withEta(String eta);
+  }
+
+  public interface VesselDraught {
+    VesselShipType withDraught(double draught);
+  }
+
+  public interface VesselShipType {
+    VesselDestination withShipType(int shipType);
+  }
+
+  public interface VesselDestination {
+    VesselBuild withDestination(String destination);
+  }
+
+  public interface VesselBuild {
+    Vessel build();
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Vessel POJO builder
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static class Builder
+      implements VesselCallSign,
+          VesselEta,
+          VesselDraught,
+          VesselShipType,
+          VesselDestination,
+          VesselBuild {
+
+    // mandatory fields
+    private final int mmsi;
+    private final int imo;
+    private final String vesselName;
+
+    // optional fields
+    private String callSign;
+    private String eta;
+    private double draught;
+    private int shipType;
+    private String destination;
+
+    public Builder(int mmsi, int imo, String vesselName) {
+      this.mmsi = mmsi;
+      this.imo = imo;
+      this.vesselName = vesselName;
+    }
+
+    /**
+     * Set the International radio call sign, assigned to the vessel by its country of registry.
+     *
+     * @param callSign The International radio call sign (max 7 characters)
+     * @return The Builder
+     */
+    @Override
+    public VesselEta withCallSign(String callSign) {
+      this.callSign = callSign;
+      return this;
+    }
+
+    /**
+     * Set the estimate time of arrival.
+     *
+     * @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time
+     * @return The Builder
+     */
+    @Override
+    public VesselDraught withEta(String eta) {
+      this.eta = eta;
+      return this;
+    }
+
+    /**
+     * Set the vessel draught.
+     *
+     * @param draught The vessel draught (Min = 0.1, Max = 25.5)
+     * @return The Builder
+     */
+    @Override
+    public VesselShipType withDraught(double draught) {
+      this.draught = draught;
+      return this;
+    }
+
+    /**
+     * Set the ship type code.
+     *
+     * @param shipType The ship type code
+     * @return The Builder
+     */
+    @Override
+    public VesselDestination withShipType(int shipType) {
+      this.shipType = shipType;
+      return this;
+    }
+
+    /**
+     * Set the destination.
+     *
+     * @param destination The destination of the trip
+     * @return The Builder
+     */
+    @Override
+    public VesselBuild withDestination(String destination) {
+      this.destination = destination;
+      return this;
+    }
+
+    @Override
+    public Vessel build() {
+      return new Vessel(this);
+    }
   }
 }

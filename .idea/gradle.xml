@@ -14,9 +14,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/api" />
-            <option value="$PROJECT_DIR$/builder" />
             <option value="$PROJECT_DIR$/db" />
             <option value="$PROJECT_DIR$/model" />
+            <option value="$PROJECT_DIR$/retriever" />
           </set>
         </option>
       </GradleProjectSettings>
