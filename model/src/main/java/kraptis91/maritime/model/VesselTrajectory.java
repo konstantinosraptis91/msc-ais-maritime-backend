@@ -9,6 +9,25 @@ public class VesselTrajectory {
   private Set<VesselTrajectoryPoint> pointSet;
 
   /**
+   * Add a point to trajectory.
+   *
+   * @param point The point
+   */
+  public VesselTrajectory add(VesselTrajectoryPoint point) {
+    getPointSet().add(point);
+    return this;
+  }
+
+  /**
+   * The the size of the trajectory.
+   *
+   * @return The size
+   */
+  public int size() {
+    return getPointSet().size();
+  }
+
+  /**
    * Get the vessel trajectory as points.
    *
    * @return The point set
@@ -18,5 +37,10 @@ public class VesselTrajectory {
       pointSet = new LinkedHashSet<>();
     }
     return pointSet;
+  }
+
+  @Override
+  public String toString() {
+    return "VesselTrajectory{" + "pointSet=" + getPointSet() + '}';
   }
 }

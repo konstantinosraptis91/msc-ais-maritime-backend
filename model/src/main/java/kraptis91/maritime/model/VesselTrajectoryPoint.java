@@ -8,9 +8,19 @@ public class VesselTrajectoryPoint {
   private final double longitude;
   private final double latitude;
 
-  public VesselTrajectoryPoint(double longitude, double latitude) {
+  private VesselTrajectoryPoint(double longitude, double latitude) {
     this.longitude = longitude;
     this.latitude = latitude;
+  }
+
+  /**
+   * Create a new vessel trajectory point.
+   *
+   * @param longitude The longitude
+   * @param latitude The latitude
+   */
+  public static VesselTrajectoryPoint of(double longitude, double latitude) {
+    return new VesselTrajectoryPoint(longitude, latitude);
   }
 
   public double getLongitude() {
@@ -47,5 +57,10 @@ public class VesselTrajectoryPoint {
 
     return Objects.equals(this.longitude, other.longitude)
         && Objects.equals(this.latitude, other.latitude);
+  }
+
+  @Override
+  public String toString() {
+    return "VesselTrajectoryPoint{" + "longitude=" + longitude + ", latitude=" + latitude + '}';
   }
 }

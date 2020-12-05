@@ -10,10 +10,13 @@ public class Vessel {
    * identifying a ship. It is programmed into all AIS systems and VHF electronics on board of the
    * vessel and provides an internationally standardized number for contacting the vessel.
    */
-  private int mmsi;
+  private final int mmsi;
 
   /** IMO ship identification number (7 digits). */
-  private int imo;
+  private final int imo;
+
+  /** Name of the vessel (max 20 characters). */
+  private final String vesselName;
 
   /**
    * International radio call sign (max 7 characters), assigned to the vessel by its country of
@@ -27,13 +30,8 @@ public class Vessel {
    */
   private String eta;
 
-  /** Name of the vessel (max 20 characters). */
-  private String vesselName;
-
   /** Allowed values: 0.1-25.5 meters */
   private double draught;
-
-  private VesselTrajectory vesselTrajectory;
 
   private int shipType;
 
@@ -42,13 +40,40 @@ public class Vessel {
 
   private double speed;
 
-  private VesselTrajectory trajectory;
+  private VesselTrajectory vesselTrajectory;
 
-  private Vessel(Builder builder) {
-    this.imo = builder.imo;
-    this.vesselName = builder.vesselName;
-    this.draught = builder.draught;
-    this.vesselTrajectory = builder.vesselTrajectory;
+  public Vessel(int mmsi, int imo, String vesselName) {
+    this.mmsi = mmsi;
+    this.imo = imo;
+    this.vesselName = vesselName;
+  }
+
+  public void setCallSign(String callSign) {
+    this.callSign = callSign;
+  }
+
+  public void setEta(String eta) {
+    this.eta = eta;
+  }
+
+  public void setDraught(double draught) {
+    this.draught = draught;
+  }
+
+  public void setShipType(int shipType) {
+    this.shipType = shipType;
+  }
+
+  public void setDestination(String destination) {
+    this.destination = destination;
+  }
+
+  public void setSpeed(double speed) {
+    this.speed = speed;
+  }
+
+  public int getMmsi() {
+    return mmsi;
   }
 
   public int getImo() {
@@ -59,12 +84,28 @@ public class Vessel {
     return vesselName;
   }
 
+  public String getCallSign() {
+    return callSign;
+  }
+
+  public String getEta() {
+    return eta;
+  }
+
   public double getDraught() {
     return draught;
   }
 
-  public void setDraught(double draught) {
-    this.draught = draught;
+  public int getShipType() {
+    return shipType;
+  }
+
+  public String getDestination() {
+    return destination;
+  }
+
+  public double getSpeed() {
+    return speed;
   }
 
   public VesselTrajectory getVesselTrajectory() {
@@ -74,33 +115,33 @@ public class Vessel {
     return vesselTrajectory;
   }
 
-  public static class Builder {
-
-    // mandatory fields
-    private int imo;
-    private String vesselName;
-
-    // non mandatory fields
-    private double draught;
-    private VesselTrajectory vesselTrajectory;
-
-    public Builder(int imo, String vesselName) {
-      this.imo = imo;
-      this.vesselName = vesselName;
-    }
-
-    public Builder withDraught(double draught) {
-      this.draught = draught;
-      return Builder.this;
-    }
-
-    public Builder withVesselTrajectory(VesselTrajectory vesselTrajectory) {
-      this.vesselTrajectory = vesselTrajectory;
-      return Builder.this;
-    }
-
-    public Vessel build() {
-      return new Vessel(Builder.this);
-    }
+  @Override
+  public String toString() {
+    return "Vessel{"
+        + "mmsi="
+        + mmsi
+        + ", imo="
+        + imo
+        + ", vesselName='"
+        + vesselName
+        + '\''
+        + ", callSign='"
+        + callSign
+        + '\''
+        + ", eta='"
+        + eta
+        + '\''
+        + ", draught="
+        + draught
+        + ", shipType="
+        + shipType
+        + ", destination='"
+        + destination
+        + '\''
+        + ", speed="
+        + speed
+        + ", vesselTrajectory="
+        + getVesselTrajectory()
+        + '}';
   }
 }
