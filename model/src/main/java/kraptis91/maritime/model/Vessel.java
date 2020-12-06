@@ -136,7 +136,7 @@ public class Vessel {
         + destination
         + '\''
         + ", vesselTrajectory="
-        + vesselTrajectory
+        + getVesselTrajectory()
         + '}';
   }
 
