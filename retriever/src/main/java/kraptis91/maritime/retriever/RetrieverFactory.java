@@ -8,4 +8,8 @@ public class RetrieverFactory {
   public static MaritimeDataRetriever createMaritimeDataRetriever() {
     return new MaritimeDataRetrieverImpl();
   }
+
+  public static MaritimeDemoDataRetriever createMaritimeDemoDataRetriever() {
+    return new MaritimeDataRetrieverImpl();
+  }
 }

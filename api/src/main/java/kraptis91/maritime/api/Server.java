@@ -1,7 +1,7 @@
 package kraptis91.maritime.api;
 
 import io.javalin.Javalin;
-import kraptis91.maritime.api.endpoint.VesselController;
+import kraptis91.maritime.api.controller.VesselController;
 import kraptis91.maritime.api.enums.ServerConfig;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 7/12/2020. */
@@ -15,8 +15,12 @@ public class Server {
 
   public void start() {
     app = Javalin.create().start(ServerConfig.INSTANCE.getPort());
+    bindControllers();
+  }
+
+  private void bindControllers() {
     app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
-    app.get("/vessels", VesselController.getAllVessels);
+    app.get("/vessels/:shiptype", VesselController.getVesselsByShipType);
   }
 
   //  public void stop() {
