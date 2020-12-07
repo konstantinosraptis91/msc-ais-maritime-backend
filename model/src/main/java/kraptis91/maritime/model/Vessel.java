@@ -154,7 +154,7 @@ public class Vessel {
         + country
         + '\''
         + ", vesselTrajectory="
-        + vesselTrajectory
+        + getVesselTrajectory()
         + '}';
   }
 
