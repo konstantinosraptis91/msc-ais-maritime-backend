@@ -18,5 +18,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("kraptis91.maritime.api.Server")
+    mainClass.set("kraptis91.maritime.api.Application")
 }
