@@ -8,6 +8,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,11 +24,12 @@ public class VesselTest {
     // create a new full vessel
     Vessel vessel =
         new Vessel.Builder(999999999, 9999999, "__VESSEL_NAME")
-            .withCallSign("__CALL_SIGN")
-            .withEta("__ETA")
+            .withCallSign("__SIGN")
+            .withEta(LocalDateTime.now())
             .withDraught(25.5)
-            .withShipType(1)
+            .withShipType("__SHIP_TYPE_NAME")
             .withDestination("__VESSEL_DESTINATION")
+            .withCountry("__COUNTRY_NAME")
             .build();
 
     // set vessel's trajectory
@@ -49,12 +51,12 @@ public class VesselTest {
     Validator validator = factory.getValidator();
     Set<ConstraintViolation<Vessel>> vesselViolations = validator.validate(vessel);
 
-    Assert.assertEquals(0, vesselViolations.size());
-
     for (ConstraintViolation<Vessel> violation : vesselViolations) {
       // System.out.println(violation.getMessage());
       LOGGER.log(Level.SEVERE, violation.getMessage());
     }
+
+    Assert.assertEquals(0, vesselViolations.size());
 
     for (VesselTrajectoryPoint vesselTrajectoryPoint : vessel.getVesselTrajectory().getPointSet()) {
       Set<ConstraintViolation<VesselTrajectoryPoint>> vesselTrajectoryPointViolations =

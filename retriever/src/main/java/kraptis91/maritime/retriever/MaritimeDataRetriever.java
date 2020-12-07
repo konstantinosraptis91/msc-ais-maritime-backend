@@ -47,8 +47,8 @@ public interface MaritimeDataRetriever {
   /**
    * Get vessels by type.
    *
-   * @param id The ship type id
+   * @param shipType The ship type
    * @return The vessel list
    */
-  List<Vessel> getVesselsByType(int id);
+  List<Vessel> getVesselsByType(int shipType);
 }

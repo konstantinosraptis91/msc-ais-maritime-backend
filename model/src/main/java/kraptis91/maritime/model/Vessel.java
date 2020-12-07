@@ -3,6 +3,7 @@ package kraptis91.maritime.model;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public class Vessel {
@@ -15,43 +16,52 @@ public class Vessel {
    * vessel and provides an internationally standardized number for contacting the vessel.
    */
   @Range(
-      min = 100000000,
+      min = 1,
       max = 999999999,
       message = "Invalid maritime mobile service identity. The MMSI should be a 9 digit number.")
   private final int mmsi;
 
   /** IMO ship identification number (7 digits). */
   @Range(
-      min = 1000000,
+      min = 1,
       max = 9999999,
       message = "Invalid ship identification number. The IMO should be a 7 digit number.")
   private final int imo;
 
   /** Name of the vessel (max 20 characters). */
-  @NotNull private final String vesselName;
+  @NotNull
+  @Size(max = 20, message = "Invalid vessel name. The vessel name should be max 20 characters.")
+  private final String vesselName;
 
   /**
    * International radio call sign (max 7 characters), assigned to the vessel by its country of
    * registry.
    */
-  @NotNull private final String callSign;
+  @NotNull
+  @Size(max = 7, message = "Invalid call sign. The call sign should be max 7 characters.")
+  private final String callSign;
 
   /**
    * ETA (estimated time of arrival) in format dd-mm hh:mm (day, month, hour, minute) – UTC time
    * zone.
    */
-  @NotNull private final String eta;
+  @NotNull private final LocalDateTime eta;
 
   /** Allowed values: 0.1-25.5 meters */
   @DecimalMin(value = "0.1", message = "Invalid draught value, draught cannot be less than 0.1")
   @DecimalMax(value = "25.5", message = "Invalid draught value, draught cannot be more than 25.5")
   private final double draught;
 
-  private final int shipType;
+  /** Type of the ship. */
+  @NotNull private final String shipType;
 
   /** Destination of this trip (manually entered). */
   @NotNull private final String destination;
 
+  /** The country in which the vessel belongs. */
+  private final String country;
+
+  /** Trajectory of the vessel. */
   private VesselTrajectory vesselTrajectory;
 
   private Vessel(Builder builder) {
@@ -63,6 +73,7 @@ public class Vessel {
     this.draught = builder.draught;
     this.shipType = builder.shipType;
     this.destination = builder.destination;
+    this.country = builder.country;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -85,7 +96,7 @@ public class Vessel {
     return callSign;
   }
 
-  public String getEta() {
+  public LocalDateTime getEta() {
     return eta;
   }
 
@@ -93,12 +104,16 @@ public class Vessel {
     return draught;
   }
 
-  public int getShipType() {
+  public String getShipType() {
     return shipType;
   }
 
   public String getDestination() {
     return destination;
+  }
+
+  public String getCountry() {
+    return country;
   }
 
   public VesselTrajectory getVesselTrajectory() {
@@ -125,15 +140,18 @@ public class Vessel {
         + ", callSign='"
         + callSign
         + '\''
-        + ", eta='"
+        + ", eta="
         + eta
-        + '\''
         + ", draught="
         + draught
-        + ", shipType="
+        + ", shipType='"
         + shipType
+        + '\''
         + ", destination='"
         + destination
+        + '\''
+        + ", country='"
+        + country
         + '\''
         + ", vesselTrajectory="
         + vesselTrajectory
@@ -149,7 +167,7 @@ public class Vessel {
   }
 
   public interface VesselEta {
-    VesselDraught withEta(String eta);
+    VesselDraught withEta(LocalDateTime eta);
   }
 
   public interface VesselDraught {
@@ -157,11 +175,15 @@ public class Vessel {
   }
 
   public interface VesselShipType {
-    VesselDestination withShipType(int shipType);
+    VesselDestination withShipType(String shipType);
   }
 
   public interface VesselDestination {
-    VesselBuild withDestination(String destination);
+    VesselCountry withDestination(String destination);
+  }
+
+  public interface VesselCountry {
+    VesselBuild withCountry(String country);
   }
 
   public interface VesselBuild {
@@ -178,6 +200,7 @@ public class Vessel {
           VesselDraught,
           VesselShipType,
           VesselDestination,
+          VesselCountry,
           VesselBuild {
 
     // mandatory fields
@@ -187,10 +210,11 @@ public class Vessel {
 
     // optional fields
     private String callSign;
-    private String eta;
+    private LocalDateTime eta;
     private double draught;
-    private int shipType;
+    private String shipType;
     private String destination;
+    private String country;
 
     public Builder(int mmsi, int imo, String vesselName) {
       this.mmsi = mmsi;
@@ -217,7 +241,7 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselDraught withEta(String eta) {
+    public VesselDraught withEta(LocalDateTime eta) {
       this.eta = eta;
       return this;
     }
@@ -241,7 +265,7 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselDestination withShipType(int shipType) {
+    public VesselDestination withShipType(String shipType) {
       this.shipType = shipType;
       return this;
     }
@@ -253,8 +277,20 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselBuild withDestination(String destination) {
+    public VesselCountry withDestination(String destination) {
       this.destination = destination;
+      return this;
+    }
+
+    /**
+     * Set the country in which the vessel belongs.
+     *
+     * @param country The country
+     * @return The Builder
+     */
+    @Override
+    public VesselBuild withCountry(String country) {
+      this.country = country;
       return this;
     }
 
