@@ -28,23 +28,22 @@ public class OceanConditions {
     private final double latitude;
 
     /**
-     * bottom depth of the oceans point in meters (Undefined value = -16384)
+     * bottom depth of the oceans point in meters (Undefined value = -16384 -> see tdo)
      */
     private final double bottomDepth;
 
     /**
-     * sea surface height above sea level in meters (=>tidal effect). (Undefined value = -327.67)
+     * sea surface height above sea level in meters (=>tidal effect). (Undefined value = -327.67 -> see tdo)
      */
-    @Contended
     private final double tidalEffect;
 
     /**
-     * significant height of wind and swell waves (=>see state) (Undefined value = -65.534)
+     * significant height of wind and swell waves (=>see state) (Undefined value = -65.534 -> see tdo)
      */
     private final double seaHeight;
 
     /**
-     * mean wave length in meters. (Undefined value= - 32767)
+     * mean wave length in meters. (Undefined value= - 32767 -> see tdo)
      */
     private final int meanWaveLength;
 
@@ -123,19 +122,19 @@ public class OceanConditions {
     // -------------------------------------------------------------------------------------------------------------------
 
     public interface OceanBottomDepth {
-        OceanTidalEffect withBottomDepth(double bottomDepth);
+        OceanTidalEffect withBottomDepth(OptionalDouble bottomDepth);
     }
 
     public interface OceanTidalEffect {
-        OceanSeaHeight withTidalEffect(double tidalEffect);
+        OceanSeaHeight withTidalEffect(OptionalDouble tidalEffect);
     }
 
     public interface OceanSeaHeight {
-        OceanMeanWaveLength withSeaHeight(double seaHeight);
+        OceanMeanWaveLength withSeaHeight(OptionalDouble seaHeight);
     }
 
     public interface OceanMeanWaveLength {
-        OceanBuild withMeanWaveLength(int meanWaveLength);
+        OceanBuild withMeanWaveLength(OptionalInt meanWaveLength);
     }
 
     public interface OceanBuild {
@@ -175,8 +174,8 @@ public class OceanConditions {
          * @return The Builder
          */
         @Override
-        public OceanTidalEffect withBottomDepth(double bottomDepth) {
-            this.bottomDepth = OptionalDouble.of(bottomDepth).orElse(-16384.0);
+        public OceanTidalEffect withBottomDepth(OptionalDouble bottomDepth) {
+            this.bottomDepth = bottomDepth.orElse(-16384);
             return this;
         }
 
@@ -185,8 +184,8 @@ public class OceanConditions {
          * @return The Builder
          */
         @Override
-        public OceanMeanWaveLength withSeaHeight(double seaHeight) {
-            this.seaHeight = OptionalDouble.of(seaHeight).orElse(-65.534);
+        public OceanMeanWaveLength withSeaHeight(OptionalDouble seaHeight) {
+            this.seaHeight = seaHeight.orElse(-65.53);
             return this;
         }
 
@@ -195,8 +194,8 @@ public class OceanConditions {
          * @return The Builder
          */
         @Override
-        public OceanBuild withMeanWaveLength(int meanWaveLength) {
-            this.meanWaveLength = OptionalInt.of(meanWaveLength).orElse(-32767);
+        public OceanBuild withMeanWaveLength(OptionalInt meanWaveLength) {
+            this.meanWaveLength = meanWaveLength.orElse(-32767);
             return this;
         }
 
@@ -205,8 +204,8 @@ public class OceanConditions {
          * @return The Builder
          */
         @Override
-        public OceanSeaHeight withTidalEffect(double tidalEffect) {
-            this.tidalEffect = OptionalDouble.of(tidalEffect).orElse(-327.67);
+        public OceanSeaHeight withTidalEffect(OptionalDouble tidalEffect) {
+            this.tidalEffect = tidalEffect.orElse(-327.67);
             return this;
         }
 
