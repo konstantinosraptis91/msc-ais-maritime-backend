@@ -6,6 +6,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigInteger;
 import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 /**
  * @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020.
@@ -45,7 +46,7 @@ public class OceanConditions {
     /**
      * mean wave length in meters. (Undefined value= - 32767)
      */
-    private final double meanWaveLength;
+    private final int meanWaveLength;
 
     private final BigInteger timestamp;
 
@@ -134,7 +135,7 @@ public class OceanConditions {
     }
 
     public interface OceanMeanWaveLength {
-        OceanBuild withMeanWaveLength(double meanWaveLength);
+        OceanBuild withMeanWaveLength(int meanWaveLength);
     }
 
     public interface OceanBuild {
@@ -161,7 +162,7 @@ public class OceanConditions {
         private double bottomDepth;
         private double tidalEffect;
         private double seaHeight;
-        private double meanWaveLength;
+        private int meanWaveLength;
 
         public Builder(double longitude, double latitude, BigInteger timestamp) {
             this.longitude = longitude;
@@ -180,32 +181,32 @@ public class OceanConditions {
         }
 
         /**
-         * @param seaHeight Sea surface height above sea level in meters (Undefined value = -327.67)
+         * @param seaHeight Sea surface height above sea level in meters (Undefined value = -65.534)
          * @return The Builder
          */
         @Override
         public OceanMeanWaveLength withSeaHeight(double seaHeight) {
-            this.seaHeight = OptionalDouble.of(seaHeight).orElse(-327.67);
+            this.seaHeight = OptionalDouble.of(seaHeight).orElse(-65.534);
             return this;
         }
 
         /**
-         * @param meanWaveLength Mean wave length in meters (Undefined value = -65.534)
+         * @param meanWaveLength Mean wave length in meters (Undefined value = -32767)
          * @return The Builder
          */
         @Override
-        public OceanBuild withMeanWaveLength(double meanWaveLength) {
-            this.meanWaveLength = OptionalDouble.of(meanWaveLength).orElse(-65.534);
+        public OceanBuild withMeanWaveLength(int meanWaveLength) {
+            this.meanWaveLength = OptionalInt.of(meanWaveLength).orElse(-32767);
             return this;
         }
 
         /**
-         * @param tidalEffect Significant height of wind and swell waves (Undefined value = -32767.0)
+         * @param tidalEffect Significant height of wind and swell waves (Undefined value = -327.67)
          * @return The Builder
          */
         @Override
         public OceanSeaHeight withTidalEffect(double tidalEffect) {
-            this.tidalEffect = OptionalDouble.of(tidalEffect).orElse(-32767.0);
+            this.tidalEffect = OptionalDouble.of(tidalEffect).orElse(-327.67);
             return this;
         }
 
