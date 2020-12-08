@@ -1,7 +1,5 @@
 package kraptis91.maritime.model;
 
-import sun.misc.Contended;
-
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigInteger;
