@@ -11,29 +11,27 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020.
- */
+/** @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020. */
 public class OceanConditionsTest {
 
-    private static final Logger LOGGER = Logger.getLogger(OceanConditionsTest.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(OceanConditionsTest.class.getName());
 
-    @Test
-    public void testHowToCreateVesselObject() {
+  @Test
+  public void testHowToCreateVesselObject() {
 
-        // create new OceanConditions demo object via model factory
-        OceanConditions oceanConditionsDemo = ModelFactory.createOceanConditionsDemo();
+    // create new OceanConditions demo object via model factory
+    OceanConditions oceanConditionsDemo = ModelFactory.createOceanConditionsDemo();
 
+    System.out.println(oceanConditionsDemo);
 
-        System.out.println(oceanConditionsDemo);
+    //  perform validation for geometry coordinates
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+    Set<ConstraintViolation<OceanConditions>> vesselViolations =
+        validator.validate(oceanConditionsDemo);
 
-        //  perform validation for geometry coordinates
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<OceanConditions>> vesselViolations = validator.validate(oceanConditionsDemo);
-
-        vesselViolations.forEach(v -> LOGGER.log(Level.SEVERE, v.getMessage()));
-        //  test that no validations occur
-        Assert.assertEquals(0, vesselViolations.size());
-    }
+    vesselViolations.forEach(v -> LOGGER.log(Level.SEVERE, v.getMessage()));
+    //  test that no validations occur
+    Assert.assertEquals(0, vesselViolations.size());
+  }
 }
