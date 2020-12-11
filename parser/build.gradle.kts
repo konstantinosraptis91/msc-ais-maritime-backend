@@ -1,12 +1,7 @@
 plugins {
-    `java-library`
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
+    id("maritime.java-library-conventions")
 }
 
 dependencies {
-    testImplementation("junit:junit:4.13")
+
 }

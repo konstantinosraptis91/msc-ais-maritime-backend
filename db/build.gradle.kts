@@ -1,15 +1,9 @@
 plugins {
-    `java-library`
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
+    id("maritime.java-library-conventions")
 }
 
 dependencies {
     implementation(project(":model"))
     implementation(project(":parser"))
-    testImplementation("junit:junit:4.13")
     implementation("org.mongodb:mongo-java-driver:3.12.7")
 }

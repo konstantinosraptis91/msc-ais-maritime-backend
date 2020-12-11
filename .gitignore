@@ -7,3 +7,5 @@
 out/
 
 **/build/
+
+buildSrc/.gradle

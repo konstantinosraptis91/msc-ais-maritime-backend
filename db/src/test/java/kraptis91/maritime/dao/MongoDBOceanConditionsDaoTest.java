@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 30/11/2020. */
-public class MongoDBOceanConditionsTest {
+public class MongoDBOceanConditionsDaoTest {
 
   /** @author Stavros Lamprinos [stalab at linuxmail.org] on 11/12/2020. */
   @Test
