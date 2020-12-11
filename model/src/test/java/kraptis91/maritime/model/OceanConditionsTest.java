@@ -17,7 +17,7 @@ public class OceanConditionsTest {
   private static final Logger LOGGER = Logger.getLogger(OceanConditionsTest.class.getName());
 
   @Test
-  public void testHowToCreateVesselObject() {
+  public void testHowToCreateOCObject() {
 
     // create new OceanConditions demo object via model factory
     OceanConditions oceanConditionsDemo = ModelFactory.createOceanConditionsDemo();

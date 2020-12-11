@@ -2,6 +2,7 @@ package kraptis91.maritime.model;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 7/12/2020. */
 public class ModelFactory {
