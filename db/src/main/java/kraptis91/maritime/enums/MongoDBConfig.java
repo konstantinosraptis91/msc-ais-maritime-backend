@@ -8,14 +8,23 @@ import java.nio.file.Paths;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 12/12/2020. */
 public enum MongoDBConfig {
-  INSTANCE("C:\\Users\\konst\\Downloads\\mongodb.conf");
+  INSTANCE;
 
   private final Config config;
 
-  MongoDBConfig(String filename) {
-    Config config = ConfigFactory.parseResources(filename);
-    Path f = Paths.get("./" + filename);
-    this.config = ConfigFactory.parseFile(f.toFile()).withFallback(config).resolve();
+  MongoDBConfig() {
+    final String confFile = "mongodb.conf";
+
+    Config config = ConfigFactory.parseResources(confFile);
+    Config localDirConfig =
+        ConfigFactory.parseFile(Paths.get("C:/Users/konst/Downloads/" + confFile).toFile());
+
+    Path f = Paths.get("./" + confFile);
+    this.config =
+        ConfigFactory.parseFile(f.toFile())
+            .withFallback(localDirConfig)
+            .withFallback(config)
+            .resolve();
   }
 
   public String getUser() {
@@ -26,8 +35,12 @@ public enum MongoDBConfig {
     return getMongoDBConfig().getString("password");
   }
 
-  public String getSource() {
-    return getMongoDBConfig().getString("source");
+  public String getHost() {
+    return getMongoDBConfig().getString("host");
+  }
+
+  public int getPort() {
+    return getMongoDBConfig().getInt("port");
   }
 
   private Config getMongoDBConfig() {

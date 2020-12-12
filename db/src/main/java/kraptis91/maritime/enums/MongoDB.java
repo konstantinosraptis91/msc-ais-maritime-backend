@@ -1,9 +1,6 @@
 package kraptis91.maritime.enums;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import kraptis91.maritime.model.OceanConditions;
@@ -12,8 +9,6 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
-import java.util.Arrays;
-
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 30/11/2020. */
 public enum MongoDB {
   MARITIME("maritime");
@@ -21,20 +16,19 @@ public enum MongoDB {
   private final MongoDatabase database;
 
   MongoDB(String dbName) {
-    MongoClient mongoClient = new MongoClient("localhost", 27017);
+    // local mongo db client
+    MongoClient mongoClient =
+        new MongoClient(MongoDBConfig.INSTANCE.getHost(), MongoDBConfig.INSTANCE.getPort());
 
-    //    MongoCredential credential =
-    //        MongoCredential.createCredential(
-    //            MongoDBConfig.INSTANCE.getUser(),
-    //            MongoDBConfig.INSTANCE.getSource(),
-    //            MongoDBConfig.INSTANCE.getPassword().toCharArray());
-
-    //    MongoClient mongoClient =
-    //            MongoClients.create(MongoClientSettings.builder()
-    //                    .applyToClusterSettings(builder ->
-    //                            builder.hosts(Arrays.asList(new ServerAddress("", 27017))))
-    //                    .credential(credential)
-    //                    .build());
+    // remote mongo db client
+    //    com.mongodb.client.MongoClient mongoClient =
+    //        com.mongodb.client.MongoClients.create(
+    //            "mongodb+srv://"
+    //                + MongoDBConfig.INSTANCE.getUser()
+    //                + ":"
+    //                + MongoDBConfig.INSTANCE.getPassword()
+    //                + "@"
+    //                + MongoDBConfig.INSTANCE.getHost());
 
     CodecProvider pojoCodecProvider =
         PojoCodecProvider.builder().register(OceanConditions.class).build();
