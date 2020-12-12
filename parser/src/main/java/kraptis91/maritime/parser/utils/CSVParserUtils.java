@@ -1,5 +1,8 @@
 package kraptis91.maritime.parser.utils;
 
+import kraptis91.maritime.parser.exception.CSVParserException;
+import org.jetbrains.annotations.Nullable;
+
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -9,30 +12,65 @@ public class CSVParserUtils {
 
   public static final Logger LOGGER = Logger.getLogger(CSVParserUtils.class.getName());
 
-  public static double parseDouble(@NotNull String value) throws NumberFormatException {
+  public static double parseDouble(@NotNull String value)
+      throws CSVParserException, IllegalArgumentException {
     validateValue("parseDouble", value);
-    return Double.parseDouble(value);
+
+    try {
+      return Double.parseDouble(value);
+    } catch (NumberFormatException e) {
+      throw new CSVParserException(e);
+    }
   }
 
-  public static int parseInt(@NotNull String value) throws NumberFormatException {
+  public static int parseInt(@NotNull String value)
+      throws CSVParserException, IllegalArgumentException {
     validateValue("parseInt", value);
-    return Integer.parseInt(value);
+
+    try {
+      return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+      throw new CSVParserException(e);
+    }
   }
 
-  public static long parseLong(@NotNull String value) throws NumberFormatException {
+  public static long parseLong(@NotNull String value)
+      throws CSVParserException, IllegalArgumentException {
     validateValue("parseLong", value);
-    return Long.parseLong(value);
+
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException e) {
+      throw new CSVParserException(e);
+    }
+  }
+
+  public static String parseText(@NotNull String value) throws IllegalArgumentException {
+    validateValue("parseText", value);
+    return value;
+  }
+
+  @Nullable
+  public static String parseTextOrApplyNull(@Nullable String value) {
+
+    if (Objects.isNull(value)) {
+      return null;
+    } else if (value.isEmpty() || value.isBlank()) {
+      value = null;
+    }
+
+    return value;
   }
 
   /** @param name The name of the method call this method */
-  private static void validateValue(String name, String value) throws NumberFormatException {
+  private static void validateValue(String name, String value) throws IllegalArgumentException {
 
     if (Objects.isNull(value)) {
-      throw new NumberFormatException("Error... Trying to " + name + " null value");
+      throw new IllegalArgumentException("Error... Trying to " + name + " null value");
     } else if (value.isEmpty()) {
-      throw new NumberFormatException("Error... Trying to " + name + " empty value");
+      throw new IllegalArgumentException("Error... Trying to " + name + " empty value");
     } else if (value.isBlank()) {
-      throw new NumberFormatException("Error... Trying to " + name + " blank value");
+      throw new IllegalArgumentException("Error... Trying to " + name + " blank value");
     }
   }
 }
