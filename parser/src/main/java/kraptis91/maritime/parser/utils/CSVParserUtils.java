@@ -23,6 +23,24 @@ public class CSVParserUtils {
     }
   }
 
+  public static double parseDoubleOrReturnDefault(@NotNull String value, double defaultValue) {
+    try {
+      validateValue("parseDoubleOrReturnDefault", value);
+      return Double.parseDouble(value);
+    } catch (IllegalArgumentException e) { // NumberFormatException also will be caught here
+      return defaultValue;
+    }
+  }
+
+  public static int parseIntOrReturnDefault(@NotNull String value, int defaultValue) {
+    try {
+      validateValue("parseIntOrReturnDefault", value);
+      return Integer.parseInt(value);
+    } catch (IllegalArgumentException e) { // NumberFormatException also will be caught here
+      return defaultValue;
+    }
+  }
+
   public static int parseInt(@NotNull String value)
       throws CSVParserException, IllegalArgumentException {
     validateValue("parseInt", value);
@@ -51,7 +69,7 @@ public class CSVParserUtils {
   }
 
   @Nullable
-  public static String parseTextOrApplyNull(@Nullable String value) {
+  public static String parseTextOrReturnNull(@Nullable String value) {
 
     if (Objects.isNull(value)) {
       return null;

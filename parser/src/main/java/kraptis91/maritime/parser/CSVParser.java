@@ -36,19 +36,19 @@ public class CSVParser {
             break;
 
           case 2:
-            dto.setDpt(CSVParserUtils.parseDouble(data[i]));
+            dto.setDpt(CSVParserUtils.parseDoubleOrReturnDefault(data[i], -16384));
             break;
 
           case 3:
-            dto.setWlv(CSVParserUtils.parseDouble(data[i]));
+            dto.setWlv(CSVParserUtils.parseDoubleOrReturnDefault(data[i], -327.67));
             break;
 
           case 4:
-            dto.setHs(CSVParserUtils.parseDouble(data[i]));
+            dto.setHs(CSVParserUtils.parseDoubleOrReturnDefault(data[i], -65.534));
             break;
 
           case 5:
-            dto.setLm(CSVParserUtils.parseInt(data[i]));
+            dto.setLm(CSVParserUtils.parseIntOrReturnDefault(data[i], -32767));
             break;
 
             //          case 6:
@@ -91,11 +91,11 @@ public class CSVParser {
             break;
 
           case 2:
-            dto.setCallSign(CSVParserUtils.parseTextOrApplyNull(data[i]));
+            dto.setCallSign(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
           case 3:
-            dto.setShipName(CSVParserUtils.parseTextOrApplyNull(data[i]));
+            dto.setShipName(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
             //          case 4:
@@ -119,7 +119,7 @@ public class CSVParser {
             //            break;
 
           case 9:
-            dto.setEta(CSVParserUtils.parseTextOrApplyNull(data[i]));
+            dto.setEta(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
           case 10:
@@ -127,7 +127,7 @@ public class CSVParser {
             break;
 
           case 11:
-            dto.setDestination(CSVParserUtils.parseTextOrApplyNull(data[i]));
+            dto.setDestination(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
             //          case 12:
