@@ -2,6 +2,7 @@ package kraptis91.maritime.dao;
 
 import kraptis91.maritime.parser.utils.DirectoryUtils;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -17,6 +18,7 @@ public class MongoDBOceanConditionsDaoTest {
       MongoDBOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/oc_january_sample.csv");
 
+  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
@@ -29,6 +31,7 @@ public class MongoDBOceanConditionsDaoTest {
     dao.insertMany(InputStreamUtils.getBufferedInputStream(isSample));
   }
 
+  @Ignore
   @Test
   public void testAddAllSeaStateForecastDtoToDb() throws Exception {
 
