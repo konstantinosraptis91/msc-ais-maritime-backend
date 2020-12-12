@@ -15,7 +15,7 @@ public class CSVParser {
 
   public SeaStateForecastDto extractSeaStateForecastDto(String line) throws CSVParserException {
     // break the line at commas
-    final String data[] = line.split(",");
+    final String[] data = line.split(",");
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
