@@ -20,6 +20,18 @@ public class MongoDBOceanConditionsDaoTest {
   @Test
   public void testInsertMany() throws Exception {
 
+    //      InputStream isBig =
+    //          new FileInputStream(
+    //              DirectoryUtils.getDefaultDownloadsDirectory() +
+    // "/ocean-conditions/oc_december.csv");
+
+    OceanConditionsDao dao = DaoFactory.createMongoDBOceanConditionsDao();
+    dao.insertMany(InputStreamUtils.getBufferedInputStream(isSample));
+  }
+
+  @Test
+  public void testAddAllSeaStateForecastDtoToDb() throws Exception {
+
     String[] months = {"october", "november", "december", "january", "february", "march"};
 
     for (String m : months) {
