@@ -2,9 +2,6 @@ package kraptis91.maritime.model;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import java.math.BigInteger;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
 
 /**
  * @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020.
@@ -173,7 +170,8 @@ public class OceanConditions {
          */
         @Override
         public OceanTidalEffect withBottomDepth(double bottomDepth) {
-            this.bottomDepth = OptionalDouble.of(bottomDepth).orElse(-16384.0);
+            // this.bottomDepth = OptionalDouble.of(bottomDepth).orElse(-16384.0);
+            this.bottomDepth = bottomDepth;
             return this;
         }
 
@@ -183,7 +181,8 @@ public class OceanConditions {
          */
         @Override
         public OceanMeanWaveLength withSeaHeight(double seaHeight) {
-            this.seaHeight = OptionalDouble.of(seaHeight).orElse(-65.534);
+            // this.seaHeight = OptionalDouble.of(seaHeight).orElse(-65.534);
+            this.seaHeight = seaHeight;
             return this;
         }
 
@@ -193,7 +192,8 @@ public class OceanConditions {
          */
         @Override
         public OceanBuild withMeanWaveLength(int meanWaveLength) {
-            this.meanWaveLength = OptionalInt.of(meanWaveLength).orElse(-32767);
+            // this.meanWaveLength = OptionalInt.of(meanWaveLength).orElse(-32767);
+            this.meanWaveLength = meanWaveLength;
             return this;
         }
 
@@ -203,7 +203,8 @@ public class OceanConditions {
          */
         @Override
         public OceanSeaHeight withTidalEffect(double tidalEffect) {
-            this.tidalEffect = OptionalDouble.of(tidalEffect).orElse(-327.67);
+            // this.tidalEffect = OptionalDouble.of(tidalEffect).orElse(-327.67);
+            this.tidalEffect = tidalEffect;
             return this;
         }
 
