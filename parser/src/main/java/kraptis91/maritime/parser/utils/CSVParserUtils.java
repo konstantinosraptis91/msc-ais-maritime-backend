@@ -91,4 +91,8 @@ public class CSVParserUtils {
       throw new IllegalArgumentException("Error... Trying to " + name + " blank value");
     }
   }
+
+  public static String[] splitLineAtCommas(@NotNull String line) {
+    return line.split(",");
+  }
 }

@@ -5,7 +5,6 @@ public class MmsiCountryCodesDto {
 
   /** first 3 digits of ship's identifier (MMSI) */
   private int mmsiCountryCode;
-
   private String country;
 
   public int getMmsiCountryCode() {

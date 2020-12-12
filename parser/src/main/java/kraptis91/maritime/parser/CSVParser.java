@@ -1,7 +1,6 @@
 package kraptis91.maritime.parser;
 
-import kraptis91.maritime.parser.dto.NariStaticDto;
-import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+import kraptis91.maritime.parser.dto.*;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.CSVParserUtils;
 
@@ -16,7 +15,7 @@ public class CSVParser {
   public SeaStateForecastDto extractSeaStateForecastDto(@NotNull String line)
       throws CSVParserException {
     // break the line at commas
-    final String[] data = line.split(",");
+    final String[] data = CSVParserUtils.splitLineAtCommas(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -51,10 +50,6 @@ public class CSVParser {
             dto.setLm(CSVParserUtils.parseIntOrReturnDefault(data[i], -32767));
             break;
 
-            //          case 6:
-            //            dto.setDir(CSVParserUtils.parseDouble(data[i]));
-            //            break;
-
           case 7:
             dto.setTs(CSVParserUtils.parseLong(data[i]));
             break;
@@ -70,7 +65,7 @@ public class CSVParser {
   public NariStaticDto extractNariStaticDto(@NotNull String line) throws CSVParserException {
 
     // break the line at commas
-    final String[] data = line.split(",");
+    final String[] data = CSVParserUtils.splitLineAtCommas(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -98,26 +93,6 @@ public class CSVParser {
             dto.setShipName(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
-            //          case 4:
-            //            dto.setShipType(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
-            //          case 5:
-            //            dto.setToBow(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
-            //          case 6:
-            //            dto.setToStern(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
-            //          case 7:
-            //            dto.setToStarboard(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
-            //          case 8:
-            //            dto.setToPort(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
           case 9:
             dto.setEta(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
@@ -129,14 +104,6 @@ public class CSVParser {
           case 11:
             dto.setDestination(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
-
-            //          case 12:
-            //            dto.setMotherShipMmsi(CSVParserUtils.parseInt(data[i]));
-            //            break;
-
-            //          case 13:
-            //            dto.setT(CSVParserUtils.parseLong(data[i]));
-            //            break;
         }
       }
     } catch (CSVParserException | IllegalArgumentException e) {
@@ -145,4 +112,111 @@ public class CSVParser {
 
     return dto;
   }
+
+  public MmsiCountryCodesDto extractMmsiCountryCodesDto(@NotNull String line)
+      throws CSVParserException {
+
+    // break the line at commas
+    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    // print data after split
+    // LOGGER.info("Data extracted: " + Arrays.toString(data));
+    // create the dto obj
+    MmsiCountryCodesDto dto = new MmsiCountryCodesDto();
+    // if a number format exception thrown, discard the line
+    try {
+
+      // loop through results
+      for (int i = 0; i <= 1; i++) { // expecting 2 attributes
+
+        switch (i) {
+          case 0:
+            dto.setMmsiCountryCode(CSVParserUtils.parseInt(data[i]));
+            break;
+
+          case 1:
+            dto.setCountry(CSVParserUtils.parseTextOrReturnNull(data[i]));
+            break;
+        }
+      }
+    } catch (CSVParserException | IllegalArgumentException e) {
+      throw new CSVParserException(e);
+    }
+
+    return dto;
+  }
+
+  public ShipTypeListDto extractShipTypeListDto(@NotNull String line) throws CSVParserException {
+
+    // break the line at commas
+    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    // print data after split
+    // LOGGER.info("Data extracted: " + Arrays.toString(data));
+    // create the dto obj
+    ShipTypeListDto dto = new ShipTypeListDto();
+    // if a number format exception thrown, discard the line
+    try {
+
+      // loop through results
+      for (int i = 0; i <= 4; i++) { // expecting 5 attributes
+
+        switch (i) {
+          case 0:
+            dto.setIdShipType(CSVParserUtils.parseInt(data[i]));
+            break;
+
+          case 3:
+            dto.setTypeName(CSVParserUtils.parseTextOrReturnNull(data[i]));
+            break;
+        }
+      }
+    } catch (CSVParserException | IllegalArgumentException e) {
+      throw new CSVParserException(e);
+    }
+
+    return dto;
+  }
+
+  public NariDynamicDto extractDynamicDto(@NotNull String line) throws CSVParserException {
+
+    // break the line at commas
+    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    // print data after split
+    // LOGGER.info("Data extracted: " + Arrays.toString(data));
+    // create the dto obj
+    NariDynamicDto dto = new NariDynamicDto();
+    // if a number format exception thrown, discard the line
+    try {
+
+      // loop through results
+      for (int i = 0; i <= 8; i++) { // expecting 9 attributes
+
+        switch (i) {
+          case 0:
+            dto.setMmsi(CSVParserUtils.parseInt(data[i]));
+            break;
+
+          case 3:
+            dto.setSpeed(CSVParserUtils.parseDouble(data[i]));
+            break;
+
+          case 6:
+            dto.setLon(CSVParserUtils.parseDouble(data[i]));
+            break;
+
+          case 7:
+            dto.setLat(CSVParserUtils.parseDouble(data[i]));
+            break;
+
+          case 8:
+            dto.setT(CSVParserUtils.parseLong(data[i]));
+            break;
+        }
+      }
+    } catch (CSVParserException | IllegalArgumentException e) {
+      throw new CSVParserException(e);
+    }
+
+    return dto;
+  }
+
 }
