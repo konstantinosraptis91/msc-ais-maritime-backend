@@ -45,7 +45,7 @@ public class Vessel {
    * ETA (estimated time of arrival) in format dd-mm hh:mm (day, month, hour, minute) – UTC time
    * zone.
    */
-  @NotNull private final LocalDateTime eta;
+  @NotNull private final String eta;
 
   /** Allowed values: 0.1-25.5 meters */
   @DecimalMin(value = "0.1", message = "Invalid draught value, draught cannot be less than 0.1")
@@ -96,7 +96,7 @@ public class Vessel {
     return callSign;
   }
 
-  public LocalDateTime getEta() {
+  public String getEta() {
     return eta;
   }
 
@@ -167,7 +167,7 @@ public class Vessel {
   }
 
   public interface VesselEta {
-    VesselDraught withEta(LocalDateTime eta);
+    VesselDraught withEta(String eta);
   }
 
   public interface VesselDraught {
@@ -210,7 +210,7 @@ public class Vessel {
 
     // optional fields
     private String callSign;
-    private LocalDateTime eta;
+    private String eta;
     private double draught;
     private String shipType;
     private String destination;
@@ -241,7 +241,7 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselDraught withEta(LocalDateTime eta) {
+    public VesselDraught withEta(String eta) {
       this.eta = eta;
       return this;
     }

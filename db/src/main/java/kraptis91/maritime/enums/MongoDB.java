@@ -31,7 +31,8 @@ public enum MongoDB {
     //                + MongoDBConfig.INSTANCE.getHost());
 
     CodecProvider pojoCodecProvider =
-        PojoCodecProvider.builder().register(OceanConditions.class).build();
+        //        PojoCodecProvider.builder().register(OceanConditions.class).build();
+        PojoCodecProvider.builder().register("kraptis91.maritime.model").build();
 
     CodecRegistry pojoCodecRegistry =
         CodecRegistries.fromRegistries(

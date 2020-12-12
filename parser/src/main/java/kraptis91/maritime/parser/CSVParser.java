@@ -113,7 +113,7 @@ public class CSVParser {
     return dto;
   }
 
-  public MmsiCountryCodesDto extractMmsiCountryCodesDto(@NotNull String line)
+  public MMSICountryCodesDto extractMmsiCountryCodesDto(@NotNull String line)
       throws CSVParserException {
 
     // break the line at commas
@@ -121,7 +121,7 @@ public class CSVParser {
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
-    MmsiCountryCodesDto dto = new MmsiCountryCodesDto();
+    MMSICountryCodesDto dto = new MMSICountryCodesDto();
     // if a number format exception thrown, discard the line
     try {
 
