@@ -11,7 +11,7 @@ public class ModelFactory {
     Vessel vessel =
         new Vessel.Builder(999999999, 9999999, "__VESSEL_NAME")
             .withCallSign("__SIGN")
-            .withEta(LocalDateTime.now())
+            .withEta("04-09 20:00 ")
             .withDraught(25.5)
             .withShipType("__SHIP_TYPE_NAME")
             .withDestination("__VESSEL_DESTINATION")
