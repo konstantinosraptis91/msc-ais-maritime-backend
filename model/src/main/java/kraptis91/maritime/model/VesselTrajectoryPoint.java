@@ -61,6 +61,8 @@ public class VesselTrajectoryPoint {
     int hash = 5;
     hash = 29 * hash + Objects.hashCode(this.longitude);
     hash = 29 * hash + Objects.hashCode(this.latitude);
+    hash = 29 * hash + Objects.hashCode(this.timestamp);
+    hash = 29 * hash + Objects.hashCode(this.speed);
     return hash;
   }
 

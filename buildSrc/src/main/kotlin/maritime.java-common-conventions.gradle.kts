@@ -25,6 +25,11 @@ repositories {
 }
 
 dependencies {
+    // annotations
+    implementation("org.jetbrains:annotations:19.0.0")
+    implementation("jakarta.validation:jakarta.validation-api:3.0.0")
+    // config
+    implementation("com.typesafe:config:1.4.1")
     // testing
     testImplementation("junit:junit:4.13")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")

@@ -3,6 +3,7 @@ package kraptis91.maritime;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import kraptis91.maritime.enums.MongoDB;
 import org.bson.Document;
 import org.junit.Test;
 

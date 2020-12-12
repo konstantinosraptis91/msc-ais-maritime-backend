@@ -45,7 +45,7 @@ public class OceanConditions {
      */
     private final int meanWaveLength;
 
-    private final BigInteger timestamp;
+    private final long timestamp;
 
 
     private OceanConditions(Builder builder) {
@@ -86,7 +86,7 @@ public class OceanConditions {
         return meanWaveLength;
     }
 
-    public BigInteger getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
@@ -153,7 +153,7 @@ public class OceanConditions {
         // mandatory fields
         private final double longitude;
         private final double latitude;
-        private final BigInteger timestamp;
+        private final long timestamp;
 
         // optional fields
         private double bottomDepth;
@@ -161,7 +161,7 @@ public class OceanConditions {
         private double seaHeight;
         private int meanWaveLength;
 
-        public Builder(double longitude, double latitude, BigInteger timestamp) {
+        public Builder(double longitude, double latitude, long timestamp) {
             this.longitude = longitude;
             this.latitude = latitude;
             this.timestamp = timestamp;

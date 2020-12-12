@@ -33,7 +33,7 @@ public class ModelFactory {
   /** @return new OceanConditions object */
   public static OceanConditions createOceanConditionsDemo() {
 
-    return new OceanConditions.Builder(45.55, 50.4, BigInteger.valueOf(1812202345))
+    return new OceanConditions.Builder(45.55, 50.4, 122121878)
         .withBottomDepth(77.99)
         .withTidalEffect(99.99)
         .withSeaHeight(15.5)
