@@ -51,7 +51,7 @@ public class MongoDBOceanConditionsDao implements OceanConditionsDao {
       }
 
       // parse current line to the dto
-      dto = parser.extractSeaStateForecastDro(line);
+      dto = parser.extractSeaStateForecastDto(line);
       // System.out.println(dto);
       // add to the list after model obj extraction
       oceanConditionsList.add(ModelExtractor.extractOceanConditions(dto));

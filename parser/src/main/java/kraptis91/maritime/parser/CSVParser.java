@@ -13,7 +13,7 @@ public class CSVParser {
 
   public static final Logger LOGGER = Logger.getLogger(CSVParser.class.getName());
 
-  public SeaStateForecastDto extractSeaStateForecastDro(String line) throws CSVParserException {
+  public SeaStateForecastDto extractSeaStateForecastDto(String line) throws CSVParserException {
     // break the line at commas
     final String data[] = line.split(",");
     // print data after split

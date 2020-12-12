@@ -33,7 +33,7 @@ public class CSVParserTest {
         continue;
       }
 
-      SeaStateForecastDto dto = parser.extractSeaStateForecastDro(line);
+      SeaStateForecastDto dto = parser.extractSeaStateForecastDto(line);
       System.out.println(dto);
 
       counter++;
