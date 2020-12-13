@@ -1,9 +1,7 @@
 package kraptis91.maritime.enums;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import kraptis91.maritime.model.OceanConditions;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -16,22 +14,13 @@ public enum MongoDB {
   private final MongoDatabase database;
 
   MongoDB(String dbName) {
-    // local mongo db client
-    MongoClient mongoClient =
-        new MongoClient(MongoDBConfig.INSTANCE.getHost(), MongoDBConfig.INSTANCE.getPort());
 
-    // remote mongo db client
-    //    com.mongodb.client.MongoClient mongoClient =
-    //        com.mongodb.client.MongoClients.create(
-    //            "mongodb+srv://"
-    //                + MongoDBConfig.INSTANCE.getUser()
-    //                + ":"
-    //                + MongoDBConfig.INSTANCE.getPassword()
-    //                + "@"
-    //                + MongoDBConfig.INSTANCE.getHost());
+    // create a mongo db client
+    com.mongodb.client.MongoClient mongoClient =
+        com.mongodb.client.MongoClients.create(createConnectionString());
 
+    // codec registry for all model class by package reference
     CodecProvider pojoCodecProvider =
-        //        PojoCodecProvider.builder().register(OceanConditions.class).build();
         PojoCodecProvider.builder().register("kraptis91.maritime.model").build();
 
     CodecRegistry pojoCodecRegistry =
@@ -44,5 +33,17 @@ public enum MongoDB {
 
   public MongoDatabase getDatabase() {
     return database;
+  }
+
+  private String createConnectionString() {
+
+    return MongoDBConfig.INSTANCE.useRemote()
+        ? "mongodb+srv://"
+            + MongoDBConfig.INSTANCE.getUser()
+            + ":"
+            + String.valueOf(MongoDBConfig.INSTANCE.getPassword())
+            + "@"
+            + MongoDBConfig.INSTANCE.getHost()
+        : "mongodb://" + MongoDBConfig.INSTANCE.getHost() + ":" + MongoDBConfig.INSTANCE.getPort();
   }
 }

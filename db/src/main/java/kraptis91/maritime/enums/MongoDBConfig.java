@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 12/12/2020. */
-public enum MongoDBConfig {
+enum MongoDBConfig {
   INSTANCE;
 
   private final Config config;
@@ -28,19 +28,33 @@ public enum MongoDBConfig {
   }
 
   public String getUser() {
-    return getMongoDBConfig().getString("user");
+    return useRemote() ? getRemoteConfig().getString("user") : getLocalConfig().getString("user");
   }
 
-  public String getPassword() {
-    return getMongoDBConfig().getString("password");
+  public char[] getPassword() {
+    return useRemote()
+        ? getRemoteConfig().getString("password").toCharArray()
+        : getLocalConfig().getString("password").toCharArray();
   }
 
   public String getHost() {
-    return getMongoDBConfig().getString("host");
+    return useRemote() ? getRemoteConfig().getString("host") : getLocalConfig().getString("host");
   }
 
   public int getPort() {
-    return getMongoDBConfig().getInt("port");
+    return useRemote() ? getRemoteConfig().getInt("port") : getLocalConfig().getInt("port");
+  }
+
+  public boolean useRemote() {
+    return config.getConfig("mongodb").getBoolean("use-remote");
+  }
+
+  private Config getRemoteConfig() {
+    return getMongoDBConfig().getConfig("remote");
+  }
+
+  private Config getLocalConfig() {
+    return getMongoDBConfig().getConfig("local");
   }
 
   private Config getMongoDBConfig() {
