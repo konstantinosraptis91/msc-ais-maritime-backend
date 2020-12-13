@@ -27,13 +27,12 @@ public class MongoDBVesselDao implements VesselDao {
   public static final Logger LOGGER = Logger.getLogger(MongoDBVesselDao.class.getName());
 
   @Override
-  public void insertMany(@NotNull InputStream is) throws Exception {
+  public void insertMany(@NotNull InputStream is, final int chunkSize) throws Exception {
 
     // LOGGER.info("Inserting " + is.available() + " bytes to db.");
 
     final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
     final CSVParser parser = new CSVParser();
-    final int chunkSize = 2;
     final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
     // final List<Vessel> vesselList = new ArrayList<>();
     final Set<Integer> totalMMSISet = new LinkedHashSet<>();
