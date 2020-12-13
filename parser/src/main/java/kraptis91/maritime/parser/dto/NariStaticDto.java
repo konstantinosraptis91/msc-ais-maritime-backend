@@ -1,5 +1,7 @@
 package kraptis91.maritime.parser.dto;
 
+import java.util.Objects;
+
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 12/12/2020. */
 public class NariStaticDto {
 

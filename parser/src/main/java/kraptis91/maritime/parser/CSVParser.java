@@ -5,6 +5,8 @@ import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.CSVParserUtils;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
@@ -107,7 +109,9 @@ public class CSVParser {
         }
       }
     } catch (CSVParserException | IllegalArgumentException e) {
-      throw new CSVParserException(e);
+      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
+      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
+      throw new CSVParserException(line, e);
     }
 
     return dto;
@@ -218,5 +222,4 @@ public class CSVParser {
 
     return dto;
   }
-
 }

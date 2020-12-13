@@ -9,6 +9,8 @@ public class VesselTrajectory {
   public VesselTrajectory() {}
 
   private Set<VesselTrajectoryPoint> pointSet;
+  /** MMSI identifier for vessel. */
+  private int mmsi;
 
   /**
    * Add a point to trajectory.

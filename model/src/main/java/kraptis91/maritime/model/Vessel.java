@@ -2,8 +2,11 @@ package kraptis91.maritime.model;
 
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.*;
-import java.time.LocalDateTime;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Objects;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public class Vessel {
@@ -61,9 +64,6 @@ public class Vessel {
   /** The country in which the vessel belongs. */
   private final String country;
 
-  /** Trajectory of the vessel. */
-  private VesselTrajectory vesselTrajectory;
-
   private Vessel(Builder builder) {
     this.mmsi = builder.mmsi;
     this.imo = builder.imo;
@@ -116,13 +116,6 @@ public class Vessel {
     return country;
   }
 
-  public VesselTrajectory getVesselTrajectory() {
-    if (vesselTrajectory == null) {
-      vesselTrajectory = new VesselTrajectory();
-    }
-    return vesselTrajectory;
-  }
-
   // -------------------------------------------------------------------------------------------------------------------
   // toString
   // -------------------------------------------------------------------------------------------------------------------
@@ -140,8 +133,9 @@ public class Vessel {
         + ", callSign='"
         + callSign
         + '\''
-        + ", eta="
+        + ", eta='"
         + eta
+        + '\''
         + ", draught="
         + draught
         + ", shipType='"
@@ -153,8 +147,6 @@ public class Vessel {
         + ", country='"
         + country
         + '\''
-        + ", vesselTrajectory="
-        + getVesselTrajectory()
         + '}';
   }
 
@@ -190,6 +182,31 @@ public class Vessel {
     Vessel build();
   }
 
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 29 * hash + Objects.hashCode(this.mmsi);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
+      return false;
+    }
+
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Vessel other = (Vessel) obj;
+
+    return Objects.equals(this.mmsi, other.mmsi);
+  }
   // -------------------------------------------------------------------------------------------------------------------
   // Vessel POJO builder
   // -------------------------------------------------------------------------------------------------------------------

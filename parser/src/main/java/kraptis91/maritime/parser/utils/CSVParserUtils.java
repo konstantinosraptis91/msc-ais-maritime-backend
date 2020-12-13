@@ -17,7 +17,7 @@ public class CSVParserUtils {
     validateValue("parseDouble", value);
 
     try {
-      return Double.parseDouble(value);
+      return Double.parseDouble(trimAndRemoveJunk(value));
     } catch (NumberFormatException e) {
       throw new CSVParserException(e);
     }
@@ -26,7 +26,7 @@ public class CSVParserUtils {
   public static double parseDoubleOrReturnDefault(@NotNull String value, double defaultValue) {
     try {
       validateValue("parseDoubleOrReturnDefault", value);
-      return Double.parseDouble(value);
+      return Double.parseDouble(trimAndRemoveJunk(value));
     } catch (IllegalArgumentException e) { // NumberFormatException also will be caught here
       return defaultValue;
     }
@@ -35,7 +35,7 @@ public class CSVParserUtils {
   public static int parseIntOrReturnDefault(@NotNull String value, int defaultValue) {
     try {
       validateValue("parseIntOrReturnDefault", value);
-      return Integer.parseInt(value);
+      return Integer.parseInt(trimAndRemoveJunk(value));
     } catch (IllegalArgumentException e) { // NumberFormatException also will be caught here
       return defaultValue;
     }
@@ -46,7 +46,7 @@ public class CSVParserUtils {
     validateValue("parseInt", value);
 
     try {
-      return Integer.parseInt(value);
+      return Integer.parseInt(trimAndRemoveJunk(value));
     } catch (NumberFormatException e) {
       throw new CSVParserException(e);
     }
@@ -57,7 +57,7 @@ public class CSVParserUtils {
     validateValue("parseLong", value);
 
     try {
-      return Long.parseLong(value);
+      return Long.parseLong(trimAndRemoveJunk(value));
     } catch (NumberFormatException e) {
       throw new CSVParserException(e);
     }
@@ -65,19 +65,17 @@ public class CSVParserUtils {
 
   public static String parseText(@NotNull String value) throws IllegalArgumentException {
     validateValue("parseText", value);
-    return value;
+    return trimAndRemoveJunk(value);
   }
 
   @Nullable
   public static String parseTextOrReturnNull(@Nullable String value) {
 
-    if (Objects.isNull(value)) {
+    if (Objects.isNull(value) || value.isEmpty() || value.isBlank()) {
       return null;
-    } else if (value.isEmpty() || value.isBlank()) {
-      value = null;
     }
 
-    return value;
+    return trimAndRemoveJunk(value);
   }
 
   /** @param name The name of the method call this method */
@@ -90,6 +88,12 @@ public class CSVParserUtils {
     } else if (value.isBlank()) {
       throw new IllegalArgumentException("Error... Trying to " + name + " blank value");
     }
+  }
+
+  public static String trimAndRemoveJunk(@NotNull String value) {
+    value = value.replaceAll("\"", "");
+    value = value.trim();
+    return value;
   }
 
   public static String[] splitLineAtCommas(@NotNull String line) {
