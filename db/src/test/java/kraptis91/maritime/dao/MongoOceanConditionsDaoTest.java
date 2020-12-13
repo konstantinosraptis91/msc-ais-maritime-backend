@@ -12,10 +12,10 @@ import java.io.InputStream;
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 30/11/2020.
  * @author Stavros Lamprinos [stalab at linuxmail.org]
  */
-public class MongoDBOceanConditionsDaoTest {
+public class MongoOceanConditionsDaoTest {
 
   private final InputStream isSample =
-      MongoDBOceanConditionsDaoTest.class.getResourceAsStream(
+      MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/oc_january_sample.csv");
 
   // @Ignore
@@ -27,7 +27,7 @@ public class MongoDBOceanConditionsDaoTest {
     //              DirectoryUtils.getDefaultDownloadsDirectory() +
     // "/ocean-conditions/oc_december.csv");
 
-    OceanConditionsDao dao = DaoFactory.createMongoDBOceanConditionsDao();
+    OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
     dao.insertMany(InputStreamUtils.getBufferedInputStream(isSample));
   }
 
@@ -42,7 +42,7 @@ public class MongoDBOceanConditionsDaoTest {
           new FileInputStream(
               DirectoryUtils.getDefaultDownloadsDirectory() + "/ocean-conditions/oc_" + m + ".csv");
 
-      OceanConditionsDao dao = DaoFactory.createMongoDBOceanConditionsDao();
+      OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
       dao.insertMany(InputStreamUtils.getBufferedInputStream(isBig));
     }
   }

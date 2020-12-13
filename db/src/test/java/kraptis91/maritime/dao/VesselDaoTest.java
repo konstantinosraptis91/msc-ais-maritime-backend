@@ -11,7 +11,7 @@ import java.io.InputStream;
 public class VesselDaoTest {
 
   private final InputStream isSample =
-      MongoDBOceanConditionsDaoTest.class.getResourceAsStream(
+      MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/nari_static_sample.csv");
 
   @Test
@@ -21,7 +21,7 @@ public class VesselDaoTest {
         new FileInputStream(
             DirectoryUtils.getDefaultDownloadsDirectory() + "/ais-data/nari_static.csv");
 
-    VesselDao dao = DaoFactory.createMongoDBOVesselDao();
+    VesselDao dao = DaoFactory.createMongoVesselDao();
     dao.insertMany(InputStreamUtils.getBufferedInputStream(isSample));
   }
 }

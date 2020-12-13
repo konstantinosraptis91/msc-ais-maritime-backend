@@ -8,9 +8,10 @@ public class VesselTrajectory {
 
   public VesselTrajectory() {}
 
-  private Set<VesselTrajectoryPoint> pointSet;
   /** MMSI identifier for vessel. */
   private int mmsi;
+
+  private Set<VesselTrajectoryPoint> pointSet;
 
   /**
    * Add a point to trajectory.
@@ -23,7 +24,7 @@ public class VesselTrajectory {
   }
 
   /**
-   * The the size of the trajectory.
+   * The the size of the point set.
    *
    * @return The size
    */
@@ -41,6 +42,24 @@ public class VesselTrajectory {
       pointSet = new LinkedHashSet<>();
     }
     return pointSet;
+  }
+
+  /**
+   * Get the mmsi id of vessel in which this trajectory belongs to.
+   *
+   * @return The mmsi id
+   */
+  public int getMmsi() {
+    return mmsi;
+  }
+
+  /**
+   * Set the mmsi id of vessel in which this trajectory belongs to.
+   *
+   * @param mmsi The mmsi id
+   */
+  public void setMmsi(int mmsi) {
+    this.mmsi = mmsi;
   }
 
   @Override

@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020.
  * @author Stavros Lamprinos [stalab at linuxmail.org]
  */
-public class MongoDBOceanConditionsDao implements OceanConditionsDao {
+public class MongoOceanConditionsDao implements OceanConditionsDao {
 
-  public static final Logger LOGGER = Logger.getLogger(MongoDBOceanConditionsDao.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(MongoOceanConditionsDao.class.getName());
 
   @Override
   public void insertMany(@NotNull InputStream is) throws Exception {

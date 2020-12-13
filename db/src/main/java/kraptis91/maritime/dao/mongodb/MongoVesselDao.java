@@ -22,9 +22,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
-public class MongoDBVesselDao implements VesselDao {
+public class MongoVesselDao implements VesselDao {
 
-  public static final Logger LOGGER = Logger.getLogger(MongoDBVesselDao.class.getName());
+  public static final Logger LOGGER = Logger.getLogger(MongoVesselDao.class.getName());
 
   @Override
   public void insertMany(@NotNull InputStream is, final int chunkSize) throws Exception {

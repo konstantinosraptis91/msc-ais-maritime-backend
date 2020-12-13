@@ -17,10 +17,9 @@ public class VesselTrajectoryPoint {
       message = "Invalid speed value, speed cannot be more than 102.2 knots")
   private final double speed;
 
-  private final BigInteger timestamp;
+  private final long timestamp;
 
-  private VesselTrajectoryPoint(
-      double longitude, double latitude, double speed, BigInteger timestamp) {
+  private VesselTrajectoryPoint(double longitude, double latitude, double speed, long timestamp) {
     this.longitude = longitude;
     this.latitude = latitude;
     this.speed = speed;
@@ -36,7 +35,7 @@ public class VesselTrajectoryPoint {
    * @param timestamp timestamp in UNIX epochs
    */
   public static VesselTrajectoryPoint of(
-      double longitude, double latitude, double speed, BigInteger timestamp) {
+      double longitude, double latitude, double speed, long timestamp) {
     return new VesselTrajectoryPoint(longitude, latitude, speed, timestamp);
   }
 
@@ -52,7 +51,7 @@ public class VesselTrajectoryPoint {
     return speed;
   }
 
-  public BigInteger getTimestamp() {
+  public long getTimestamp() {
     return timestamp;
   }
 

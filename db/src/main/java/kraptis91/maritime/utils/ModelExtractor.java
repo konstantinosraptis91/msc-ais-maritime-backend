@@ -2,6 +2,8 @@ package kraptis91.maritime.utils;
 
 import kraptis91.maritime.model.OceanConditions;
 import kraptis91.maritime.model.Vessel;
+import kraptis91.maritime.model.VesselTrajectoryPoint;
+import kraptis91.maritime.parser.dto.NariDynamicDto;
 import kraptis91.maritime.parser.dto.NariStaticDto;
 import kraptis91.maritime.parser.dto.SeaStateForecastDto;
 
@@ -28,5 +30,9 @@ public class ModelExtractor {
         .withDestination(dto.getDestination())
         .withCountry(country)
         .build();
+  }
+
+  public static VesselTrajectoryPoint extractVesselTrajectoryPoint(NariDynamicDto dto) {
+    return VesselTrajectoryPoint.of(dto.getLon(), dto.getLat(), dto.getSpeed(), dto.getT());
   }
 }
