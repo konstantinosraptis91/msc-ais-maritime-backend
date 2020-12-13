@@ -33,8 +33,9 @@ public class MongoDBVesselDao implements VesselDao {
 
     final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
     final CSVParser parser = new CSVParser();
-    final int chunkSize = 50;
+    final int chunkSize = 2;
     final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
+    // final List<Vessel> vesselList = new ArrayList<>();
     final Set<Integer> totalMMSISet = new LinkedHashSet<>();
     int totalVessels = 0;
 
@@ -73,7 +74,7 @@ public class MongoDBVesselDao implements VesselDao {
           insertMany(vesselSet);
           // increase total vessels counter
           totalVessels += vesselSet.size();
-          // clear map
+          // clear set
           vesselSet.clear();
         }
 
@@ -86,8 +87,9 @@ public class MongoDBVesselDao implements VesselDao {
     insertMany(vesselSet);
     // increase total vessels counter
     totalVessels += vesselSet.size();
-    // clear map
+    // clear set
     vesselSet.clear();
+    totalMMSISet.clear();
 
     LOGGER.info("All lines inserted to db successfully.");
     LOGGER.info("Total vessels added to db: " + totalVessels);
