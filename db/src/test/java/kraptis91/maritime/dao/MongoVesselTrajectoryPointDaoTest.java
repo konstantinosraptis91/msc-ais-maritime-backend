@@ -1,5 +1,6 @@
 package kraptis91.maritime.dao;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -11,6 +12,7 @@ public class MongoVesselTrajectoryPointDaoTest {
       MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/nari_dynamic_sample.csv");
 
+  @Ignore
   @Test
   public void testInsertMany() throws Exception {
     VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();

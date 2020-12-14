@@ -8,8 +8,10 @@ import java.util.Objects;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public class VesselTrajectoryPoint {
 
-  private final double longitude;
-  private final double latitude;
+  /** longitude and latitude in geoJSON format
+   *  replaced longitude and latitude with geoPoint Stavros Lamprinos on 14/12/2020
+   * */
+  private final GeoPoint location;
 
   @DecimalMin(value = "0.0", message = "Invalid speed value, speed cannot be less than 0.0 knots")
   @DecimalMax(
@@ -20,8 +22,7 @@ public class VesselTrajectoryPoint {
   private final long timestamp;
 
   private VesselTrajectoryPoint(double longitude, double latitude, double speed, long timestamp) {
-    this.longitude = longitude;
-    this.latitude = latitude;
+    this.location = new GeoPoint(longitude, latitude);
     this.speed = speed;
     this.timestamp = timestamp;
   }
@@ -39,13 +40,7 @@ public class VesselTrajectoryPoint {
     return new VesselTrajectoryPoint(longitude, latitude, speed, timestamp);
   }
 
-  public double getLongitude() {
-    return longitude;
-  }
-
-  public double getLatitude() {
-    return latitude;
-  }
+  public GeoPoint getLocation() { return this.location; }
 
   public double getSpeed() {
     return speed;
@@ -58,8 +53,6 @@ public class VesselTrajectoryPoint {
   @Override
   public int hashCode() {
     int hash = 5;
-    hash = 29 * hash + Objects.hashCode(this.longitude);
-    hash = 29 * hash + Objects.hashCode(this.latitude);
     hash = 29 * hash + Objects.hashCode(this.timestamp);
     hash = 29 * hash + Objects.hashCode(this.speed);
     return hash;
@@ -81,17 +74,18 @@ public class VesselTrajectoryPoint {
     }
     final VesselTrajectoryPoint other = (VesselTrajectoryPoint) obj;
 
-    return Objects.equals(this.longitude, other.longitude)
-        && Objects.equals(this.latitude, other.latitude);
+    return Objects.equals(this.location, other.location);
   }
 
   @Override
   public String toString() {
     return "VesselTrajectoryPoint{"
-        + "longitude="
-        + longitude
-        + ", latitude="
-        + latitude
+        + "location = {"
+        + "type = "
+        + location.getType()
+        + ", coordinates = ["
+        + location.getCoordinates()
+        + "]}"
         + ", speed="
         + speed
         + ", timestamp="
