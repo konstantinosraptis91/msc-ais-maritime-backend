@@ -25,6 +25,8 @@ repositories {
 }
 
 dependencies {
+    // guava
+    implementation("com.google.guava:guava:29.0-jre")
     // annotations
     implementation("org.jetbrains:annotations:19.0.0")
     implementation("jakarta.validation:jakarta.validation-api:3.0.0")

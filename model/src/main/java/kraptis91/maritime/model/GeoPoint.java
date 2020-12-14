@@ -1,19 +1,28 @@
 package kraptis91.maritime.model;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
+import kraptis91.maritime.model.enums.GeoJsonType;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+
+import java.util.List;
+import java.util.Objects;
 
 /** @author Stavros Lamprinos [stalab at linuxmail.org] on 14/12/2020. */
 public class GeoPoint {
 
-  /* geospatial data in geoJSON format */
-  private final String type = "Point";
+  // longitude and latitude coordinates
+  @BsonIgnore private final double longitude;
+  @BsonIgnore private final double latitude;
+  // the GeoJson type
+  private final String type;
+  // coordinates as an array of [lon, lat]
+  private final List<Double> coordinates;
 
-  /* longitude and latitude coordinates */
-  private final ArrayList<Double> coordinates = new ArrayList<>();
-
-  public GeoPoint(double longitude, double latitude) {
-    coordinates.add(longitude);
-    coordinates.add(latitude);
+  private GeoPoint(double longitude, double latitude) {
+    this.longitude = longitude;
+    this.latitude = latitude;
+    this.type = GeoJsonType.POINT.getValue();
+    coordinates = ImmutableList.of(longitude, latitude);
   }
 
   /**
@@ -26,20 +35,52 @@ public class GeoPoint {
     return new GeoPoint(longitude, latitude);
   }
 
-  public String getType() { return this.type; }
+  public double getLongitude() {
+    return longitude;
+  }
 
-  public ArrayList<Double> getCoordinates() {return this.coordinates; }
+  public double getLatitude() {
+    return latitude;
+  }
 
+  public String getType() {
+    return type;
+  }
+
+  public List<Double> getCoordinates() {
+    return coordinates;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 29 * hash + Objects.hashCode(this.longitude);
+    hash = 29 * hash + Objects.hashCode(this.latitude);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
+      return false;
+    }
+
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final GeoPoint other = (GeoPoint) obj;
+
+    return Objects.equals(this.longitude, other.longitude)
+        && Objects.equals(this.latitude, other.latitude);
+  }
 
   @Override
   public String toString() {
-    return "geoPoint{"
-        + "type = "
-        + this.type
-        + ", coordinates = ["
-        + this.coordinates.get(0)
-        + ", "
-        + this.coordinates.get(1)
-        + "]}";
+    return "GeoPoint{" + "longitude=" + longitude + ", latitude=" + latitude + '}';
   }
 }

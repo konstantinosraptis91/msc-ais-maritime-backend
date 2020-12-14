@@ -1,13 +1,13 @@
 package kraptis91.maritime.model;
 
-
 /** @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020. */
 public class OceanConditions {
 
-  /** longitude and latitude in geoJSON format
-   *  replaced longitude and latitude with geoPoint Stavros Lamprinos on 14/12/2020
-   * */
-  private final GeoPoint location;
+  /**
+   * longitude and latitude in geoJSON format replaced longitude and latitude with geoPoint Stavros
+   * Lamprinos on 14/12/2020
+   */
+  private final GeoPoint geoPoint;
 
   /** bottom depth of the oceans point in meters (Undefined value = -16384) */
   private final double bottomDepth;
@@ -24,7 +24,7 @@ public class OceanConditions {
   private final long timestamp;
 
   private OceanConditions(Builder builder) {
-    this.location = builder.location;
+    this.geoPoint = builder.location;
     this.bottomDepth = builder.bottomDepth;
     this.tidalEffect = builder.tidalEffect;
     this.seaHeight = builder.seaHeight;
@@ -36,7 +36,9 @@ public class OceanConditions {
   // Getters
   // -------------------------------------------------------------------------------------------------------------------
 
-  public GeoPoint getLocation() {return this.location; }
+  public GeoPoint getGeoPoint() {
+    return this.geoPoint;
+  }
 
   public double getBottomDepth() {
     return bottomDepth;
@@ -65,23 +67,19 @@ public class OceanConditions {
   @Override
   public String toString() {
     return "OceanConditions{"
-        + "location = {"
-        + "type = "
-        + location.getType()
-        + ", coordinates = ["
-        + location.getCoordinates()
-        + "]}"
-        + ", bottomDepth = "
+        + "geoPoint="
+        + geoPoint
+        + ", bottomDepth="
         + bottomDepth
-        + ", tidalEffect = "
+        + ", tidalEffect="
         + tidalEffect
-        + ", seaHeight = "
+        + ", seaHeight="
         + seaHeight
         + ", meanWaveLength="
         + meanWaveLength
-        + ", timestamp ="
+        + ", timestamp="
         + timestamp
-        + "}";
+        + '}';
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -130,7 +128,7 @@ public class OceanConditions {
     private int meanWaveLength;
 
     public Builder(double longitude, double latitude, long timestamp) {
-      this.location = new GeoPoint(longitude, latitude);
+      this.location = GeoPoint.of(longitude, latitude);
       this.timestamp = timestamp;
     }
 

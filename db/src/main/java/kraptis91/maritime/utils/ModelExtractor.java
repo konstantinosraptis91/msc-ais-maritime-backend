@@ -1,5 +1,6 @@
 package kraptis91.maritime.utils;
 
+import kraptis91.maritime.model.GeoPoint;
 import kraptis91.maritime.model.OceanConditions;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
@@ -33,6 +34,7 @@ public class ModelExtractor {
   }
 
   public static VesselTrajectoryPoint extractVesselTrajectoryPoint(NariDynamicDto dto) {
-    return VesselTrajectoryPoint.of(dto.getLon(), dto.getLat(), dto.getSpeed(), dto.getT());
+    return VesselTrajectoryPoint.createInstance(
+        GeoPoint.of(dto.getLon(), dto.getLat()), dto.getSpeed(), dto.getT());
   }
 }
