@@ -1,28 +1,13 @@
 package kraptis91.maritime.model;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 
 /** @author Stavros Lamprinos [stalab at linuxmail.org] on 8/12/2020. */
 public class OceanConditions {
 
-  /** longitude in degrees (-180.0 to 180.0 range) */
-  @DecimalMin(
-      value = "-180.0",
-      message = "Invalid value, degrees of longitude cannot be less than -180.0")
-  @DecimalMax(
-      value = "180.0",
-      message = "Invalid value, degrees of longitude cannot be more than 180.0")
-  private final double longitude;
-
-  /** latitude in degrees (-90.0 to 90.0 range) */
-  @DecimalMin(
-      value = "-90.0",
-      message = "Invalid value, degrees of latitude cannot be less than -90.0")
-  @DecimalMax(
-      value = "90.0",
-      message = "Invalid value, degrees of latitude cannot be more than 90.0")
-  private final double latitude;
+  /** longitude and latitude in geoJSON format
+   *  replaced longitude and latitude with geoPoint Stavros Lamprinos on 14/12/2020
+   * */
+  private final GeoPoint location;
 
   /** bottom depth of the oceans point in meters (Undefined value = -16384) */
   private final double bottomDepth;
@@ -39,8 +24,7 @@ public class OceanConditions {
   private final long timestamp;
 
   private OceanConditions(Builder builder) {
-    this.longitude = builder.longitude;
-    this.latitude = builder.latitude;
+    this.location = builder.location;
     this.bottomDepth = builder.bottomDepth;
     this.tidalEffect = builder.tidalEffect;
     this.seaHeight = builder.seaHeight;
@@ -52,13 +36,7 @@ public class OceanConditions {
   // Getters
   // -------------------------------------------------------------------------------------------------------------------
 
-  public double getLongitude() {
-    return longitude;
-  }
-
-  public double getLatitude() {
-    return latitude;
-  }
+  public GeoPoint getLocation() {return this.location; }
 
   public double getBottomDepth() {
     return bottomDepth;
@@ -87,10 +65,12 @@ public class OceanConditions {
   @Override
   public String toString() {
     return "OceanConditions{"
-        + "longitude = "
-        + longitude
-        + ", latitude = "
-        + latitude
+        + "location = {"
+        + "type = "
+        + location.getType()
+        + ", coordinates = ["
+        + location.getCoordinates()
+        + "]}"
         + ", bottomDepth = "
         + bottomDepth
         + ", tidalEffect = "
@@ -140,8 +120,7 @@ public class OceanConditions {
           OceanBuild {
 
     // mandatory fields
-    private final double longitude;
-    private final double latitude;
+    private final GeoPoint location;
     private final long timestamp;
 
     // optional fields
@@ -151,8 +130,7 @@ public class OceanConditions {
     private int meanWaveLength;
 
     public Builder(double longitude, double latitude, long timestamp) {
-      this.longitude = longitude;
-      this.latitude = latitude;
+      this.location = new GeoPoint(longitude, latitude);
       this.timestamp = timestamp;
     }
 
