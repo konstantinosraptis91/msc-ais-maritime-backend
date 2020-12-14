@@ -14,8 +14,6 @@ public class GeoPoint {
   public GeoPoint(double longitude, double latitude) {
     coordinates.add(longitude);
     coordinates.add(latitude);
-//    this.coordinates[0] = longitude;
-//    this.coordinates[1] = latitude;
   }
 
   /**
@@ -33,17 +31,9 @@ public class GeoPoint {
   public ArrayList<Double> getCoordinates() {return this.coordinates; }
 
 
-//  @Override
-//  public int hashCode() {
-//    int hash = 5;
-//    hash = Objects.hashCode(this.coordinates);
-////    hash = 29 * hash + Objects.hashCode(this.coordinates[1]);
-//    return hash;
-//  }
-
   @Override
   public String toString() {
-    return "geoPont{"
+    return "geoPoint{"
         + "type = "
         + this.type
         + ", coordinates = ["

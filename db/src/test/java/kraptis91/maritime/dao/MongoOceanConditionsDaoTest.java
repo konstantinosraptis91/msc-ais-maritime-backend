@@ -17,7 +17,7 @@ public class MongoOceanConditionsDaoTest {
       MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/oc_january_sample.csv");
 
-  //@Ignore
+  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
