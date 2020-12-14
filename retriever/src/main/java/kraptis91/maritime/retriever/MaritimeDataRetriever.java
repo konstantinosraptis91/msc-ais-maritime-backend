@@ -1,7 +1,6 @@
 package kraptis91.maritime.retriever;
 
 import kraptis91.maritime.model.Vessel;
-import kraptis91.maritime.model.VesselTrajectory;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 
 import java.math.BigInteger;
@@ -23,7 +22,7 @@ public interface MaritimeDataRetriever {
 
   String getVesselDestination(String vesselName);
 
-  VesselTrajectory getVesselTrajectory(String vesselName);
+  List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName);
 
   List<Vessel> getVesselsByTrajectoryPoint(double longitude, double latitude);
 
