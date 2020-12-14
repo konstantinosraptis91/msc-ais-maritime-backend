@@ -7,22 +7,16 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-/** @author Konstantinos Raptis [kraptis at unipi.gr] on 8/12/2020. */
-public class VesselDaoTest {
+/** @author Konstantinos Raptis [kraptis at unipi.gr] on 14/12/2020. */
+public class MongoVesselTrajectoryPointDaoTest {
 
   private final InputStream isSample =
       MongoOceanConditionsDaoTest.class.getResourceAsStream(
-          "/sample/maritime/nari_static_sample.csv");
+          "/sample/maritime/nari_dynamic_sample.csv");
 
-  @Ignore
   @Test
   public void testInsertMany() throws Exception {
-
-    InputStream isBig =
-        new FileInputStream(
-            DirectoryUtils.getDefaultDownloadsDirectory() + "/ais-data/nari_static.csv");
-
-    VesselDao dao = DaoFactory.createMongoVesselDao();
+    VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
     dao.insertMany(isSample);
   }
 }

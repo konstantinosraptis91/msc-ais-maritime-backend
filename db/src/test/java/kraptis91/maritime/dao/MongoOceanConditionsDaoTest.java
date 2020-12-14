@@ -1,7 +1,6 @@
 package kraptis91.maritime.dao;
 
 import kraptis91.maritime.parser.utils.DirectoryUtils;
-import kraptis91.maritime.parser.utils.InputStreamUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,17 +17,16 @@ public class MongoOceanConditionsDaoTest {
       MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/oc_january_sample.csv");
 
-  // @Ignore
+  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
-    //      InputStream isBig =
-    //          new FileInputStream(
-    //              DirectoryUtils.getDefaultDownloadsDirectory() +
-    // "/ocean-conditions/oc_december.csv");
+    InputStream isBig =
+        new FileInputStream(
+            DirectoryUtils.getDefaultDownloadsDirectory() + "/ocean-conditions/oc_december.csv");
 
     OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
-    dao.insertMany(InputStreamUtils.getBufferedInputStream(isSample));
+    dao.insertMany(isSample);
   }
 
   @Ignore
@@ -43,7 +41,7 @@ public class MongoOceanConditionsDaoTest {
               DirectoryUtils.getDefaultDownloadsDirectory() + "/ocean-conditions/oc_" + m + ".csv");
 
       OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
-      dao.insertMany(InputStreamUtils.getBufferedInputStream(isBig));
+      dao.insertMany(isBig);
     }
   }
 }

@@ -8,6 +8,8 @@ import kraptis91.maritime.enums.MongoDBCollection;
 import kraptis91.maritime.model.OceanConditions;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+import kraptis91.maritime.parser.exception.CSVParserException;
+import kraptis91.maritime.parser.utils.InputStreamUtils;
 import kraptis91.maritime.utils.ModelExtractor;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -27,16 +30,18 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
   public static final Logger LOGGER = Logger.getLogger(MongoOceanConditionsDao.class.getName());
 
   @Override
-  public void insertMany(@NotNull InputStream is) throws Exception {
+  public void insertMany(@NotNull InputStream csvStream, int chunkSize) throws Exception {
 
-    LOGGER.info("Inserting " + is.available() + " bytes to db.");
+    //    LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
 
-    final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+    final BufferedReader bufferedReader =
+        new BufferedReader(
+            new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
     final CSVParser parser = new CSVParser();
-    final int chunkSize = 3000;
     final List<OceanConditions> oceanConditionsList = new ArrayList<>(chunkSize);
+    int totalOceanConditions = 0;
 
-    LOGGER.info("Chunk size is " + chunkSize + ".");
+    //    LOGGER.info("Chunk size csvStream " + chunkSize + ".");
 
     String line;
     SeaStateForecastDto dto;
@@ -50,30 +55,43 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
         continue;
       }
 
-      // parse current line to the dto
-      dto = parser.extractSeaStateForecastDto(line);
-      // System.out.println(dto);
-      // add to the list after model obj extraction
-      oceanConditionsList.add(ModelExtractor.extractOceanConditions(dto));
+      try {
+        // parse current line to the dto
+        dto = parser.extractSeaStateForecastDto(line);
+        // add to the list after model obj extraction
+        oceanConditionsList.add(ModelExtractor.extractOceanConditions(dto));
 
-      // when read chunkSize number of lines, insert data to mongoDB
-      if (oceanConditionsList.size() == chunkSize) {
-        LOGGER.info(oceanConditionsList.size() + " lines read, attempting to insert data to db.");
-        insertMany(oceanConditionsList);
-        // clear list
-        oceanConditionsList.clear();
+        // when read chunkSize number of lines, insert data to mongoDB
+        if (oceanConditionsList.size() == chunkSize) {
+          //        LOGGER.info(oceanConditionsList.size() + " lines read, attempting to insert data
+          // to db.");
+          insertMany(oceanConditionsList);
+          // increase total ocean conditions counter
+          totalOceanConditions += oceanConditionsList.size();
+          // clear list
+          oceanConditionsList.clear();
+        }
+
+      } catch (CSVParserException e) {
+        LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
       }
     }
-    LOGGER.info(oceanConditionsList.size() + " lines left, attempting to insert data to db.");
+    //    LOGGER.info(oceanConditionsList.size() + " lines left, attempting to insert data to db.");
     // insert any data left
     insertMany(oceanConditionsList);
+    // increase total ocean conditions counter
+    totalOceanConditions += oceanConditionsList.size();
+    // clear list
+    oceanConditionsList.clear();
+
     LOGGER.info("All lines inserted to db successfully.");
+    LOGGER.info("Total ocean conditions added to db: " + totalOceanConditions);
   }
 
   @Override
   public void insertMany(@NotEmpty List<OceanConditions> list) {
 
-    LOGGER.info("Inserting data to db START.");
+    //    LOGGER.info("Inserting data to db START.");
 
     MongoCollection<OceanConditions> collection =
         MongoDB.MARITIME
@@ -82,6 +100,6 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
                 MongoDBCollection.OCEAN_CONDITIONS.getCollectionName(), OceanConditions.class);
 
     collection.insertMany(list);
-    LOGGER.info("Inserting data to db END.");
+    //    LOGGER.info("Inserting data to db END.");
   }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 13/12/2020. */
 public interface VesselTrajectoryPointDao {
 
-  void insertMany(InputStream is, int chunkSize) throws Exception;
+  void insertMany(InputStream csvStream, int chunkSize) throws Exception;
 
   default void insertMany(InputStream is) throws Exception {
     insertMany(is, 3000);

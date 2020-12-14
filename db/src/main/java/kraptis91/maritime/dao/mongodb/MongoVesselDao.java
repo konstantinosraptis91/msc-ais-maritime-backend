@@ -11,6 +11,7 @@ import kraptis91.maritime.parser.dto.NariStaticDto;
 import kraptis91.maritime.parser.enums.MMSICountryCode;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.parser.exception.CSVParserException;
+import kraptis91.maritime.parser.utils.InputStreamUtils;
 import kraptis91.maritime.utils.ModelExtractor;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,18 +28,19 @@ public class MongoVesselDao implements VesselDao {
   public static final Logger LOGGER = Logger.getLogger(MongoVesselDao.class.getName());
 
   @Override
-  public void insertMany(@NotNull InputStream is, final int chunkSize) throws Exception {
+  public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
 
-    // LOGGER.info("Inserting " + is.available() + " bytes to db.");
+    // LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
 
-    final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+    final BufferedReader bufferedReader =
+        new BufferedReader(
+            new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
     final CSVParser parser = new CSVParser();
     final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
-    // final List<Vessel> vesselList = new ArrayList<>();
     final Set<Integer> totalMMSISet = new LinkedHashSet<>();
     int totalVessels = 0;
 
-    // LOGGER.info("Chunk size is " + chunkSize + ".");
+    // LOGGER.info("Chunk size csvStream " + chunkSize + ".");
 
     String line;
     NariStaticDto dto;
@@ -52,13 +54,14 @@ public class MongoVesselDao implements VesselDao {
         continue;
       }
 
-      // parse current line to the dto
       try {
+        // parse current line to the dto
         dto = parser.extractNariStaticDto(line);
 
         // System.out.println(dto);
-        // add to the list after model obj extraction
+        // check to avoid duplicates
         if (!totalMMSISet.contains(dto.getMmsi())) {
+          // add to the list after model obj extraction
           vesselSet.add(
               ModelExtractor.extractVessel(
                   dto,
@@ -95,7 +98,7 @@ public class MongoVesselDao implements VesselDao {
   }
 
   @Override
-  public void insertMany(@NotEmpty Set<Vessel> set) {
+  public void insertMany(@NotEmpty Set<Vessel> vesselSet) {
 
     // LOGGER.info("Inserting data to db START.");
 
@@ -104,13 +107,13 @@ public class MongoVesselDao implements VesselDao {
             .getDatabase()
             .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
 
-    collection.insertMany(new ArrayList<>(set));
+    collection.insertMany(new ArrayList<>(vesselSet));
 
     // LOGGER.info("Inserting data to db END.");
   }
 
   @Override
-  public void insertMany(@NotEmpty List<Vessel> list) {
+  public void insertMany(@NotEmpty List<Vessel> vesselList) {
 
     // LOGGER.info("Inserting data to db START.");
 
@@ -119,7 +122,7 @@ public class MongoVesselDao implements VesselDao {
             .getDatabase()
             .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
 
-    collection.insertMany(list);
+    collection.insertMany(vesselList);
 
     // LOGGER.info("Inserting data to db END.");
   }
