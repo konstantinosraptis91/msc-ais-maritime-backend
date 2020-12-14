@@ -18,4 +18,7 @@ public interface VesselDao {
   void insertMany(Set<Vessel> vesselSet);
 
   void insertMany(List<Vessel> vesselList);
+
+  String findObjectId(int mmsi);
+
 }

@@ -1,5 +1,6 @@
 package kraptis91.maritime.model;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.DecimalMax;
@@ -16,7 +17,8 @@ public class Vessel {
     /**
      * The id given by mongo db.
      */
-    private String id;
+    @BsonId
+    private final String id;
 
     /**
      * MMSI identifier for vessel.

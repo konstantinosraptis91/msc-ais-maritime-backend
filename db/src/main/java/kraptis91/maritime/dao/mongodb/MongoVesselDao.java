@@ -1,6 +1,8 @@
 package kraptis91.maritime.dao.mongodb;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import jakarta.validation.constraints.NotEmpty;
 import kraptis91.maritime.dao.VesselDao;
 import kraptis91.maritime.enums.MongoDB;
@@ -22,108 +24,138 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
+/**
+ * @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020.
+ */
 public class MongoVesselDao implements VesselDao {
 
-  public static final Logger LOGGER = Logger.getLogger(MongoVesselDao.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(MongoVesselDao.class.getName());
 
-  @Override
-  public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
+    @Override
+    public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
 
-    // LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
+        // LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
 
-    final BufferedReader bufferedReader =
-        new BufferedReader(
-            new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
-    final CSVParser parser = new CSVParser();
-    final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
-    final Set<Integer> totalMMSISet = new LinkedHashSet<>();
-    int totalVessels = 0;
+        final BufferedReader bufferedReader =
+                new BufferedReader(
+                        new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
+        final CSVParser parser = new CSVParser();
+        final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
+        final Set<Integer> totalMMSISet = new LinkedHashSet<>();
+        int totalVessels = 0;
 
-    // LOGGER.info("Chunk size csvStream " + chunkSize + ".");
+        // LOGGER.info("Chunk size csvStream " + chunkSize + ".");
 
-    String line;
-    NariStaticDto dto;
-    boolean isFirstLine = true;
+        String line;
+        NariStaticDto dto;
+        boolean isFirstLine = true;
 
-    while ((line = bufferedReader.readLine()) != null) {
+        while ((line = bufferedReader.readLine()) != null) {
 
-      // omit first line
-      if (isFirstLine) {
-        isFirstLine = false;
-        continue;
-      }
+            // omit first line
+            if (isFirstLine) {
+                isFirstLine = false;
+                continue;
+            }
 
-      try {
-        // parse current line to the dto
-        dto = parser.extractNariStaticDto(line);
+            try {
+                // parse current line to the dto
+                dto = parser.extractNariStaticDto(line);
 
-        // System.out.println(dto);
-        // check to avoid duplicates
-        if (!totalMMSISet.contains(dto.getMmsi())) {
-          // add to the list after model obj extraction
-          vesselSet.add(
-              ModelExtractor.extractVessel(
-                  dto,
-                  ShipTypes.INSTANCE.getShipType(dto.getShipType()),
-                  MMSICountryCode.INSTANCE.getCountryByMMSI(dto.getMmsi())));
-          totalMMSISet.add(dto.getMmsi());
+                // System.out.println(dto);
+                // check to avoid duplicates
+                if (!totalMMSISet.contains(dto.getMmsi())) {
+                    // add to the list after model obj extraction
+                    vesselSet.add(
+                            ModelExtractor.extractVessel(
+                                    dto,
+                                    ShipTypes.INSTANCE.getShipType(dto.getShipType()),
+                                    MMSICountryCode.INSTANCE.getCountryByMMSI(dto.getMmsi())));
+                    totalMMSISet.add(dto.getMmsi());
+                }
+
+                // when read chunkSize number of lines, insert data to mongoDB
+                if (vesselSet.size() == chunkSize) {
+                    // LOGGER.info(vesselSet.size() + " lines read, attempting to insert data to db.");
+                    insertMany(vesselSet);
+                    // increase total vessels counter
+                    totalVessels += vesselSet.size();
+                    // clear set
+                    vesselSet.clear();
+                }
+
+            } catch (CSVParserException e) {
+                LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
+            }
         }
+        // LOGGER.info(vesselSet.size() + " lines left, attempting to insert data to db.");
+        // insert any data left
+        insertMany(vesselSet);
+        // increase total vessels counter
+        totalVessels += vesselSet.size();
+        // clear set
+        vesselSet.clear();
+        totalMMSISet.clear();
 
-        // when read chunkSize number of lines, insert data to mongoDB
-        if (vesselSet.size() == chunkSize) {
-          // LOGGER.info(vesselSet.size() + " lines read, attempting to insert data to db.");
-          insertMany(vesselSet);
-          // increase total vessels counter
-          totalVessels += vesselSet.size();
-          // clear set
-          vesselSet.clear();
-        }
-
-      } catch (CSVParserException e) {
-        LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
-      }
+        LOGGER.info("All lines inserted to db successfully.");
+        LOGGER.info("Total vessels added to db: " + totalVessels);
     }
-    // LOGGER.info(vesselSet.size() + " lines left, attempting to insert data to db.");
-    // insert any data left
-    insertMany(vesselSet);
-    // increase total vessels counter
-    totalVessels += vesselSet.size();
-    // clear set
-    vesselSet.clear();
-    totalMMSISet.clear();
 
-    LOGGER.info("All lines inserted to db successfully.");
-    LOGGER.info("Total vessels added to db: " + totalVessels);
-  }
+    @Override
+    public void insertMany(@NotEmpty Set<Vessel> vesselSet) {
 
-  @Override
-  public void insertMany(@NotEmpty Set<Vessel> vesselSet) {
+        // LOGGER.info("Inserting data to db START.");
 
-    // LOGGER.info("Inserting data to db START.");
+        MongoCollection<Vessel> collection =
+                MongoDB.MARITIME
+                        .getDatabase()
+                        .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
 
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+        collection.insertMany(new ArrayList<>(vesselSet));
 
-    collection.insertMany(new ArrayList<>(vesselSet));
+        // LOGGER.info("Inserting data to db END.");
+    }
 
-    // LOGGER.info("Inserting data to db END.");
-  }
+    @Override
+    public void insertMany(@NotEmpty List<Vessel> vesselList) {
 
-  @Override
-  public void insertMany(@NotEmpty List<Vessel> vesselList) {
+        // LOGGER.info("Inserting data to db START.");
 
-    // LOGGER.info("Inserting data to db START.");
+        MongoCollection<Vessel> collection =
+                MongoDB.MARITIME
+                        .getDatabase()
+                        .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
 
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+        collection.insertMany(vesselList);
 
-    collection.insertMany(vesselList);
+        // LOGGER.info("Inserting data to db END.");
+    }
 
-    // LOGGER.info("Inserting data to db END.");
-  }
+    @Override
+    public String findObjectId(int mmsi) {
+
+        LOGGER.info("Trying to find vessel _id for vessel with mmsi " + mmsi + ".");
+
+        final BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("mmsi", mmsi);
+
+        MongoCollection<Vessel> collection =
+                MongoDB.MARITIME
+                        .getDatabase()
+                        .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+
+        try (MongoCursor<Vessel> cursor = collection.find(searchQuery).iterator()) {
+            while (cursor.hasNext()) {
+
+                Vessel vessel;
+
+                if ((vessel = cursor.next()).getMmsi() == mmsi) {
+                    return vessel.getId();
+                }
+            }
+        }
+
+        LOGGER.info("Failed to find vessel _id for vessel with mmsi " + mmsi + ".");
+        return null;
+    }
 }
