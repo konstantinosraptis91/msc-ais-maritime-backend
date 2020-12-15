@@ -1,5 +1,6 @@
 package kraptis91.maritime.dao;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -13,6 +14,7 @@ public class VesselDaoTest {
             MongoOceanConditionsDaoTest.class.getResourceAsStream(
                     "/sample/maritime/nari_static_sample.csv");
 
+    @Ignore
     @Test
     public void testInsertMany() throws Exception {
 
@@ -24,12 +26,12 @@ public class VesselDaoTest {
         dao.insertMany(isSample);
     }
 
+    @Ignore
     @Test
     public void testFindObjectId() throws Exception {
 
         VesselDao dao = DaoFactory.createMongoVesselDao();
         System.out.println(dao.findObjectId(228157000));
-
     }
 
 }
