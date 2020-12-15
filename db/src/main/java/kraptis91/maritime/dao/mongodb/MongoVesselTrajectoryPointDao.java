@@ -65,8 +65,15 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
 
           // get it from map
           String objectId = vesselIdMap.get(dto.getMmsi());
-          // add to the list after model obj extraction
-          pointList.add(ModelExtractor.extractVesselTrajectoryPoint(dto, objectId));
+
+          if (!Objects.isNull(objectId)) {
+            // add to the list after model obj extraction
+            pointList.add(ModelExtractor.extractVesselTrajectoryPoint(dto, objectId));
+          } else {
+            LOGGER.log(
+                Level.WARNING,
+                "ObjectId retrieved from Map but was null for mmsi " + dto.getMmsi());
+          }
 
         } else {
 
@@ -80,6 +87,8 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
             vesselIdMap.put(dto.getMmsi(), objectId);
           } else { // a vessel not found for given mmsi
 
+            // add it to map as null to avoid to search again db
+            vesselIdMap.put(dto.getMmsi(), null);
             LOGGER.log(Level.WARNING, "Cannot find a vessel for mmsi " + dto.getMmsi());
           }
         }

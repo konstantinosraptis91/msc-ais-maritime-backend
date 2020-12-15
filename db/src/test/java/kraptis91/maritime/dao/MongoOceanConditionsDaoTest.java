@@ -1,10 +1,8 @@
 package kraptis91.maritime.dao;
 
-import kraptis91.maritime.parser.utils.DirectoryUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -31,13 +29,21 @@ public class MongoOceanConditionsDaoTest {
 
     String[] months = {"october", "november", "december", "january", "february", "march"};
 
-    for (String m : months) {
-      InputStream isBig =
-          new FileInputStream(
-              DirectoryUtils.getDefaultDownloadsDirectory() + "/ocean-conditions/oc_" + m + ".csv");
+    for (String month : months) {
+
+      //      InputStream isBig =
+      //          new FileInputStream(
+      //              "D:/NetbeansProjects/maritime-nosql/data/ocean-conditions/oc_" + month +
+      // ".csv");
+
+      //      InputStream isBig =
+      //          new FileInputStream(
+      //              DirectoryUtils.getDefaultDownloadsDirectory() + "/ocean-conditions/oc_" +
+      // month +
+      // ".csv");
 
       OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
-      dao.insertMany(isBig);
+      dao.insertMany(isSample);
     }
   }
 }
