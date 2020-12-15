@@ -17,11 +17,10 @@ public class MongoVesselTrajectoryPointDaoTest {
   @Test
   public void testInsertMany() throws Exception {
 
-    //    InputStream isBig =
-    //        new
-    // FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_dynamic.csv");
+    InputStream isBig =
+        new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_dynamic.csv");
 
     VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
-    dao.insertMany(isSample);
+    dao.insertMany(isBig);
   }
 }

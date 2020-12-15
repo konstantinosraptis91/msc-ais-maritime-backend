@@ -3,6 +3,7 @@ package kraptis91.maritime.dao;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -31,10 +32,9 @@ public class MongoOceanConditionsDaoTest {
 
     for (String month : months) {
 
-      //      InputStream isBig =
-      //          new FileInputStream(
-      //              "D:/NetbeansProjects/maritime-nosql/data/ocean-conditions/oc_" + month +
-      // ".csv");
+      InputStream isBig =
+          new FileInputStream(
+              "D:/NetbeansProjects/maritime-nosql/data/ocean-conditions/oc_" + month + ".csv");
 
       //      InputStream isBig =
       //          new FileInputStream(
@@ -43,7 +43,7 @@ public class MongoOceanConditionsDaoTest {
       // ".csv");
 
       OceanConditionsDao dao = DaoFactory.createMongoOceanConditionsDao();
-      dao.insertMany(isSample);
+      dao.insertMany(isBig);
     }
   }
 }

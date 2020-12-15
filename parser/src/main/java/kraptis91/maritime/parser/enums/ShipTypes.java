@@ -9,8 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,11 +19,11 @@ public enum ShipTypes {
   INSTANCE("/csv/shipTypesList.csv");
 
   public final Logger LOGGER = java.util.logging.Logger.getLogger(ShipTypes.class.getName());
-  private final Map<String, String> shipTypeMap;
+  private final List<ShipTypeListDto> shipTypeListDtoList;
 
   ShipTypes(String resource) {
 
-    shipTypeMap = new LinkedHashMap<>();
+    shipTypeListDtoList = new ArrayList<>();
 
     try {
       LOGGER.info("Initializing Ship Types from " + resource + " START");
@@ -48,7 +48,7 @@ public enum ShipTypes {
         dto = parser.extractShipTypeListDto(line);
         // System.out.println(dto);
         // add ship type id as key to Map and type name as value
-        shipTypeMap.put(String.valueOf(dto.getIdShipType()), dto.getTypeName());
+        shipTypeListDtoList.add(dto);
       }
 
     } catch (IOException | CSVParserException e) {
@@ -56,7 +56,20 @@ public enum ShipTypes {
     }
   }
 
-  public String getShipType(int shipType) {
-    return shipTypeMap.get(String.valueOf(shipType));
+  private Predicate<ShipTypeListDto> isBetween(int shipType) {
+    return dto -> shipType >= dto.getShipTypeMin() && shipType <= dto.getShipTypeMax();
+  }
+
+  public String getShipType(final int shipType) {
+
+    try {
+      return shipTypeListDtoList.stream()
+          .filter(isBetween(shipType))
+          .findAny()
+          .orElseThrow()
+          .getTypeName();
+    } catch (NoSuchElementException e) {
+      return null;
+    }
   }
 }

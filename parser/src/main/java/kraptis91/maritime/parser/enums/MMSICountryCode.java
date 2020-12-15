@@ -45,7 +45,7 @@ public enum MMSICountryCode {
         }
 
         // parse current line to the dto
-        dto = parser.extractMmsiCountryCodesDto(line);
+        dto = parser.extractMMSICountryCodesDto(line);
         // System.out.println(dto);
         // add mmsi country code as key to Map and country name as value
         mmsiCountryCodeMap.put(String.valueOf(dto.getMmsiCountryCode()), dto.getCountry());

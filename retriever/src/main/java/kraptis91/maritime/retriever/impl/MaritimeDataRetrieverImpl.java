@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
  */
 public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever, MaritimeDemoDataRetriever {
     @Override
-    public Map<String, VesselTrajectoryPoint> getVesselPositionMap(BigInteger timestamp) {
+    public Map<String, VesselTrajectoryPoint> getVesselPositionMap(long timestamp) {
         return null;
     }
 
     @Override
-    public VesselTrajectoryPoint getVesselPosition(String vesselName, BigInteger timestamp) {
+    public VesselTrajectoryPoint getVesselPosition(String vesselName, long timestamp) {
         return null;
     }
 
@@ -70,5 +70,15 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever, Maritim
         return vesselList.stream()
                 .filter(vl -> vl.getShipType().equals(shipType))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Vessel getVesselByMMSI(int mmsi) {
+        return null;
+    }
+
+    @Override
+    public Vessel getVesselByName(String vesselName) {
+        return null;
     }
 }

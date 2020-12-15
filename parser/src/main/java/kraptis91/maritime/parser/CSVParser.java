@@ -95,6 +95,10 @@ public class CSVParser {
             dto.setShipName(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
+          case 4:
+            dto.setShipType(CSVParserUtils.parseInt(data[i]));
+            break;
+
           case 9:
             dto.setEta(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
@@ -109,15 +113,15 @@ public class CSVParser {
         }
       }
     } catch (CSVParserException | IllegalArgumentException e) {
-      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
-      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
+      //      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
+      //      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
       throw new CSVParserException(line, e);
     }
 
     return dto;
   }
 
-  public MMSICountryCodesDto extractMmsiCountryCodesDto(@NotNull String line)
+  public MMSICountryCodesDto extractMMSICountryCodesDto(@NotNull String line)
       throws CSVParserException {
 
     // break the line at commas
@@ -164,8 +168,12 @@ public class CSVParser {
       for (int i = 0; i <= 4; i++) { // expecting 5 attributes
 
         switch (i) {
-          case 0:
-            dto.setIdShipType(CSVParserUtils.parseInt(data[i]));
+          case 1:
+            dto.setShipTypeMin(CSVParserUtils.parseInt(data[i]));
+            break;
+
+          case 2:
+            dto.setShipTypeMax(CSVParserUtils.parseInt(data[i]));
             break;
 
           case 3:

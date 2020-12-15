@@ -73,7 +73,7 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
         }
 
       } catch (CSVParserException e) {
-        LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
+        // LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
       }
     }
     //    LOGGER.info(oceanConditionsList.size() + " lines left, attempting to insert data to db.");

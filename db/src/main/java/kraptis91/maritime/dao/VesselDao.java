@@ -21,4 +21,5 @@ public interface VesselDao {
 
   String findObjectId(int mmsi);
 
+  Vessel findVesselByMMSI(int mmsi);
 }

@@ -47,6 +47,7 @@ public class CSVParserTest {
     }
   }
 
+  @Ignore
   @Test
   public void testExtractNariStaticDto() throws Exception {
 

@@ -16,9 +16,9 @@ public interface MaritimeDataRetriever {
    * @param timestamp timestamp in UNIX epochs
    * @return The vessel Map, which has vessel name as key and current position as value
    */
-  Map<String, VesselTrajectoryPoint> getVesselPositionMap(BigInteger timestamp);
+  Map<String, VesselTrajectoryPoint> getVesselPositionMap(long timestamp);
 
-  VesselTrajectoryPoint getVesselPosition(String vesselName, BigInteger timestamp);
+  VesselTrajectoryPoint getVesselPosition(String vesselName, long timestamp);
 
   String getVesselDestination(String vesselName);
 
@@ -50,4 +50,8 @@ public interface MaritimeDataRetriever {
    * @return The vessel list
    */
   List<Vessel> getVesselsByType(int shipType);
+
+  Vessel getVesselByMMSI(int mmsi);
+
+  Vessel getVesselByName(String vesselName);
 }

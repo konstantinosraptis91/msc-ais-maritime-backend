@@ -1,5 +1,6 @@
 package kraptis91.maritime.dao.mongodb;
 
+import com.mongodb.MongoBulkWriteException;
 import com.mongodb.client.MongoCollection;
 import kraptis91.maritime.dao.DaoFactory;
 import kraptis91.maritime.dao.VesselDao;
@@ -70,9 +71,9 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
             // add to the list after model obj extraction
             pointList.add(ModelExtractor.extractVesselTrajectoryPoint(dto, objectId));
           } else {
-            LOGGER.log(
-                Level.WARNING,
-                "ObjectId retrieved from Map but was null for mmsi " + dto.getMmsi());
+            //            LOGGER.log(
+            //                Level.WARNING,
+            //                "ObjectId retrieved from Map but was null for mmsi " + dto.getMmsi());
           }
 
         } else {
@@ -90,7 +91,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
 
             // add it to map as null to avoid to search again db
             vesselIdMap.put(dto.getMmsi(), null);
-            LOGGER.log(Level.WARNING, "Cannot find a vessel for mmsi " + dto.getMmsi());
+            // LOGGER.log(Level.WARNING, "Cannot find a vessel for mmsi " + dto.getMmsi());
           }
         }
 
@@ -105,7 +106,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
         }
 
       } catch (CSVParserException e) {
-        LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
+        // LOGGER.log(Level.WARNING, "Discarding corrupted line" + e.getMessage());
       }
     }
     // LOGGER.info(vesselSet.size() + " lines left, attempting to insert data to db.");
@@ -133,6 +134,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
                 MongoDBCollection.VESSEL_TRAJECTORY_POINTS.getCollectionName(),
                 VesselTrajectoryPoint.class);
 
+    collection.insertMany(points);
     // LOGGER.info("Inserting data to db END.");
   }
 }
