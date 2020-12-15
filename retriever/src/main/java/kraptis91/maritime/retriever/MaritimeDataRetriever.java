@@ -54,4 +54,6 @@ public interface MaritimeDataRetriever {
   Vessel getVesselByMMSI(int mmsi);
 
   Vessel getVesselByName(String vesselName);
+
+  List<Vessel> getVesselsByType(String shipType, int skip, int limit);
 }

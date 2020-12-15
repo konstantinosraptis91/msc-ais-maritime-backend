@@ -4,18 +4,13 @@ import kraptis91.maritime.dao.DaoFactory;
 import kraptis91.maritime.dao.VesselDao;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
-import kraptis91.maritime.model.ModelFactory;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
-import kraptis91.maritime.retriever.MaritimeDemoDataRetriever;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 6/12/2020. */
-public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever, MaritimeDemoDataRetriever {
+public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
   @Override
   public Map<String, VesselTrajectoryPoint> getVesselPositionMap(long timestamp) {
     return null;
@@ -57,9 +52,9 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever, Maritim
   }
 
   @Override
-  public List<Vessel> getVesselsByType(String shipType) {
+  public List<Vessel> getVesselsByType(String shipType, int skip, int limit) {
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    return dao.findVesselsByType(shipType);
+    return dao.findVesselsByType(shipType, skip, limit);
   }
 
   @Override
