@@ -19,6 +19,10 @@ public interface VesselDao {
 
   void insertMany(List<Vessel> vesselList);
 
+  List<Vessel> findVesselsByType(String shipType, int skip, int limit);
+
+  List<Vessel> findVesselsByType(String shipType);
+
   String findObjectId(int mmsi);
 
   Vessel findVesselByMMSI(int mmsi);

@@ -58,18 +58,8 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever, Maritim
 
   @Override
   public List<Vessel> getVesselsByType(String shipType) {
-
-    // Maybe a demo DAO or DTO could be used here, in order to add db module in the game
-
-    List<Vessel> vesselList = new ArrayList<>();
-    vesselList.add(ModelFactory.createDemoVessel());
-    vesselList.add(ModelFactory.createDemoVessel());
-    vesselList.add(ModelFactory.createDemoVessel());
-    vesselList.add(ModelFactory.createDemoVessel());
-
-    return vesselList.stream()
-        .filter(vl -> vl.getShipType().equals(shipType))
-        .collect(Collectors.toList());
+    VesselDao dao = DaoFactory.createMongoVesselDao();
+    return dao.findVesselsByType(shipType);
   }
 
   @Override

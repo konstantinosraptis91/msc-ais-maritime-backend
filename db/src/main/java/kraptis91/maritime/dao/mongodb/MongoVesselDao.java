@@ -162,4 +162,40 @@ public class MongoVesselDao implements VesselDao {
     // LOGGER.info("Failed to find vessel with mmsi " + mmsi + ".");
     return null;
   }
+
+  @Override
+  public List<Vessel> findVesselsByType(String shipType) {
+    return findVesselsByType(shipType, 0, 10);
+  }
+
+  @Override
+  public List<Vessel> findVesselsByType(String shipType, int skip, int limit) {
+
+    // LOGGER.info("Trying to find vessel with mmsi " + mmsi + ".");
+
+    List<Vessel> vesselList = new ArrayList<>();
+
+    final BasicDBObject searchQuery = new BasicDBObject();
+    searchQuery.put("shipType", shipType);
+
+    MongoCollection<Vessel> collection =
+        MongoDB.MARITIME
+            .getDatabase()
+            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+
+    try (MongoCursor<Vessel> cursor =
+        collection.find(searchQuery).skip(skip).limit(limit).iterator()) {
+      while (cursor.hasNext()) {
+
+        Vessel vessel;
+
+        if ((vessel = cursor.next()).getShipType().equals(shipType)) {
+          vesselList.add(vessel);
+        }
+      }
+    }
+
+    // LOGGER.info("Failed to find vessel with mmsi " + mmsi + ".");
+    return vesselList;
+  }
 }
