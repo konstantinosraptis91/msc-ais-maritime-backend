@@ -77,6 +77,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
 
         } else {
 
+          // get it from db
           String objectId = vesselDao.findObjectId(dto.getMmsi());
 
           if (!Objects.isNull(objectId)) {
@@ -131,8 +132,6 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
             .getCollection(
                 MongoDBCollection.VESSEL_TRAJECTORY_POINTS.getCollectionName(),
                 VesselTrajectoryPoint.class);
-
-    collection.insertMany(points);
 
     // LOGGER.info("Inserting data to db END.");
   }
