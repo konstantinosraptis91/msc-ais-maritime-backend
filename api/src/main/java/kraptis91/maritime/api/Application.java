@@ -10,6 +10,7 @@ public class Application {
   public static void main(String[] args) {
     Javalin app = Javalin.create().start(ServerConfig.INSTANCE.getPort());
     app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
-    app.get("/vessels/:shiptype", VesselController.getVesselsByShipType);
+    app.get("/vessels/shiptype/:shiptype", VesselController.getVesselsByShipType);
+    app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
   }
 }

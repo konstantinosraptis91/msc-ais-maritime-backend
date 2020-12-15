@@ -17,4 +17,14 @@ public class VesselController {
         // use service to get the demo data
         ctx.json(service.getVesselsByShipType(shipTypeParam));
       };
+
+  public static Handler getVesselByMMSI =
+      ctx -> {
+        // extract param from url path
+        String mmsiParam = ctx.pathParam("mmsi");
+        // create a new service
+        VesselService service = new VesselService();
+        // use service to get the demo data
+        ctx.json(service.getVesselByMMSI(mmsiParam));
+      };
 }
