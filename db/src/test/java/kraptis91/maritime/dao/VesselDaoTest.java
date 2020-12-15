@@ -13,7 +13,6 @@ public class VesselDaoTest {
       MongoOceanConditionsDaoTest.class.getResourceAsStream(
           "/sample/maritime/nari_static_sample.csv");
 
-  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
@@ -21,11 +20,11 @@ public class VesselDaoTest {
     //        new FileInputStream(
     //            DirectoryUtils.getDefaultDownloadsDirectory() + "/ais-data/nari_static.csv");
 
-    InputStream isBig =
-        new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
+    // InputStream isBig =
+    //    new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
 
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    dao.insertMany(isBig);
+    dao.insertMany(isSample);
   }
 
   @Ignore

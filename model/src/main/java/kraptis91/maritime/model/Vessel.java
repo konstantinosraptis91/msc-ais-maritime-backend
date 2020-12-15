@@ -164,6 +164,14 @@ public class Vessel {
   // Fluent API interfaces
   // -------------------------------------------------------------------------------------------------------------------
 
+  public interface VesselIMO {
+    VesselName withIMO(int imo);
+  }
+
+  public interface VesselName {
+    VesselCallSign withVesselName(String vesselName);
+  }
+
   public interface VesselCallSign {
     VesselEta withCallSign(String callSign);
   }
@@ -219,12 +227,19 @@ public class Vessel {
 
     return Objects.equals(this.mmsi, other.mmsi);
   }
+
+  public static Builder builder(int mmsi) {
+    return new Builder(mmsi);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // Vessel POJO builder
   // -------------------------------------------------------------------------------------------------------------------
 
   public static class Builder
-      implements VesselCallSign,
+      implements VesselIMO,
+          VesselName,
+          VesselCallSign,
           VesselEta,
           VesselDraught,
           VesselShipType,
@@ -234,10 +249,10 @@ public class Vessel {
 
     // mandatory fields
     private final int mmsi;
-    private final int imo;
-    private final String vesselName;
 
     // optional fields
+    private int imo;
+    private String vesselName;
     private String callSign;
     private String eta;
     private double draught;
@@ -246,10 +261,32 @@ public class Vessel {
     private String country;
     private String id;
 
-    public Builder(int mmsi, int imo, String vesselName) {
+    public Builder(int mmsi) {
       this.mmsi = mmsi;
+    }
+
+    /**
+     * Set the IMO ship identification number (7 digits).
+     *
+     * @param imo The IMO
+     * @return The next in chain
+     */
+    @Override
+    public VesselName withIMO(int imo) {
       this.imo = imo;
+      return this;
+    }
+
+    /**
+     * Set the vessel name.
+     *
+     * @param vesselName The name
+     * @return The next in chain
+     */
+    @Override
+    public VesselCallSign withVesselName(String vesselName) {
       this.vesselName = vesselName;
+      return this;
     }
 
     /**
