@@ -1,6 +1,5 @@
 package kraptis91.maritime.dao.mongodb;
 
-import com.mongodb.MongoBulkWriteException;
 import com.mongodb.client.MongoCollection;
 import kraptis91.maritime.dao.DaoFactory;
 import kraptis91.maritime.dao.VesselDao;
@@ -18,7 +17,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 13/12/2020. */
@@ -26,6 +24,14 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
 
   public static final Logger LOGGER =
       Logger.getLogger(MongoVesselTrajectoryPointDao.class.getName());
+
+  public static MongoCollection<VesselTrajectoryPoint> createVesselTrajectoryPointsCollection() {
+    return MongoDB.MARITIME
+        .getDatabase()
+        .getCollection(
+            MongoDBCollection.VESSEL_TRAJECTORY_POINTS.getCollectionName(),
+            VesselTrajectoryPoint.class);
+  }
 
   @Override
   public void insertMany(InputStream csvStream, int chunkSize) throws Exception {
@@ -126,14 +132,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
   @Override
   public void insertMany(List<VesselTrajectoryPoint> points) {
     // LOGGER.info("Inserting data to db START.");
-
-    MongoCollection<VesselTrajectoryPoint> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(
-                MongoDBCollection.VESSEL_TRAJECTORY_POINTS.getCollectionName(),
-                VesselTrajectoryPoint.class);
-
+    MongoCollection<VesselTrajectoryPoint> collection = createVesselTrajectoryPointsCollection();
     collection.insertMany(points);
     // LOGGER.info("Inserting data to db END.");
   }

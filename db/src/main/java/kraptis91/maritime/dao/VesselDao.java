@@ -4,6 +4,7 @@ import kraptis91.maritime.model.Vessel;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 8/12/2020. */
@@ -21,9 +22,13 @@ public interface VesselDao {
 
   List<Vessel> findVesselsByType(String shipType, int skip, int limit);
 
-  List<Vessel> findVesselsByType(String shipType);
+  default List<Vessel> findVesselsByType(String shipType) {
+    return findVesselsByType(shipType, 0, 10);
+  }
 
   String findObjectId(int mmsi);
 
   Vessel findVesselByMMSI(int mmsi);
+
+  Optional<Vessel> findVesselByName(String vesselName);
 }

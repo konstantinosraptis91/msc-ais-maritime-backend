@@ -3,6 +3,7 @@ package kraptis91.maritime.dao.mongodb;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import jakarta.validation.constraints.NotEmpty;
 import kraptis91.maritime.dao.VesselDao;
 import kraptis91.maritime.enums.MongoDB;
@@ -21,13 +22,19 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.logging.Level;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
 public class MongoVesselDao implements VesselDao {
 
   public static final Logger LOGGER = Logger.getLogger(MongoVesselDao.class.getName());
+
+  public static MongoCollection<Vessel> createVesselCollection() {
+    return MongoDB.MARITIME
+        .getDatabase()
+        .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+  }
 
   @Override
   public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
@@ -101,31 +108,17 @@ public class MongoVesselDao implements VesselDao {
 
   @Override
   public void insertMany(@NotEmpty Set<Vessel> vesselSet) {
-
     // LOGGER.info("Inserting data to db START.");
-
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
-
+    MongoCollection<Vessel> collection = createVesselCollection();
     collection.insertMany(new ArrayList<>(vesselSet));
-
     // LOGGER.info("Inserting data to db END.");
   }
 
   @Override
   public void insertMany(@NotEmpty List<Vessel> vesselList) {
-
     // LOGGER.info("Inserting data to db START.");
-
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
-
+    MongoCollection<Vessel> collection = createVesselCollection();
     collection.insertMany(vesselList);
-
     // LOGGER.info("Inserting data to db END.");
   }
 
@@ -139,63 +132,38 @@ public class MongoVesselDao implements VesselDao {
   public Vessel findVesselByMMSI(int mmsi) {
 
     // LOGGER.info("Trying to find vessel with mmsi " + mmsi + ".");
-
     final BasicDBObject searchQuery = new BasicDBObject();
     searchQuery.put("mmsi", mmsi);
 
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+    MongoCollection<Vessel> collection = createVesselCollection();
+    Vessel vessel = null;
 
     try (MongoCursor<Vessel> cursor = collection.find(searchQuery).iterator()) {
       while (cursor.hasNext()) {
-
-        Vessel vessel;
 
         if ((vessel = cursor.next()).getMmsi() == mmsi) {
           return vessel;
         }
       }
     }
-
     // LOGGER.info("Failed to find vessel with mmsi " + mmsi + ".");
-    return null;
-  }
-
-  @Override
-  public List<Vessel> findVesselsByType(String shipType) {
-    return findVesselsByType(shipType, 0, 10);
+    return vessel;
   }
 
   @Override
   public List<Vessel> findVesselsByType(String shipType, int skip, int limit) {
-
-    // LOGGER.info("Trying to find vessel with mmsi " + mmsi + ".");
-
-    List<Vessel> vesselList = new ArrayList<>();
-
-    final BasicDBObject searchQuery = new BasicDBObject();
-    searchQuery.put("shipType", shipType);
-
-    MongoCollection<Vessel> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
-
-    try (MongoCursor<Vessel> cursor =
-        collection.find(searchQuery).skip(skip).limit(limit).iterator()) {
-      while (cursor.hasNext()) {
-
-        Vessel vessel;
-
-        if ((vessel = cursor.next()).getShipType().equals(shipType)) {
-          vesselList.add(vessel);
-        }
-      }
-    }
-
-    // LOGGER.info("Failed to find vessel with mmsi " + mmsi + ".");
+    final List<Vessel> vesselList = new ArrayList<>();
+    createVesselCollection()
+        .find(Filters.eq("shipType", shipType))
+        .skip(skip)
+        .limit(limit)
+        .forEach((Consumer<Vessel>) vesselList::add);
     return vesselList;
+  }
+
+  @Override
+  public Optional<Vessel> findVesselByName(String vesselName) {
+    return Optional.ofNullable(
+        createVesselCollection().find(Filters.eq("vesselName", vesselName)).first());
   }
 }

@@ -2,6 +2,7 @@ package kraptis91.maritime.api.controller;
 
 import io.javalin.http.Handler;
 import kraptis91.maritime.api.service.VesselService;
+import kraptis91.maritime.retriever.exception.RetrieverException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,21 @@ public class VesselController {
           ctx.json(service.getVesselByMMSI(mmsiParam));
         } else {
           ctx.status(400);
+        }
+      };
+
+  public static Handler getVesselByName =
+      ctx -> {
+        // extract param from url path
+        String vesselNameParam = ctx.pathParam("name");
+
+        try {
+          // create a new service
+          VesselService service = new VesselService();
+          // use service to get the demo data
+          ctx.json(service.getVesselByName(vesselNameParam));
+        } catch (RetrieverException e) {
+          ctx.status(404);
         }
       };
 }

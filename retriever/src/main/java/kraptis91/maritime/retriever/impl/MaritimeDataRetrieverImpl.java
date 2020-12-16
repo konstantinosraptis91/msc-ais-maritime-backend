@@ -5,50 +5,39 @@ import kraptis91.maritime.dao.VesselDao;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
+import kraptis91.maritime.retriever.exception.RetrieverException;
 
 import java.util.List;
-import java.util.Map;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 6/12/2020. */
 public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
-  @Override
-  public Map<String, VesselTrajectoryPoint> getVesselPositionMap(long timestamp) {
-    return null;
-  }
 
   @Override
-  public VesselTrajectoryPoint getVesselPosition(String vesselName, long timestamp) {
-    return null;
-  }
-
-  @Override
-  public String getVesselDestination(String vesselName) {
+  public List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi) {
     return null;
   }
 
   @Override
   public List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName) {
+
     return null;
   }
 
   @Override
-  public List<Vessel> getVesselsByTrajectoryPoint(double longitude, double latitude) {
+  public String getVesselDestination(int mmsi) {
     return null;
   }
 
   @Override
-  public List<Vessel> getVesselsBySpeed(double speed) {
-    return null;
+  public String getVesselDestination(String vesselName) throws RetrieverException {
+    Vessel vessel = getVesselByName(vesselName);
+    return vessel.getDestination();
   }
 
   @Override
-  public List<Vessel> getVesselsByDraught(double min, double max) {
-    return null;
-  }
-
-  @Override
-  public List<Vessel> getVesselsByType(int shipType) {
-    return null;
+  public List<Vessel> getVesselsByType(String shipType) {
+    VesselDao dao = DaoFactory.createMongoVesselDao();
+    return dao.findVesselsByType(shipType);
   }
 
   @Override
@@ -64,7 +53,8 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
   }
 
   @Override
-  public Vessel getVesselByName(String vesselName) {
-    return null;
+  public Vessel getVesselByName(String vesselName) throws RetrieverException {
+    VesselDao dao = DaoFactory.createMongoVesselDao();
+    return dao.findVesselByName(vesselName).orElseThrow(RetrieverException::new);
   }
 }

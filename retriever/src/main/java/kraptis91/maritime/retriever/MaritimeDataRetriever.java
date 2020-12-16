@@ -2,46 +2,24 @@ package kraptis91.maritime.retriever;
 
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
+import kraptis91.maritime.retriever.exception.RetrieverException;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public interface MaritimeDataRetriever {
 
-  /**
-   * Get vessel Map by time.
-   *
-   * @param timestamp timestamp in UNIX epochs
-   * @return The vessel Map, which has vessel name as key and current position as value
-   */
-  Map<String, VesselTrajectoryPoint> getVesselPositionMap(long timestamp);
+  String getVesselDestination(int mmsi);
 
-  VesselTrajectoryPoint getVesselPosition(String vesselName, long timestamp);
+  String getVesselDestination(String vesselName) throws RetrieverException;
 
-  String getVesselDestination(String vesselName);
+  List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi);
 
   List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName);
 
-  List<Vessel> getVesselsByTrajectoryPoint(double longitude, double latitude);
+  Vessel getVesselByMMSI(int mmsi);
 
-  /**
-   * Get vessels by speed.
-   *
-   * @param speed The speed in knots (allowed values: 0-102.2 knots)
-   * @return The vessel list
-   */
-  List<Vessel> getVesselsBySpeed(double speed);
-
-  /**
-   * Get vessels by draught specifications.
-   *
-   * @param min The minimum draught
-   * @param max The maximum draught
-   * @return The vessel list
-   */
-  List<Vessel> getVesselsByDraught(double min, double max);
+  Vessel getVesselByName(String vesselName) throws RetrieverException;
 
   /**
    * Get vessels by type.
@@ -49,11 +27,15 @@ public interface MaritimeDataRetriever {
    * @param shipType The ship type
    * @return The vessel list
    */
-  List<Vessel> getVesselsByType(int shipType);
+  List<Vessel> getVesselsByType(String shipType);
 
-  Vessel getVesselByMMSI(int mmsi);
-
-  Vessel getVesselByName(String vesselName);
-
+  /**
+   * Get vessels by type.
+   *
+   * @param shipType The ship type
+   * @param skip Number of docs to skip in db
+   * @param limit Limit the number of results
+   * @return The vessel list
+   */
   List<Vessel> getVesselsByType(String shipType, int skip, int limit);
 }

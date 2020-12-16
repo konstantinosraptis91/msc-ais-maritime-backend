@@ -15,6 +15,7 @@ public class Application {
     app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
     app.get("/vessels/shiptype/:shiptype", VesselController.getVesselsByShipType);
     app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
+    app.get("/vessels/name/:name", VesselController.getVesselByName);
 
     JavalinJackson.configure(
         new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL));

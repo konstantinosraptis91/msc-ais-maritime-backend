@@ -29,6 +29,13 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
 
   public static final Logger LOGGER = Logger.getLogger(MongoOceanConditionsDao.class.getName());
 
+  public static MongoCollection<OceanConditions> createOceanConditionsCollection() {
+    return MongoDB.MARITIME
+        .getDatabase()
+        .getCollection(
+            MongoDBCollection.OCEAN_CONDITIONS.getCollectionName(), OceanConditions.class);
+  }
+
   @Override
   public void insertMany(@NotNull InputStream csvStream, int chunkSize) throws Exception {
 
@@ -90,15 +97,8 @@ public class MongoOceanConditionsDao implements OceanConditionsDao {
 
   @Override
   public void insertMany(@NotEmpty List<OceanConditions> list) {
-
     //    LOGGER.info("Inserting data to db START.");
-
-    MongoCollection<OceanConditions> collection =
-        MongoDB.MARITIME
-            .getDatabase()
-            .getCollection(
-                MongoDBCollection.OCEAN_CONDITIONS.getCollectionName(), OceanConditions.class);
-
+    MongoCollection<OceanConditions> collection = createOceanConditionsCollection();
     collection.insertMany(list);
     //    LOGGER.info("Inserting data to db END.");
   }
