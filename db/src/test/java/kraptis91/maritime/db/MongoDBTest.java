@@ -1,9 +1,9 @@
-package kraptis91.maritime;
+package kraptis91.maritime.db;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import kraptis91.maritime.enums.MongoDB;
+import kraptis91.maritime.db.enums.MongoDB;
 import org.bson.Document;
 import org.junit.Test;
 

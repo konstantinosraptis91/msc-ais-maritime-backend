@@ -1,4 +1,4 @@
-package kraptis91.maritime.enums;
+package kraptis91.maritime.db.enums;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;

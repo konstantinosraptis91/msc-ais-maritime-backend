@@ -1,7 +1,7 @@
 package kraptis91.maritime.retriever.impl;
 
-import kraptis91.maritime.dao.DaoFactory;
-import kraptis91.maritime.dao.VesselDao;
+import kraptis91.maritime.db.dao.DaoFactory;
+import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
@@ -47,9 +47,9 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
   }
 
   @Override
-  public Vessel getVesselByMMSI(int mmsi) {
+  public Vessel getVesselByMMSI(int mmsi) throws RetrieverException {
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    return dao.findVesselByMMSI(mmsi);
+    return dao.findVesselByMMSI(mmsi).orElseThrow(RetrieverException::new);
   }
 
   @Override

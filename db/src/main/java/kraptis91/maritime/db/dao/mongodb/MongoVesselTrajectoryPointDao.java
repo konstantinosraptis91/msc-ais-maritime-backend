@@ -1,17 +1,17 @@
-package kraptis91.maritime.dao.mongodb;
+package kraptis91.maritime.db.dao.mongodb;
 
 import com.mongodb.client.MongoCollection;
-import kraptis91.maritime.dao.DaoFactory;
-import kraptis91.maritime.dao.VesselDao;
-import kraptis91.maritime.dao.VesselTrajectoryPointDao;
-import kraptis91.maritime.enums.MongoDB;
-import kraptis91.maritime.enums.MongoDBCollection;
+import kraptis91.maritime.db.dao.DaoFactory;
+import kraptis91.maritime.db.dao.VesselDao;
+import kraptis91.maritime.db.dao.VesselTrajectoryPointDao;
+import kraptis91.maritime.db.enums.MongoDB;
+import kraptis91.maritime.db.enums.MongoDBCollection;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.NariDynamicDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.utils.ModelExtractor;
+import kraptis91.maritime.db.utils.ModelExtractor;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

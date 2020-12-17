@@ -17,7 +17,7 @@ public class VesselService {
     return dataRetriever.getVesselsByType(shipType, skip, limit);
   }
 
-  public Vessel getVesselByMMSI(int mmsi) {
+  public Vessel getVesselByMMSI(int mmsi) throws RetrieverException {
     // create a demo Maritime data retriever
     MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
     // use the Maritime data retriever to return demo data

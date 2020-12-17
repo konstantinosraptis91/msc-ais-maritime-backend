@@ -1,16 +1,16 @@
-package kraptis91.maritime.dao.mongodb;
+package kraptis91.maritime.db.dao.mongodb;
 
 import com.mongodb.client.MongoCollection;
 import jakarta.validation.constraints.NotEmpty;
-import kraptis91.maritime.dao.OceanConditionsDao;
-import kraptis91.maritime.enums.MongoDB;
-import kraptis91.maritime.enums.MongoDBCollection;
+import kraptis91.maritime.db.dao.OceanConditionsDao;
+import kraptis91.maritime.db.enums.MongoDB;
+import kraptis91.maritime.db.enums.MongoDBCollection;
 import kraptis91.maritime.model.OceanConditions;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.SeaStateForecastDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.utils.ModelExtractor;
+import kraptis91.maritime.db.utils.ModelExtractor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;

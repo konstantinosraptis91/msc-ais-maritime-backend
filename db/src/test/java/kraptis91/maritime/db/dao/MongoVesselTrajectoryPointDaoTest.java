@@ -1,4 +1,4 @@
-package kraptis91.maritime.dao;
+package kraptis91.maritime.db.dao;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.io.InputStream;
 public class MongoVesselTrajectoryPointDaoTest {
 
   private final InputStream isSample =
-      MongoOceanConditionsDaoTest.class.getResourceAsStream(
+      MongoVesselTrajectoryPointDaoTest.class.getResourceAsStream(
           "/sample/maritime/nari_dynamic_sample.csv");
 
   @Ignore
@@ -21,6 +21,6 @@ public class MongoVesselTrajectoryPointDaoTest {
         new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_dynamic.csv");
 
     VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
-    dao.insertMany(isBig);
+    dao.insertMany(isSample);
   }
 }

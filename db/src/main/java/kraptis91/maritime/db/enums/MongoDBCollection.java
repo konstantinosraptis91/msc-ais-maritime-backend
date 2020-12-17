@@ -1,4 +1,4 @@
-package kraptis91.maritime.enums;
+package kraptis91.maritime.db.enums;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 11/12/2020. */
 public enum MongoDBCollection {

@@ -1,13 +1,11 @@
-package kraptis91.maritime.dao.mongodb;
+package kraptis91.maritime.db.dao.mongodb;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import jakarta.validation.constraints.NotEmpty;
-import kraptis91.maritime.dao.VesselDao;
-import kraptis91.maritime.enums.MongoDB;
-import kraptis91.maritime.enums.MongoDBCollection;
+import kraptis91.maritime.db.dao.VesselDao;
+import kraptis91.maritime.db.enums.MongoDB;
+import kraptis91.maritime.db.enums.MongoDBCollection;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.NariStaticDto;
@@ -15,7 +13,8 @@ import kraptis91.maritime.parser.enums.MMSICountryCode;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.utils.ModelExtractor;
+import kraptis91.maritime.db.utils.ModelExtractor;
+import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -34,6 +33,12 @@ public class MongoVesselDao implements VesselDao {
     return MongoDB.MARITIME
         .getDatabase()
         .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Vessel.class);
+  }
+
+  public static MongoCollection<Document> createDocumentCollection() {
+    return MongoDB.MARITIME
+        .getDatabase()
+        .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Document.class);
   }
 
   @Override
@@ -124,30 +129,18 @@ public class MongoVesselDao implements VesselDao {
 
   @Override
   public String findObjectId(int mmsi) {
-    Vessel vessel = findVesselByMMSI(mmsi);
-    return Objects.isNull(vessel) ? null : vessel.getId();
+    Document document =
+        createDocumentCollection()
+            .find(Filters.eq("mmsi", mmsi))
+            .projection(new Document().append("_id", 1))
+            .first();
+
+    return Objects.isNull(document) ? null : document.getObjectId("_id").toHexString();
   }
 
   @Override
-  public Vessel findVesselByMMSI(int mmsi) {
-
-    // LOGGER.info("Trying to find vessel with mmsi " + mmsi + ".");
-    final BasicDBObject searchQuery = new BasicDBObject();
-    searchQuery.put("mmsi", mmsi);
-
-    MongoCollection<Vessel> collection = createVesselCollection();
-    Vessel vessel = null;
-
-    try (MongoCursor<Vessel> cursor = collection.find(searchQuery).iterator()) {
-      while (cursor.hasNext()) {
-
-        if ((vessel = cursor.next()).getMmsi() == mmsi) {
-          return vessel;
-        }
-      }
-    }
-    // LOGGER.info("Failed to find vessel with mmsi " + mmsi + ".");
-    return vessel;
+  public Optional<Vessel> findVesselByMMSI(int mmsi) {
+    return Optional.ofNullable(createVesselCollection().find(Filters.eq("mmsi", mmsi)).first());
   }
 
   @Override

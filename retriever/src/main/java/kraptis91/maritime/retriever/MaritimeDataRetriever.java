@@ -17,7 +17,7 @@ public interface MaritimeDataRetriever {
 
   List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName);
 
-  Vessel getVesselByMMSI(int mmsi);
+  Vessel getVesselByMMSI(int mmsi) throws RetrieverException;
 
   Vessel getVesselByName(String vesselName) throws RetrieverException;
 

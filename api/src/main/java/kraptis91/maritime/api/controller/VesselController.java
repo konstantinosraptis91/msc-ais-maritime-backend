@@ -37,9 +37,13 @@ public class VesselController {
           // create a new service
           VesselService service = new VesselService();
           // use service to get the demo data
-          ctx.json(service.getVesselByMMSI(mmsiParam));
+          try {
+            ctx.json(service.getVesselByMMSI(mmsiParam));
+          } catch (RetrieverException e) {
+            ctx.status(404); // not found
+          }
         } else {
-          ctx.status(400);
+          ctx.status(400); // bad request
         }
       };
 
@@ -54,7 +58,7 @@ public class VesselController {
           // use service to get the demo data
           ctx.json(service.getVesselByName(vesselNameParam));
         } catch (RetrieverException e) {
-          ctx.status(404);
+          ctx.status(404); // not found
         }
       };
 }

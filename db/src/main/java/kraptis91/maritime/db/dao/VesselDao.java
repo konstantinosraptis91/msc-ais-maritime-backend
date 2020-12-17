@@ -1,4 +1,4 @@
-package kraptis91.maritime.dao;
+package kraptis91.maritime.db.dao;
 
 import kraptis91.maritime.model.Vessel;
 
@@ -28,7 +28,7 @@ public interface VesselDao {
 
   String findObjectId(int mmsi);
 
-  Vessel findVesselByMMSI(int mmsi);
+  Optional<Vessel> findVesselByMMSI(int mmsi);
 
   Optional<Vessel> findVesselByName(String vesselName);
 }

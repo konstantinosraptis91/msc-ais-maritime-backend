@@ -1,4 +1,4 @@
-package kraptis91.maritime.enums;
+package kraptis91.maritime.db.enums;
 
 import org.junit.Ignore;
 import org.junit.Test;

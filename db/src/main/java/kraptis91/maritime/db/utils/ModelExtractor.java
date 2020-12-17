@@ -1,4 +1,4 @@
-package kraptis91.maritime.utils;
+package kraptis91.maritime.db.utils;
 
 import kraptis91.maritime.model.GeoPoint;
 import kraptis91.maritime.model.OceanConditions;

@@ -1,4 +1,4 @@
-package kraptis91.maritime.dao.mongodb.codec;
+package kraptis91.maritime.db.dao.mongodb.codec;
 
 import kraptis91.maritime.model.Vessel;
 import org.bson.*;

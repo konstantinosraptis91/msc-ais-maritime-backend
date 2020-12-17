@@ -1,4 +1,4 @@
-package kraptis91.maritime.dao;
+package kraptis91.maritime.db.dao;
 
 import org.junit.Ignore;
 import org.junit.Test;
