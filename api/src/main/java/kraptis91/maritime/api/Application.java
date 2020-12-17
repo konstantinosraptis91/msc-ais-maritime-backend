@@ -16,6 +16,11 @@ public class Application {
     app.get("/vessels/shiptype/:shiptype", VesselController.getVesselsByShipType);
     app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
     app.get("/vessels/name/:name", VesselController.getVesselByName);
+    app.get("/vessels/destination/name/:name", VesselController.getVesselDestinationByName);
+    app.get("/vessels/destination/mmsi/:mmsi", VesselController.getVesselDestinationByMMSI);
+    app.get("/vessels/destination/:destination", VesselController.getVesselByDestination);
+    app.get("/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
+    app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
 
     JavalinJackson.configure(
         new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL));

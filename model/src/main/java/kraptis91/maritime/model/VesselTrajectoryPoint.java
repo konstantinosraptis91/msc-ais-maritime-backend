@@ -1,7 +1,5 @@
 package kraptis91.maritime.model;
 
-import org.bson.types.ObjectId;
-
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.util.Objects;
@@ -21,14 +19,16 @@ public class VesselTrajectoryPoint {
       message = "Invalid speed value, speed cannot be more than 102.2 knots")
   private final double speed;
 
-  private final ObjectId vesselId;
+  /** The id given by mongo db. */
+  private final String vesselId;
+
   private final long timestamp;
 
   private VesselTrajectoryPoint(GeoPoint geoPoint, double speed, long timestamp, String vesselId) {
     this.geoPoint = geoPoint;
     this.speed = speed;
     this.timestamp = timestamp;
-    this.vesselId = new ObjectId(vesselId);
+    this.vesselId = vesselId;
   }
 
   public GeoPoint getGeoPoint() {
@@ -43,7 +43,7 @@ public class VesselTrajectoryPoint {
     return timestamp;
   }
 
-  public ObjectId getVesselId() {
+  public String getVesselId() {
     return vesselId;
   }
 
@@ -52,8 +52,8 @@ public class VesselTrajectoryPoint {
     int hash = 5;
     hash = 29 * hash + Objects.hashCode(this.timestamp);
     hash = 29 * hash + Objects.hashCode(this.speed);
-    hash = 29 * hash + Objects.hashCode(this.geoPoint.getLongitude());
-    hash = 29 * hash + Objects.hashCode(this.geoPoint.getLatitude());
+    hash = 29 * hash + Objects.hashCode(this.geoPoint.getCoordinates().get(0));
+    hash = 29 * hash + Objects.hashCode(this.geoPoint.getCoordinates().get(1));
     return hash;
   }
 
@@ -85,6 +85,8 @@ public class VesselTrajectoryPoint {
         + geoPoint
         + ", speed="
         + speed
+        + ", vesselId="
+        + vesselId
         + ", timestamp="
         + timestamp
         + '}';

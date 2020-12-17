@@ -1,22 +1,25 @@
 package kraptis91.maritime.db.dao.mongodb;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.dao.VesselTrajectoryPointDao;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
+import kraptis91.maritime.db.utils.ModelExtractor;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.NariDynamicDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.db.utils.ModelExtractor;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 13/12/2020. */
@@ -85,14 +88,16 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
         } else {
 
           // get it from db
-          String objectId = vesselDao.findObjectId(dto.getMmsi());
+          Optional<String> objectId = vesselDao.findObjectIdAsString(dto.getMmsi());
 
-          if (!Objects.isNull(objectId)) {
+          // if (!Objects.isNull(objectId)) {
+          if (objectId.isPresent()) {
 
             // add to the list after model obj extraction
-            pointList.add(ModelExtractor.extractVesselTrajectoryPoint(dto, objectId));
+            pointList.add(ModelExtractor.extractVesselTrajectoryPoint(dto, objectId.get()));
             // add id to vesselIdMap
-            vesselIdMap.put(dto.getMmsi(), objectId);
+            vesselIdMap.put(dto.getMmsi(), objectId.get());
+
           } else { // a vessel not found for given mmsi
 
             // add it to map as null to avoid to search again db
@@ -135,5 +140,33 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
     MongoCollection<VesselTrajectoryPoint> collection = createVesselTrajectoryPointsCollection();
     collection.insertMany(points);
     // LOGGER.info("Inserting data to db END.");
+  }
+
+  @Override
+  public List<VesselTrajectoryPoint> findVesselTrajectory(String vesselName, int skip, int limit) {
+    final List<VesselTrajectoryPoint> trajectoryPointList = new ArrayList<>();
+    createVesselTrajectoryPointsCollection()
+        .aggregate(
+            Arrays.asList(
+                Aggregates.lookup("vessels", "vesselId", "_id", "vesselTrajectory"),
+                Aggregates.match(Filters.eq("vesselTrajectory.vesselName", vesselName)),
+                Aggregates.skip(skip),
+                Aggregates.limit(limit)))
+        .forEach((Consumer<VesselTrajectoryPoint>) trajectoryPointList::add);
+    return trajectoryPointList;
+  }
+
+  @Override
+  public List<VesselTrajectoryPoint> findVesselTrajectory(int mmsi, int skip, int limit) {
+    final List<VesselTrajectoryPoint> trajectoryPointList = new ArrayList<>();
+    createVesselTrajectoryPointsCollection()
+        .aggregate(
+            Arrays.asList(
+                Aggregates.lookup("vessels", "vesselId", "_id", "vesselTrajectory"),
+                Aggregates.match(Filters.eq("vesselTrajectory.mmsi", mmsi)),
+                Aggregates.skip(skip),
+                Aggregates.limit(limit)))
+        .forEach((Consumer<VesselTrajectoryPoint>) trajectoryPointList::add);
+    return trajectoryPointList;
   }
 }

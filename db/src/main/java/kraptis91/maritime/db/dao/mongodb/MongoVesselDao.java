@@ -128,14 +128,33 @@ public class MongoVesselDao implements VesselDao {
   }
 
   @Override
-  public String findObjectId(int mmsi) {
-    Document document =
-        createDocumentCollection()
-            .find(Filters.eq("mmsi", mmsi))
-            .projection(new Document().append("_id", 1))
-            .first();
+  public Optional<String> findObjectIdAsString(int mmsi) {
+    return Optional.ofNullable(
+            createDocumentCollection()
+                .find(Filters.eq("mmsi", mmsi))
+                .projection(new Document().append("_id", 1))
+                .first())
+        .map(d -> d.getObjectId("_id").toHexString());
+  }
 
-    return Objects.isNull(document) ? null : document.getObjectId("_id").toHexString();
+  @Override
+  public Optional<String> findVesselDestination(String vesselName) {
+    return Optional.ofNullable(
+            createDocumentCollection()
+                .find(Filters.eq("vesselName", vesselName))
+                .projection(new Document().append("destination", 1))
+                .first())
+        .map(d -> d.getString("destination"));
+  }
+
+  @Override
+  public Optional<String> findVesselDestination(int mmsi) {
+    return Optional.ofNullable(
+            createDocumentCollection()
+                .find(Filters.eq("mmsi", mmsi))
+                .projection(new Document().append("destination", 1))
+                .first())
+        .map(d -> d.getString("destination"));
   }
 
   @Override
@@ -158,5 +177,16 @@ public class MongoVesselDao implements VesselDao {
   public Optional<Vessel> findVesselByName(String vesselName) {
     return Optional.ofNullable(
         createVesselCollection().find(Filters.eq("vesselName", vesselName)).first());
+  }
+
+  @Override
+  public List<Vessel> findVesselsByDestination(String destination, int skip, int limit) {
+    final List<Vessel> vesselList = new ArrayList<>();
+    createVesselCollection()
+        .find(Filters.eq("destination", destination))
+        .skip(skip)
+        .limit(limit)
+        .forEach((Consumer<Vessel>) vesselList::add);
+    return vesselList;
   }
 }

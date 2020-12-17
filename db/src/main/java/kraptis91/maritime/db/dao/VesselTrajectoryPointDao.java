@@ -15,4 +15,16 @@ public interface VesselTrajectoryPointDao {
   }
 
   void insertMany(List<VesselTrajectoryPoint> points);
+
+  default List<VesselTrajectoryPoint> findVesselTrajectory(String vesselName) {
+    return findVesselTrajectory(vesselName, 0, 30);
+  }
+
+  List<VesselTrajectoryPoint> findVesselTrajectory(String vesselName, int skip, int limit);
+
+  default List<VesselTrajectoryPoint> findVesselTrajectory(int mmsi) {
+    return findVesselTrajectory(mmsi, 0, 30);
+  }
+
+  List<VesselTrajectoryPoint> findVesselTrajectory(int mmsi, int skip, int limit);
 }

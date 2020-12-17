@@ -2,32 +2,26 @@ package kraptis91.maritime.retriever;
 
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
-import kraptis91.maritime.retriever.exception.RetrieverException;
 
 import java.util.List;
+import java.util.Optional;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public interface MaritimeDataRetriever {
 
-  String getVesselDestination(int mmsi);
+  Optional<String> getVesselDestination(int mmsi);
 
-  String getVesselDestination(String vesselName) throws RetrieverException;
+  Optional<String> getVesselDestination(String vesselName);
 
-  List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi);
+  List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi, int skip, int limit);
 
-  List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName);
+  List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName, int skip, int limit);
 
-  Vessel getVesselByMMSI(int mmsi) throws RetrieverException;
+  Optional<Vessel> getVesselByMMSI(int mmsi);
 
-  Vessel getVesselByName(String vesselName) throws RetrieverException;
+  Optional<Vessel> getVesselByName(String vesselName);
 
-  /**
-   * Get vessels by type.
-   *
-   * @param shipType The ship type
-   * @return The vessel list
-   */
-  List<Vessel> getVesselsByType(String shipType);
+  List<Vessel> getVesselsByDestination(String destination, int skip, int limit);
 
   /**
    * Get vessels by type.

@@ -23,12 +23,22 @@ public interface VesselDao {
   List<Vessel> findVesselsByType(String shipType, int skip, int limit);
 
   default List<Vessel> findVesselsByType(String shipType) {
-    return findVesselsByType(shipType, 0, 10);
+    return findVesselsByType(shipType, 0, 30);
   }
 
-  String findObjectId(int mmsi);
+  default List<Vessel> findVesselsByDestination(String destination) {
+    return findVesselsByDestination(destination, 0, 30);
+  }
+
+  List<Vessel> findVesselsByDestination(String destination, int skip, int limit);
+
+  Optional<String> findObjectIdAsString(int mmsi);
 
   Optional<Vessel> findVesselByMMSI(int mmsi);
 
   Optional<Vessel> findVesselByName(String vesselName);
+
+  Optional<String> findVesselDestination(String vesselName);
+
+  Optional<String> findVesselDestination(int mmsi);
 }

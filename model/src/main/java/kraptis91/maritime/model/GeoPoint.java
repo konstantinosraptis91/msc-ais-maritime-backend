@@ -2,7 +2,6 @@ package kraptis91.maritime.model;
 
 import com.google.common.collect.ImmutableList;
 import kraptis91.maritime.model.enums.GeoJsonType;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,17 +9,12 @@ import java.util.Objects;
 /** @author Stavros Lamprinos [stalab at linuxmail.org] on 14/12/2020. */
 public class GeoPoint {
 
-  // longitude and latitude coordinates
-  @BsonIgnore private final double longitude;
-  @BsonIgnore private final double latitude;
   // the GeoJson type
   private final String type;
   // coordinates as an array of [lon, lat]
   private final List<Double> coordinates;
 
   private GeoPoint(double longitude, double latitude) {
-    this.longitude = longitude;
-    this.latitude = latitude;
     this.type = GeoJsonType.POINT.getValue();
     coordinates = ImmutableList.of(longitude, latitude);
   }
@@ -35,14 +29,6 @@ public class GeoPoint {
     return new GeoPoint(longitude, latitude);
   }
 
-  public double getLongitude() {
-    return longitude;
-  }
-
-  public double getLatitude() {
-    return latitude;
-  }
-
   public String getType() {
     return type;
   }
@@ -54,8 +40,8 @@ public class GeoPoint {
   @Override
   public int hashCode() {
     int hash = 5;
-    hash = 29 * hash + Objects.hashCode(this.longitude);
-    hash = 29 * hash + Objects.hashCode(this.latitude);
+    hash = 29 * hash + Objects.hashCode(this.coordinates.get(0));
+    hash = 29 * hash + Objects.hashCode(this.coordinates.get(1));
     return hash;
   }
 
@@ -75,8 +61,8 @@ public class GeoPoint {
     }
     final GeoPoint other = (GeoPoint) obj;
 
-    return Objects.equals(this.longitude, other.longitude)
-        && Objects.equals(this.latitude, other.latitude);
+    return Objects.equals(this.coordinates.get(0), other.coordinates.get(0))
+        && Objects.equals(this.coordinates.get(1), other.coordinates.get(1));
   }
 
   @Override

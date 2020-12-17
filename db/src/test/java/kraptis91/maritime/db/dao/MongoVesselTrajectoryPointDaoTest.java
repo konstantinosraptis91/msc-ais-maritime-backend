@@ -23,4 +23,16 @@ public class MongoVesselTrajectoryPointDaoTest {
     VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
     dao.insertMany(isSample);
   }
+
+  @Test
+  public void testFindVesselTrajectoryByVesselName() {
+    VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    dao.findVesselTrajectory("F/V EL AMANECER").forEach(System.out::println);
+  }
+
+  @Test
+  public void testFindVesselTrajectoryByMMSI() {
+    VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    dao.findVesselTrajectory(228157000).forEach(System.out::println);
+  }
 }

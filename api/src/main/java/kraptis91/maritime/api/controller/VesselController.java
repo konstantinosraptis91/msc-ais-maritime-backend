@@ -1,64 +1,69 @@
 package kraptis91.maritime.api.controller;
 
 import io.javalin.http.Handler;
-import kraptis91.maritime.api.service.VesselService;
-import kraptis91.maritime.retriever.exception.RetrieverException;
-
-import java.util.Objects;
-import java.util.Optional;
+import kraptis91.maritime.api.service.ServiceFactory;
+import org.eclipse.jetty.http.HttpStatus;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 7/12/2020. */
 public class VesselController {
 
   public static Handler getVesselsByShipType =
-      ctx -> {
-        // extract param from url path
-        String shipTypeParam = ctx.pathParam("shiptype");
-
-        Integer skipHeader = ctx.header("skip", Integer.class).getOrNull();
-        Integer limitHeader = ctx.header("limit", Integer.class).getOrNull();
-
-        // create a new service
-        VesselService service = new VesselService();
-        // use service to get the demo data
-        ctx.json(
-            service.getVesselsByShipType(
-                shipTypeParam,
-                Optional.ofNullable(skipHeader).orElse(0),
-                Optional.ofNullable(limitHeader).orElse(5)));
-      };
+      ctx ->
+          ctx.json(
+              ServiceFactory.createVesselService()
+                  .getVesselsByShipType(
+                      ctx.pathParam("shiptype"),
+                      ctx.header("skip", Integer.class).get(),
+                      ctx.header("limit", Integer.class).get()));
 
   public static Handler getVesselByMMSI =
-      ctx -> {
-        // extract param from url path
-        Integer mmsiParam = ctx.pathParam("mmsi", Integer.class).getOrNull();
-
-        if (!Objects.isNull(mmsiParam)) {
-          // create a new service
-          VesselService service = new VesselService();
-          // use service to get the demo data
-          try {
-            ctx.json(service.getVesselByMMSI(mmsiParam));
-          } catch (RetrieverException e) {
-            ctx.status(404); // not found
-          }
-        } else {
-          ctx.status(400); // bad request
-        }
-      };
+      ctx ->
+          ServiceFactory.createVesselService()
+              .getVesselByMMSI(ctx.pathParam("mmsi", Integer.class).get())
+              .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
 
   public static Handler getVesselByName =
-      ctx -> {
-        // extract param from url path
-        String vesselNameParam = ctx.pathParam("name");
+      ctx ->
+          ServiceFactory.createVesselService()
+              .getVesselByName(ctx.pathParam("name"))
+              .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
 
-        try {
-          // create a new service
-          VesselService service = new VesselService();
-          // use service to get the demo data
-          ctx.json(service.getVesselByName(vesselNameParam));
-        } catch (RetrieverException e) {
-          ctx.status(404); // not found
-        }
-      };
+  public static Handler getVesselDestinationByName =
+      ctx ->
+          ServiceFactory.createVesselService()
+              .getVesselDestination(ctx.pathParam("name"))
+              .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
+
+  public static Handler getVesselDestinationByMMSI =
+      ctx ->
+          ServiceFactory.createVesselService()
+              .getVesselDestination(ctx.pathParam("mmsi", Integer.class).get())
+              .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
+
+  public static Handler getVesselByDestination =
+      ctx ->
+          ctx.json(
+              ServiceFactory.createVesselService()
+                  .getVesselsByDestination(
+                      ctx.pathParam("destination"),
+                      ctx.header("skip", Integer.class).get(),
+                      ctx.header("limit", Integer.class).get()));
+
+  public static Handler getVesselTrajectoryByName =
+      ctx ->
+          ctx.json(
+              ServiceFactory.createVesselService()
+                  .getVesselTrajectory(
+                      ctx.pathParam("name"),
+                      ctx.header("skip", Integer.class).get(),
+                      ctx.header("limit", Integer.class).get()));
+
+  public static Handler getVesselTrajectoryByMMSI =
+      ctx ->
+          ctx.json(
+              ServiceFactory.createVesselService()
+                  .getVesselTrajectory(
+                      ctx.pathParam("mmsi", Integer.class).get(),
+                      ctx.header("skip", Integer.class).get(),
+                      ctx.header("limit", Integer.class).get()));
 }

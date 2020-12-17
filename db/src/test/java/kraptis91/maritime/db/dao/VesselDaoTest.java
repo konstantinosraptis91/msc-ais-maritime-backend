@@ -26,11 +26,14 @@ public class VesselDaoTest {
     dao.insertMany(isSample);
   }
 
-  // @Ignore
   @Test
-  public void testFindObjectId() {
+  public void testFindObjectIdAsString() {
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    System.out.println(dao.findObjectId(228157000));
+    final int mmsi = 228157000;
+
+    dao.findObjectIdAsString(mmsi)
+        .ifPresentOrElse(
+            System.out::println, () -> System.out.println("Cannot find vessel with mmsi " + mmsi));
   }
 
   @Ignore
