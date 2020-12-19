@@ -79,35 +79,36 @@ public class CSVParser {
       for (int i = 0; i <= 13; i++) { // expecting 14 attributes
 
         switch (i) {
-          case 0:
+          case 0: // mmsi (mandatory)
             dto.setMmsi(CSVParserUtils.parseInt(data[i]));
             break;
 
-          case 1:
-            dto.setImo(CSVParserUtils.parseInt(data[i]));
+          case 1: // imo (optional)
+            // dto.setImo(CSVParserUtils.parseInt(data[i]));
+            dto.setImo(CSVParserUtils.parseIntOrReturnDefault(data[i], 0));
             break;
 
-          case 2:
+          case 2: // callsign (optional)
             dto.setCallSign(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
-          case 3:
+          case 3: // shipname (optional)
             dto.setShipName(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
-          case 4:
-            dto.setShipType(CSVParserUtils.parseInt(data[i]));
+          case 4: // shiptype (optional)
+            dto.setShipType(CSVParserUtils.parseIntOrReturnDefault(data[i], 0));
             break;
 
-          case 9:
+          case 9: // eta (optional)
             dto.setEta(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
 
-          case 10:
-            dto.setDraught(CSVParserUtils.parseDouble(data[i]));
+          case 10: // draught (optional)
+            dto.setDraught(CSVParserUtils.parseDoubleOrReturnDefault(data[i], 0));
             break;
 
-          case 11:
+          case 11: // destination (optional)
             dto.setDestination(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
         }
