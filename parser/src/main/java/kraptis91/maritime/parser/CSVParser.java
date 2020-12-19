@@ -17,7 +17,7 @@ public class CSVParser {
   public SeaStateForecastDto extractSeaStateForecastDto(@NotNull String line)
       throws CSVParserException {
     // break the line at commas
-    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    final String[] data = CSVParserUtils.parseLine(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -67,7 +67,7 @@ public class CSVParser {
   public NariStaticDto extractNariStaticDto(@NotNull String line) throws CSVParserException {
 
     // break the line at commas
-    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    final String[] data = CSVParserUtils.parseLine(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -113,8 +113,8 @@ public class CSVParser {
         }
       }
     } catch (CSVParserException | IllegalArgumentException e) {
-      //      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
-      //      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
+      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
+      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
       throw new CSVParserException(line, e);
     }
 
@@ -125,7 +125,7 @@ public class CSVParser {
       throws CSVParserException {
 
     // break the line at commas
-    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    final String[] data = CSVParserUtils.parseLine(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -156,7 +156,7 @@ public class CSVParser {
   public ShipTypeListDto extractShipTypeListDto(@NotNull String line) throws CSVParserException {
 
     // break the line at commas
-    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    final String[] data = CSVParserUtils.parseLine(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -188,10 +188,10 @@ public class CSVParser {
     return dto;
   }
 
-  public NariDynamicDto extractDynamicDto(@NotNull String line) throws CSVParserException {
+  public NariDynamicDto extractNariDynamicDto(@NotNull String line) throws CSVParserException {
 
     // break the line at commas
-    final String[] data = CSVParserUtils.splitLineAtCommas(line);
+    final String[] data = CSVParserUtils.parseLine(line);
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -225,7 +225,9 @@ public class CSVParser {
         }
       }
     } catch (CSVParserException | IllegalArgumentException e) {
-      throw new CSVParserException(e);
+      LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
+      LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
+      throw new CSVParserException(line, e);
     }
 
     return dto;

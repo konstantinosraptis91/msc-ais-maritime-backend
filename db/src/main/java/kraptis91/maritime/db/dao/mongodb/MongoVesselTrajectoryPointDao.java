@@ -69,7 +69,7 @@ public class MongoVesselTrajectoryPointDao implements VesselTrajectoryPointDao {
       try {
 
         // parse current line to the dto
-        dto = parser.extractDynamicDto(line);
+        dto = parser.extractNariDynamicDto(line);
         // before add find vessel ObjectId
         if (vesselIdMap.containsKey(dto.getMmsi())) {
 

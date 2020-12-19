@@ -4,6 +4,7 @@ import kraptis91.maritime.parser.exception.CSVParserException;
 import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -98,5 +99,19 @@ public class CSVParserUtils {
 
   public static String[] splitLineAtCommas(@NotNull String line) {
     return line.split(",");
+  }
+
+  public static String replaceAllCommasInQuotesWith(@NotNull String line, String with) {
+    return line.replaceAll("(\".*?),(.*?\")", with);
+  }
+
+  public static String replaceAllQuotesWith(@NotNull String line, String with) {
+    return line.replaceAll("\"", with);
+  }
+
+  public static String[] parseLine(@NotNull String line) {
+    return Arrays.stream(splitLineAtCommas(replaceAllCommasInQuotesWith(line, "$1 $2")))
+        .map(v -> replaceAllQuotesWith(v, ""))
+        .toArray(String[]::new);
   }
 }
