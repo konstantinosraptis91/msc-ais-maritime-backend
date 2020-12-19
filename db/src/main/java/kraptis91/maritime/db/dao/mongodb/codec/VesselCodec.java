@@ -6,6 +6,7 @@ import org.bson.codecs.*;
 import org.bson.types.ObjectId;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 14/12/2020. */
 public class VesselCodec implements Codec<Vessel> {
@@ -26,11 +27,11 @@ public class VesselCodec implements Codec<Vessel> {
     Document document = documentCodec.decode(reader, decoderContext);
 
     return Vessel.builder(document.getInteger("mmsi"))
-        .withIMO(document.getInteger("imo"))
+        .withIMO(Optional.ofNullable(document.getInteger("imo")).orElse(0))
         .withVesselName(document.getString("vesselName"))
         .withCallSign(document.getString("callSign"))
         .withEta(document.getString("eta"))
-        .withDraught(document.getDouble("draught"))
+        .withDraught(Optional.ofNullable(document.getDouble("draught")).orElse(0d))
         .withShipType(document.getString("shipType"))
         .withDestination(document.getString("destination"))
         .withCountry(document.getString("country"))
@@ -69,8 +70,14 @@ public class VesselCodec implements Codec<Vessel> {
       document.put("shipType", vessel.getShipType());
     }
 
-    document.put("draught", vessel.getDraught());
-    document.put("imo", vessel.getImo());
+    if (vessel.getDraught() != 0) {
+      document.put("draught", vessel.getDraught());
+    }
+
+    if (vessel.getImo() != 0) {
+      document.put("imo", vessel.getImo());
+    }
+
     document.put("mmsi", vessel.getMmsi());
 
     documentCodec.encode(writer, document, encoderContext);
