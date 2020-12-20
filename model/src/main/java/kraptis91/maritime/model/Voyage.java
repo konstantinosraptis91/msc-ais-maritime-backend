@@ -15,7 +15,13 @@ public class Voyage {
   private String eta;
 
   public Voyage() {
-    this(null);
+    timestamps = new TreeSet<>();
+  }
+
+  public Voyage(String eta, String destination) {
+    timestamps = new TreeSet<>();
+    this.destination = destination;
+    this.eta = eta;
   }
 
   /** @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
@@ -24,12 +30,18 @@ public class Voyage {
     this.eta = eta;
   }
 
+  private Voyage(Builder builder) {
+    timestamps = new TreeSet<>();
+    this.eta = builder.eta;
+    this.destination = builder.destination;
+  }
+
   public static Voyage createInstance() {
     return new Voyage();
   }
 
-  public static Voyage createInstance(String eta) {
-    return new Voyage();
+  public static Voyage createInstance(String eta, String destination) {
+    return new Voyage(eta, destination);
   }
 
   public Set<Long> getTimestamps() {
@@ -82,5 +94,46 @@ public class Voyage {
         + ", eta="
         + eta
         + '}';
+  }
+
+  public interface VoyageETA {
+    VoyageDestination withETA(String eta);
+  }
+
+  public interface VoyageDestination {
+    VoyageBuild withDestination(String destination);
+  }
+
+  public interface VoyageBuild {
+    Voyage build();
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder implements VoyageETA, VoyageDestination, VoyageBuild {
+
+    private String eta;
+    private String destination;
+
+    public Builder() {}
+
+    @Override
+    public VoyageDestination withETA(String eta) {
+      this.eta = eta;
+      return this;
+    }
+
+    @Override
+    public VoyageBuild withDestination(String destination) {
+      this.destination = destination;
+      return this;
+    }
+
+    @Override
+    public Voyage build() {
+      return new Voyage(this);
+    }
   }
 }
