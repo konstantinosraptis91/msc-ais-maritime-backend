@@ -10,23 +10,19 @@ import java.util.TreeSet;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 20/12/2020. */
 public class Voyage {
 
-  private String destination;
+  private final String destination;
   private final TreeSet<Long> timestamps;
+  /** @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
   private String eta;
 
-  public Voyage() {
-    timestamps = new TreeSet<>();
-  }
-
-  public Voyage(String eta, String destination) {
+  private Voyage(String destination) {
     timestamps = new TreeSet<>();
     this.destination = destination;
-    this.eta = eta;
   }
 
-  /** @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
-  public Voyage(String eta) {
+  private Voyage(String destination, String eta) {
     timestamps = new TreeSet<>();
+    this.destination = destination;
     this.eta = eta;
   }
 
@@ -36,12 +32,16 @@ public class Voyage {
     this.destination = builder.destination;
   }
 
-  public static Voyage createInstance() {
-    return new Voyage();
+  public static Voyage createInstance(String destination) {
+    return new Voyage(destination);
   }
 
-  public static Voyage createInstance(String eta, String destination) {
-    return new Voyage(eta, destination);
+  public static Voyage createInstance(String destination, String eta) {
+    return new Voyage(destination, eta);
+  }
+
+  public void setEta(String eta) {
+    this.eta = eta;
   }
 
   public Set<Long> getTimestamps() {
@@ -96,42 +96,24 @@ public class Voyage {
         + '}';
   }
 
-  public interface VoyageETA {
-    VoyageDestination withETA(String eta);
+  public static Builder builder(String destination) {
+    return new Builder(destination);
   }
 
-  public interface VoyageDestination {
-    VoyageBuild withDestination(String destination);
-  }
-
-  public interface VoyageBuild {
-    Voyage build();
-  }
-
-  public static Builder builder() {
-    return new Builder();
-  }
-
-  public static class Builder implements VoyageETA, VoyageDestination, VoyageBuild {
+  public static class Builder {
 
     private String eta;
-    private String destination;
+    private final String destination;
 
-    public Builder() {}
+    public Builder(String destination) {
+      this.destination = destination;
+    }
 
-    @Override
-    public VoyageDestination withETA(String eta) {
+    public Builder withETA(String eta) {
       this.eta = eta;
       return this;
     }
 
-    @Override
-    public VoyageBuild withDestination(String destination) {
-      this.destination = destination;
-      return this;
-    }
-
-    @Override
     public Voyage build() {
       return new Voyage(this);
     }
