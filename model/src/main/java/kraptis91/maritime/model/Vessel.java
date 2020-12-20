@@ -7,6 +7,8 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
@@ -48,12 +50,6 @@ public class Vessel {
   @Size(max = 7, message = "Invalid call sign. The call sign should be max 7 characters.")
   private final String callSign;
 
-  /**
-   * ETA (estimated time of arrival) in format dd-mm hh:mm (day, month, hour, minute) – UTC time
-   * zone.
-   */
-  @NotNull private final String eta;
-
   /** Allowed values: 0.1-25.5 meters */
   @DecimalMin(value = "0.1", message = "Invalid draught value, draught cannot be less than 0.1")
   @DecimalMax(value = "25.5", message = "Invalid draught value, draught cannot be more than 25.5")
@@ -68,12 +64,13 @@ public class Vessel {
   /** The country in which the vessel belongs. */
   private final String country;
 
+  private List<Voyage> voyageList;
+
   private Vessel(Builder builder) {
     this.mmsi = builder.mmsi;
     this.imo = builder.imo;
     this.vesselName = builder.vesselName;
     this.callSign = builder.callSign;
-    this.eta = builder.eta;
     this.draught = builder.draught;
     this.shipType = builder.shipType;
     this.destination = builder.destination;
@@ -101,10 +98,6 @@ public class Vessel {
     return callSign;
   }
 
-  public String getEta() {
-    return eta;
-  }
-
   public double getDraught() {
     return draught;
   }
@@ -125,6 +118,13 @@ public class Vessel {
     return id;
   }
 
+  public List<Voyage> getVoyageList() {
+    if (Objects.isNull(voyageList)) {
+      return new ArrayList<>();
+    }
+    return voyageList;
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   // toString
   // -------------------------------------------------------------------------------------------------------------------
@@ -141,9 +141,6 @@ public class Vessel {
         + '\''
         + ", callSign='"
         + callSign
-        + '\''
-        + ", eta='"
-        + eta
         + '\''
         + ", draught="
         + draught
@@ -172,11 +169,7 @@ public class Vessel {
   }
 
   public interface VesselCallSign {
-    VesselEta withCallSign(String callSign);
-  }
-
-  public interface VesselEta {
-    VesselDraught withEta(String eta);
+    VesselDraught withCallSign(String callSign);
   }
 
   public interface VesselDraught {
@@ -239,7 +232,6 @@ public class Vessel {
       implements VesselIMO,
           VesselName,
           VesselCallSign,
-          VesselEta,
           VesselDraught,
           VesselShipType,
           VesselDestination,
@@ -253,7 +245,6 @@ public class Vessel {
     private int imo;
     private String vesselName;
     private String callSign;
-    private String eta;
     private double draught;
     private String shipType;
     private String destination;
@@ -295,20 +286,8 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselEta withCallSign(String callSign) {
+    public VesselDraught withCallSign(String callSign) {
       this.callSign = callSign;
-      return this;
-    }
-
-    /**
-     * Set the estimate time of arrival.
-     *
-     * @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time
-     * @return The Builder
-     */
-    @Override
-    public VesselDraught withEta(String eta) {
-      this.eta = eta;
       return this;
     }
 

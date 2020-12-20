@@ -27,7 +27,6 @@ public class ModelExtractor {
         .withIMO(dto.getImo())
         .withVesselName(dto.getShipName())
         .withCallSign(dto.getCallSign())
-        .withEta(dto.getEta())
         .withDraught(dto.getDraught())
         .withShipType(shipType)
         .withDestination(dto.getDestination())

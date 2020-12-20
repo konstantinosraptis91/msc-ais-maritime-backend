@@ -30,7 +30,6 @@ public class VesselCodec implements Codec<Vessel> {
         .withIMO(Optional.ofNullable(document.getInteger("imo")).orElse(0))
         .withVesselName(document.getString("vesselName"))
         .withCallSign(document.getString("callSign"))
-        .withEta(document.getString("eta"))
         .withDraught(Optional.ofNullable(document.getDouble("draught")).orElse(0d))
         .withShipType(document.getString("shipType"))
         .withDestination(document.getString("destination"))
@@ -56,10 +55,6 @@ public class VesselCodec implements Codec<Vessel> {
 
     if (!Objects.isNull(vessel.getDestination())) {
       document.put("destination", vessel.getDestination());
-    }
-
-    if (!Objects.isNull(vessel.getEta())) {
-      document.put("eta", vessel.getEta());
     }
 
     if (!Objects.isNull(vessel.getVesselName())) {

@@ -9,7 +9,6 @@ public class ModelFactory {
         .withIMO(9999999)
         .withVesselName("__VESSEL_NAME")
         .withCallSign("__SIGN")
-        .withEta("04-09 20:00 ")
         .withDraught(25.5)
         .withShipType("__SHIP_TYPE_NAME")
         .withDestination("__VESSEL_DESTINATION")
