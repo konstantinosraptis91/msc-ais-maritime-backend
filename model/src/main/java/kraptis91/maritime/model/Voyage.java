@@ -3,6 +3,7 @@ package kraptis91.maritime.model;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -12,13 +13,8 @@ public class Voyage {
 
   private final String destination;
   private final TreeSet<Long> timestamps;
-  /** @param eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
-  private String eta;
-
-  private Voyage(String destination) {
-    timestamps = new TreeSet<>();
-    this.destination = destination;
-  }
+  /** eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
+  private final String eta;
 
   private Voyage(String destination, String eta) {
     timestamps = new TreeSet<>();
@@ -26,22 +22,8 @@ public class Voyage {
     this.eta = eta;
   }
 
-  private Voyage(Builder builder) {
-    timestamps = new TreeSet<>();
-    this.eta = builder.eta;
-    this.destination = builder.destination;
-  }
-
-  public static Voyage createInstance(String destination) {
-    return new Voyage(destination);
-  }
-
   public static Voyage createInstance(String destination, String eta) {
     return new Voyage(destination, eta);
-  }
-
-  public void setEta(String eta) {
-    this.eta = eta;
   }
 
   public Set<Long> getTimestamps() {
@@ -80,6 +62,34 @@ public class Voyage {
   }
 
   @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 29 * hash + Objects.hashCode(this.destination);
+    hash = 29 * hash + Objects.hashCode(this.eta);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+
+    if (this == obj) {
+      return true;
+    }
+
+    if (obj == null) {
+      return false;
+    }
+
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Voyage other = (Voyage) obj;
+
+    return Objects.equals(this.destination, other.destination)
+        && Objects.equals(this.eta, other.eta);
+  }
+
+  @Override
   public String toString() {
     return "Voyage{"
         + "destination='"
@@ -94,28 +104,5 @@ public class Voyage {
         + ", eta="
         + eta
         + '}';
-  }
-
-  public static Builder builder(String destination) {
-    return new Builder(destination);
-  }
-
-  public static class Builder {
-
-    private String eta;
-    private final String destination;
-
-    public Builder(String destination) {
-      this.destination = destination;
-    }
-
-    public Builder withETA(String eta) {
-      this.eta = eta;
-      return this;
-    }
-
-    public Voyage build() {
-      return new Voyage(this);
-    }
   }
 }

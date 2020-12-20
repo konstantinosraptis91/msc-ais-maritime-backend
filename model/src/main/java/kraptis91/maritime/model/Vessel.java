@@ -7,9 +7,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020. */
 public class Vessel {
@@ -64,7 +62,7 @@ public class Vessel {
   /** The country in which the vessel belongs. */
   private final String country;
 
-  private List<Voyage> voyageList;
+  private Set<Voyage> voyageSet;
 
   private Vessel(Builder builder) {
     this.mmsi = builder.mmsi;
@@ -102,6 +100,7 @@ public class Vessel {
     return draught;
   }
 
+  @Nullable
   public String getShipType() {
     return shipType;
   }
@@ -118,11 +117,11 @@ public class Vessel {
     return id;
   }
 
-  public List<Voyage> getVoyageList() {
-    if (Objects.isNull(voyageList)) {
-      return new ArrayList<>();
+  public Set<Voyage> getVoyageSet() {
+    if (Objects.isNull(voyageSet)) {
+      return new LinkedHashSet<>();
     }
-    return voyageList;
+    return voyageSet;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
