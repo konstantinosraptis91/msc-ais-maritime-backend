@@ -1,12 +1,11 @@
 package kraptis91.maritime.db.utils;
 
-import kraptis91.maritime.model.GeoPoint;
-import kraptis91.maritime.model.OceanConditions;
-import kraptis91.maritime.model.Vessel;
-import kraptis91.maritime.model.VesselTrajectoryPoint;
+import kraptis91.maritime.model.*;
 import kraptis91.maritime.parser.dto.NariDynamicDto;
 import kraptis91.maritime.parser.dto.NariStaticDto;
 import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+
+import java.util.Date;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 11/12/2020. */
 public class ModelExtractor {
@@ -23,15 +22,29 @@ public class ModelExtractor {
 
   public static Vessel extractVessel(NariStaticDto dto, String shipType, String country) {
 
-    return Vessel.builder(dto.getMmsi())
-        .withIMO(dto.getImo())
-        .withVesselName(dto.getShipName())
-        .withCallSign(dto.getCallSign())
-        .withDraught(dto.getDraught())
-        .withShipType(shipType)
-        .withDestination(dto.getDestination())
-        .withCountry(country)
-        .build();
+    Vessel vessel =
+        Vessel.builder(dto.getMmsi())
+            .withIMO(dto.getImo())
+            .withVesselName(dto.getShipName())
+            .withCallSign(dto.getCallSign())
+            .withDraught(dto.getDraught())
+            .withShipType(shipType)
+            .withCountry(country)
+            .build();
+
+    vessel.addVoyageAndApplyMeasurement(
+        extractVoyage(dto),
+        ReceiverMeasurement.builder()
+            .withETA(dto.getEta())
+            .withToPort(dto.getToPort())
+            .withDate(new Date(dto.getT()))
+            .build());
+
+    return vessel;
+  }
+
+  public static Voyage extractVoyage(NariStaticDto dto) {
+    return Voyage.createInstance(dto.getDestination());
   }
 
   public static VesselTrajectoryPoint extractVesselTrajectoryPoint(

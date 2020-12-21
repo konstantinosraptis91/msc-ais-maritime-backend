@@ -1,5 +1,8 @@
 package kraptis91.maritime.parser;
 
+//import com.opencsv.CSVParserBuilder;
+//import com.opencsv.CSVReader;
+//import com.opencsv.CSVReaderBuilder;
 import kraptis91.maritime.parser.dto.NariDynamicDto;
 import kraptis91.maritime.parser.dto.NariStaticDto;
 import kraptis91.maritime.parser.dto.SeaStateForecastDto;
@@ -7,11 +10,11 @@ import kraptis91.maritime.parser.utils.CSVParserUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
 public class CSVParserTest {
@@ -129,28 +132,86 @@ public class CSVParserTest {
   }
 
   @Test
-  public void testBreakAtCommas() {
+  public void testBreakAtCommas() throws Exception {
+    //        String line =
+    //            "636010909,"
+    //                + "9179218,"
+    //                + "ELVP4 ,"
+    //                + "\"MONICA P, \","
+    //                + "70,"
+    //                + "164,"
+    //                + "26,"
+    //                + "15,"
+    //                + "16,"
+    //                + "24-12 12:00 ,"
+    //                + "9.9,"
+    //                + "\"TARRAGONA,SPAIN \","
+    //                + ","
+    //                + "1450540725";
+
     String line =
-        "636010909,"
-            + "9179218,"
-            + "ELVP4 ,"
-            + "\"MONICA P, \","
-            + "70,"
-            + "164,"
-            + "26,"
-            + "15,"
-            + "16,"
-            + "24-12 12:00 ,"
-            + "9.9,"
-            + "\"TARRAGONA,SPAIN \","
-            + ","
-            + "1450540725";
+        "564923000,"
+            + "9698290,"
+            + "9V2516 ,"
+            + "EPIC CALEDONIA ,"
+            + "89,"
+            + "72,"
+            + "22,"
+            + "11,"
+            + "5,"
+            + "28-10 01:30 ,"
+            + "4.5,"
+            + "\"WANDELAAR,FOR,ORDER \","
+            + ""
+            + ",1445858617";
 
-    String line2 = "211232180,,DGYN,IZAR,36,16,1,1,4,,,,33558785,1443652712";
+    // String line = "211232180,,DGYN,IZAR,36,16,1,1,4,,,,33558785,1443652712";
 
-    String data[] = CSVParserUtils.parseLine(line2);
+    long startTime = System.currentTimeMillis();
+
+    String[] data = CSVParserUtils.parseLine(line);
+
+    long endTime = System.currentTimeMillis();
+
+    System.out.println("Total time: " + (endTime - startTime) + " ms");
 
     System.out.println("length " + data.length);
-    Arrays.stream(data).forEach(System.out::println);
+    // Arrays.stream(data).forEach(System.out::println);
+
+    for (int i = 0; i < data.length; i++) {
+      System.out.printf("%d %s\n", i, data[i]);
+    }
   }
+
+//  @Test
+//  public void testBreakAtCommasWithCSVParser() {
+//
+//    BufferedReader bufferedReader = Files.newBufferedReader(Paths.get());
+//  }
+
+//  @Test
+//  public void testBreakAtCommasWithOpencsv() throws Exception {
+//
+//    String line = "211232180,,DGYN,IZAR,36,16,1,1,4,,,,33558785,1443652712";
+//
+//    com.opencsv.CSVParser csvParser =
+//        new CSVParserBuilder().withSeparator(',').withIgnoreQuotations(false).build();
+//
+//    StringReader reader = new StringReader(line);
+//
+//    com.opencsv.CSVReader csvReader =
+//        new CSVReaderBuilder(reader).withSkipLines(0).withCSVParser(csvParser).build();
+//
+//    long startTime = System.currentTimeMillis();
+//
+//    List<String[]> data = csvReader.readAll();
+//
+//    long endTime = System.currentTimeMillis();
+//
+//    System.out.println("Total time: " + (endTime - startTime) + " ms");
+//
+//    System.out.println(data.get(0).length);
+//
+//    data.forEach(strings -> System.out.println(Arrays.toString(strings)));
+//  }
 }

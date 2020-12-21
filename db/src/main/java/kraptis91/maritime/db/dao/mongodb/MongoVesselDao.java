@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
+import kraptis91.maritime.model.ReceiverMeasurement;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.NariStaticDto;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
@@ -41,20 +43,114 @@ public class MongoVesselDao implements VesselDao {
         .getCollection(MongoDBCollection.VESSELS.getCollectionName(), Document.class);
   }
 
+  //  @Override
+  //  public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
+  //
+  //    // LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
+  //
+  //    final BufferedReader bufferedReader =
+  //        new BufferedReader(
+  //            new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
+  //    final CSVParser parser = new CSVParser();
+  //    final Map<Integer, Vessel> vesselBufferMap = new LinkedHashMap<>(chunkSize);
+  //    final Set<Integer> totalMMSIBufferSet = new LinkedHashSet<>();
+  //    int totalVessels = 0;
+  //
+  //    // LOGGER.info("Chunk size csvStream " + chunkSize + ".");
+  //
+  //    String line;
+  //    NariStaticDto dto;
+  //    boolean isFirstLine = true;
+  //
+  //    while ((line = bufferedReader.readLine()) != null) {
+  //
+  //      // omit first line
+  //      if (isFirstLine) {
+  //        isFirstLine = false;
+  //        continue;
+  //      }
+  //
+  //      try {
+  //        // parse current line to the dto
+  //        dto = parser.extractNariStaticDto(line);
+  //
+  //        // System.out.println(dto);
+  //        // check to avoid duplicates
+  //        if (!totalMMSIBufferSet.contains(dto.getMmsi())) {
+  //          // add to the list after model obj extraction
+  //          vesselBufferMap.put(
+  //              dto.getMmsi(),
+  //              ModelExtractor.extractVessel(
+  //                  dto,
+  //                  ShipTypes.INSTANCE.getShipType(dto.getShipType()),
+  //                  MMSICountryCode.INSTANCE.getCountryByMMSI(dto.getMmsi())));
+  //          totalMMSIBufferSet.add(dto.getMmsi());
+  //        } else { // not a new mmsi, vessel already in set or db
+  //
+  //          // search for that vessel in buffer map
+  //          if (vesselBufferMap.containsKey(dto.getMmsi())) {
+  //
+  //            vesselBufferMap
+  //                .get(dto.getMmsi()) // get the vessel
+  //                .addVoyageAndApplyTimestamp(
+  //                    ModelExtractor.extractVoyage(dto), dto.getT()); // add voyage if not
+  //            // exists and apply timestamp
+  //
+  //          } else { // vessel not found in map and it is in db
+  //
+  //            // search for the vessel in db
+  //            final Voyage voyage = ModelExtractor.extractVoyage(dto);
+  //            final long t = dto.getT();
+  //
+  //            findVesselByMMSI(dto.getMmsi())
+  //                .ifPresentOrElse(
+  //                    vessel -> vessel.addVoyageAndApplyTimestamp(voyage, t),
+  //                    () ->
+  //                        LOGGER.log(
+  //                            Level.SEVERE,
+  //                            "Error... Unable to find vessel either in buffer nor in db."));
+  //          }
+  //        }
+  //
+  //        // when read chunkSize number of lines, insert data to mongoDB
+  //        if (vesselBufferMap.size() == chunkSize) {
+  //          // LOGGER.info(vesselSet.size() + " lines read, attempting to insert data to db.");
+  //          insertMany(new LinkedHashSet<>(vesselBufferMap.values()));
+  //          // increase total vessels counter
+  //          totalVessels += vesselBufferMap.size();
+  //          // clear set
+  //          vesselBufferMap.clear();
+  //        }
+  //
+  //      } catch (CSVParserException e) {
+  //        // LOGGER.log(Level.WARNING, "Discarding corrupted line " + e.getMessage());
+  //      }
+  //    }
+  //    // LOGGER.info(vesselSet.size() + " lines left, attempting to insert data to db.");
+  //    // insert any data left
+  //    insertMany(new LinkedHashSet<>(vesselBufferMap.values()));
+  //    // increase total vessels counter
+  //    totalVessels += vesselBufferMap.size();
+  //    // clear set
+  //    vesselBufferMap.clear();
+  //    totalMMSIBufferSet.clear();
+  //
+  //    LOGGER.info("All lines inserted to db successfully.");
+  //    LOGGER.info("Total vessels added to db: " + totalVessels);
+  //  }
+
   @Override
   public void insertMany(@NotNull InputStream csvStream, final int chunkSize) throws Exception {
 
-    // LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
+    LOGGER.info("Inserting " + csvStream.available() + " bytes to db.");
 
     final BufferedReader bufferedReader =
         new BufferedReader(
             new InputStreamReader(InputStreamUtils.getBufferedInputStream(csvStream)));
     final CSVParser parser = new CSVParser();
-    final Set<Vessel> vesselSet = new LinkedHashSet<>(chunkSize);
-    final Set<Integer> totalMMSISet = new LinkedHashSet<>();
-    int totalVessels = 0;
+    final Map<Integer, Vessel> vesselMap = new LinkedHashMap<>(chunkSize);
 
-    // LOGGER.info("Chunk size csvStream " + chunkSize + ".");
+    LOGGER.info("Chunk size csvStream " + chunkSize + ".");
 
     String line;
     NariStaticDto dto;
@@ -74,38 +170,42 @@ public class MongoVesselDao implements VesselDao {
 
         // System.out.println(dto);
         // check to avoid duplicates
-        if (!totalMMSISet.contains(dto.getMmsi())) {
+        if (!vesselMap.containsKey(dto.getMmsi())) {
           // add to the list after model obj extraction
-          vesselSet.add(
+          vesselMap.put(
+              dto.getMmsi(),
               ModelExtractor.extractVessel(
                   dto,
                   ShipTypes.INSTANCE.getShipType(dto.getShipType()),
                   MMSICountryCode.INSTANCE.getCountryByMMSI(dto.getMmsi())));
-          totalMMSISet.add(dto.getMmsi());
-        }
 
-        // when read chunkSize number of lines, insert data to mongoDB
-        if (vesselSet.size() == chunkSize) {
-          // LOGGER.info(vesselSet.size() + " lines read, attempting to insert data to db.");
-          insertMany(vesselSet);
-          // increase total vessels counter
-          totalVessels += vesselSet.size();
-          // clear set
-          vesselSet.clear();
+        } else { // not a new mmsi, vessel already in set or db
+
+          // search for that vessel in map
+          vesselMap
+              .get(dto.getMmsi()) // get the vessel
+              .addVoyageAndApplyMeasurement(
+                  ModelExtractor.extractVoyage(dto),
+                  ReceiverMeasurement.builder()
+                      .withETA(dto.getEta())
+                      .withToPort(dto.getToPort())
+                      .withDate(new Date(dto.getT()))
+                      .build()); // add voyage if not
+          // exists and apply timestamp
+
         }
 
       } catch (CSVParserException e) {
-        // LOGGER.log(Level.WARNING, "Discarding corrupted line " + e.getMessage());
+        LOGGER.log(Level.WARNING, "Discarding corrupted line " + e.getMessage());
       }
     }
     // LOGGER.info(vesselSet.size() + " lines left, attempting to insert data to db.");
     // insert any data left
-    insertMany(vesselSet);
-    // increase total vessels counter
-    totalVessels += vesselSet.size();
+    insertMany(new LinkedHashSet<>(vesselMap.values()));
+    // count total vessels added
+    int totalVessels = vesselMap.size();
     // clear set
-    vesselSet.clear();
-    totalMMSISet.clear();
+    vesselMap.clear();
 
     LOGGER.info("All lines inserted to db successfully.");
     LOGGER.info("Total vessels added to db: " + totalVessels);

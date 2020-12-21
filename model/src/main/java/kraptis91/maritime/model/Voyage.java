@@ -4,68 +4,109 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.TimeZone;
-import java.util.TreeSet;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 20/12/2020. */
 public class Voyage {
 
+  /** Destination of this trip */
   private final String destination;
-  private final TreeSet<Long> timestamps;
-  /** eta The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time */
-  private final String eta;
 
-  private Voyage(String destination, String eta) {
-    timestamps = new TreeSet<>();
+  private ReceiverMeasurement firstMeasurement;
+  private ReceiverMeasurement lastMeasurement;
+
+  private int numberOfMeasurements;
+
+  private Voyage(String destination) {
     this.destination = destination;
-    this.eta = eta;
+    this.numberOfMeasurements = 0;
   }
 
-  public static Voyage createInstance(String destination, String eta) {
-    return new Voyage(destination, eta);
+  private Voyage(Builder builder) {
+    this.destination = builder.destination;
+    this.firstMeasurement = builder.firstMeasurement;
+    this.lastMeasurement = builder.lastMeasurement;
+    this.numberOfMeasurements = builder.numberOfMeasurements;
   }
 
-  public Set<Long> getTimestamps() {
-    return timestamps;
+  public static Voyage createInstance(String destination) {
+    return new Voyage(destination);
   }
 
   public LocalDateTime getStartDateTime() {
     return LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(timestamps.first()), TimeZone.getDefault().toZoneId());
+        Instant.ofEpochMilli(firstMeasurement.getDate().getTime()),
+        TimeZone.getDefault().toZoneId());
   }
 
   public LocalDateTime getEndDateTime() {
     return LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(timestamps.last()), TimeZone.getDefault().toZoneId());
+        Instant.ofEpochMilli(lastMeasurement.getDate().getTime()),
+        TimeZone.getDefault().toZoneId());
   }
 
   public Duration getDuration() {
     return Duration.between(
         LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(timestamps.last()), TimeZone.getDefault().toZoneId()),
+            Instant.ofEpochMilli(firstMeasurement.getDate().getTime()),
+            TimeZone.getDefault().toZoneId()),
         LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(timestamps.first()), TimeZone.getDefault().toZoneId()));
+            Instant.ofEpochMilli(lastMeasurement.getDate().getTime()),
+            TimeZone.getDefault().toZoneId()));
+  }
+
+  public void addMeasurement(ReceiverMeasurement measurement) {
+
+    setFirstMeasurement(measurement);
+    setLastMeasurement(measurement);
+    numberOfMeasurements++;
+  }
+
+  private void setFirstMeasurement(ReceiverMeasurement measurement) {
+
+    if (Objects.isNull(firstMeasurement)) {
+      firstMeasurement = measurement;
+    } else {
+
+      if (measurement.getDate().getTime() < firstMeasurement.getDate().getTime()) {
+        firstMeasurement = measurement;
+      }
+    }
+  }
+
+  private void setLastMeasurement(ReceiverMeasurement measurement) {
+
+    if (Objects.isNull(lastMeasurement)) {
+      lastMeasurement = measurement;
+    } else {
+
+      if (measurement.getDate().getTime() > lastMeasurement.getDate().getTime()) {
+        lastMeasurement = measurement;
+      }
+    }
+  }
+
+  public int getNumberOfMeasurements() {
+    return numberOfMeasurements;
+  }
+
+  public ReceiverMeasurement getFirstMeasurement() {
+    return firstMeasurement;
+  }
+
+  public ReceiverMeasurement getLastMeasurement() {
+    return lastMeasurement;
   }
 
   public String getDestination() {
     return destination;
   }
 
-  /**
-   * Get the estimate time of arrival.
-   *
-   * @return The ETA in format dd-mm hh:mm (day, month, hour, minute) – UTC time
-   */
-  public String getEta() {
-    return eta;
-  }
-
   @Override
   public int hashCode() {
     int hash = 5;
     hash = 29 * hash + Objects.hashCode(this.destination);
-    hash = 29 * hash + Objects.hashCode(this.eta);
+    // hash = 29 * hash + Objects.hashCode(this.eta);
     return hash;
   }
 
@@ -85,8 +126,8 @@ public class Voyage {
     }
     final Voyage other = (Voyage) obj;
 
-    return Objects.equals(this.destination, other.destination)
-        && Objects.equals(this.eta, other.eta);
+    return Objects.equals(this.destination, other.destination);
+    // && Objects.equals(this.eta, other.eta);
   }
 
   @Override
@@ -101,8 +142,85 @@ public class Voyage {
         + getEndDateTime()
         + ", duration="
         + getDuration()
-        + ", eta="
-        + eta
+        + "numberOfMeasurements='"
+        + numberOfMeasurements
+        + '\''
         + '}';
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Fluent API interfaces
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public interface VoyageDestination {
+    VoyageFirstMeasurement withDestination(String destination);
+  }
+
+  public interface VoyageFirstMeasurement {
+    VoyageLastMeasurement withFirstMeasurement(ReceiverMeasurement measurement);
+  }
+
+  public interface VoyageLastMeasurement {
+    VoyageNumberOfMeasurements withLastMeasurement(ReceiverMeasurement measurement);
+  }
+
+  public interface VoyageNumberOfMeasurements {
+    VoyageBuild withNumberOfMeasurements(int number);
+  }
+
+  public interface VoyageBuild {
+    Voyage build();
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+  // Voyage POJO builder
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder
+      implements VoyageDestination,
+          VoyageFirstMeasurement,
+          VoyageLastMeasurement,
+          VoyageNumberOfMeasurements,
+          VoyageBuild {
+
+    private String destination;
+    private ReceiverMeasurement firstMeasurement;
+    private ReceiverMeasurement lastMeasurement;
+    private int numberOfMeasurements;
+
+    public Builder() {}
+
+    @Override
+    public VoyageFirstMeasurement withDestination(String destination) {
+      this.destination = destination;
+      return this;
+    }
+
+    @Override
+    public VoyageLastMeasurement withFirstMeasurement(ReceiverMeasurement measurement) {
+      this.firstMeasurement = measurement;
+      return this;
+    }
+
+    @Override
+    public VoyageNumberOfMeasurements withLastMeasurement(ReceiverMeasurement measurement) {
+      this.lastMeasurement = measurement;
+      return this;
+    }
+
+    @Override
+    public VoyageBuild withNumberOfMeasurements(int number) {
+      this.numberOfMeasurements = number;
+      return this;
+    }
+
+    @Override
+    public Voyage build() {
+      return new Voyage(this);
+    }
   }
 }

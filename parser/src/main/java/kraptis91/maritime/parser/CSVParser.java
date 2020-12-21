@@ -68,6 +68,15 @@ public class CSVParser {
 
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
+
+    if (data.length != 14) {
+      throw new CSVParserException(
+          "Error... Improper nari static line parsing. "
+              + "Actual number of values "
+              + data.length
+              + ", Expected number of values 14");
+    }
+
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -100,6 +109,10 @@ public class CSVParser {
             dto.setShipType(CSVParserUtils.parseIntOrReturnDefault(data[i], 0));
             break;
 
+          case 8: // toPort (optional)
+            dto.setToPort(CSVParserUtils.parseIntOrReturnDefault(data[i], 0));
+            break;
+
           case 9: // eta (optional)
             dto.setEta(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
@@ -111,9 +124,13 @@ public class CSVParser {
           case 11: // destination (optional)
             dto.setDestination(CSVParserUtils.parseTextOrReturnNull(data[i]));
             break;
+
+          case 13: // timestamp (mandatory)
+            dto.setT(CSVParserUtils.parseLong(data[i]));
+            break;
         }
       }
-    } catch (CSVParserException | IllegalArgumentException e) {
+    } catch (CSVParserException | IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
       LOGGER.log(Level.WARNING, "Failed to parse [ " + line + " ]");
       LOGGER.log(Level.WARNING, "The line parsed as " + Arrays.toString(data));
       throw new CSVParserException(line, e);

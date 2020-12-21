@@ -56,13 +56,10 @@ public class Vessel {
   /** Type of the ship. */
   @Nullable private final String shipType;
 
-  /** Destination of this trip (manually entered). */
-  @NotNull private final String destination;
-
   /** The country in which the vessel belongs. */
   private final String country;
 
-  private Set<Voyage> voyageSet;
+  private Map<Integer, Voyage> voyageMap;
 
   private Vessel(Builder builder) {
     this.mmsi = builder.mmsi;
@@ -71,7 +68,6 @@ public class Vessel {
     this.callSign = builder.callSign;
     this.draught = builder.draught;
     this.shipType = builder.shipType;
-    this.destination = builder.destination;
     this.country = builder.country;
     this.id = builder.id;
   }
@@ -105,10 +101,6 @@ public class Vessel {
     return shipType;
   }
 
-  public String getDestination() {
-    return destination;
-  }
-
   public String getCountry() {
     return country;
   }
@@ -117,11 +109,35 @@ public class Vessel {
     return id;
   }
 
-  public Set<Voyage> getVoyageSet() {
-    if (Objects.isNull(voyageSet)) {
-      return new LinkedHashSet<>();
+  /**
+   * Add the voyage if not present in voyage map.
+   *
+   * @param voyage The voyage
+   */
+  public void addVoyage(Voyage voyage) {
+
+    // check if voyage already in map
+    if (!getVoyageMap().containsKey(voyage.hashCode())) { // add only if not exists
+      getVoyageMap().put(voyage.hashCode(), voyage);
     }
-    return voyageSet;
+  }
+
+  /**
+   * Add the voyage if not present in voyage map and apply timestamp.
+   *
+   * @param voyage The voyage
+   * @param measurement The receiver measurement
+   */
+  public void addVoyageAndApplyMeasurement(Voyage voyage, ReceiverMeasurement measurement) {
+    addVoyage(voyage); // add only if not exists
+    getVoyageMap().get(voyage.hashCode()).addMeasurement(measurement);
+  }
+
+  public Map<Integer, Voyage> getVoyageMap() {
+    if (Objects.isNull(voyageMap)) {
+      voyageMap = new LinkedHashMap<>();
+    }
+    return voyageMap;
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -145,9 +161,6 @@ public class Vessel {
         + draught
         + ", shipType='"
         + shipType
-        + '\''
-        + ", destination='"
-        + destination
         + '\''
         + ", country='"
         + country
@@ -176,11 +189,7 @@ public class Vessel {
   }
 
   public interface VesselShipType {
-    VesselDestination withShipType(String shipType);
-  }
-
-  public interface VesselDestination {
-    VesselCountry withDestination(String destination);
+    VesselCountry withShipType(String shipType);
   }
 
   public interface VesselCountry {
@@ -233,7 +242,6 @@ public class Vessel {
           VesselCallSign,
           VesselDraught,
           VesselShipType,
-          VesselDestination,
           VesselCountry,
           VesselBuild {
 
@@ -246,7 +254,6 @@ public class Vessel {
     private String callSign;
     private double draught;
     private String shipType;
-    private String destination;
     private String country;
     private String id;
 
@@ -309,20 +316,8 @@ public class Vessel {
      * @return The Builder
      */
     @Override
-    public VesselDestination withShipType(String shipType) {
+    public VesselCountry withShipType(String shipType) {
       this.shipType = shipType;
-      return this;
-    }
-
-    /**
-     * Set the destination.
-     *
-     * @param destination The destination of the trip
-     * @return The Builder
-     */
-    @Override
-    public VesselCountry withDestination(String destination) {
-      this.destination = destination;
       return this;
     }
 

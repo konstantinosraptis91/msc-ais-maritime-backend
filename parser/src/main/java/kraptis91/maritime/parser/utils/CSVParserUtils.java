@@ -110,8 +110,9 @@ public class CSVParserUtils {
   }
 
   public static String[] parseLine(@NotNull String line) {
-    return Arrays.stream(splitLineAtCommas(replaceAllCommasInQuotesWith(line, "$1 $2")))
-        .map(v -> replaceAllQuotesWith(v, ""))
-        .toArray(String[]::new);
+    //    return Arrays.stream(splitLineAtCommas(replaceAllCommasInQuotesWith(line, "$1 $2")))
+    //        .map(v -> replaceAllQuotesWith(v, ""))
+    //        .toArray(String[]::new);
+    return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
   }
 }
