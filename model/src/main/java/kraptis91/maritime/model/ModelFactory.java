@@ -16,7 +16,7 @@ public class ModelFactory {
   }
 
   /** @return new OceanConditions object */
-  public static OceanConditions createOceanConditionsDemo() {
+  public static OceanConditions createDemoOceanConditionsDemo() {
 
     return new OceanConditions.Builder(45.55, 50.4, 122121878)
         .withBottomDepth(77.99)

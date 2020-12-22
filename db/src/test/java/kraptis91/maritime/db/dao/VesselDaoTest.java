@@ -12,6 +12,7 @@ public class VesselDaoTest {
   private final InputStream isSample =
       VesselDaoTest.class.getResourceAsStream("/sample/maritime/nari_static_sample.csv");
 
+  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
@@ -19,11 +20,12 @@ public class VesselDaoTest {
     //        new FileInputStream(
     //            DirectoryUtils.getDefaultDownloadsDirectory() + "/ais-data/nari_static.csv");
 
-    InputStream isBig =
-        new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
+    //    InputStream isBig =
+    //        new
+    // FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
 
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    dao.insertMany(isBig);
+    dao.insertMany(isSample);
   }
 
   @Ignore
@@ -37,11 +39,12 @@ public class VesselDaoTest {
             System.out::println, () -> System.out.println("Cannot find vessel with mmsi " + mmsi));
   }
 
-  @Ignore
+  // @Ignore
   @Test
   public void testVesselByMMSI() throws Exception {
 
     VesselDao dao = DaoFactory.createMongoVesselDao();
-    System.out.println(dao.findVesselByMMSI(228157000));
+    // System.out.println(dao.findVesselByMMSI(228157000));
+    dao.findVesselByMMSI(228051000).ifPresent(System.out::println);
   }
 }

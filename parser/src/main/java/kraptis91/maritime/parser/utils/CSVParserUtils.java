@@ -79,6 +79,27 @@ public class CSVParserUtils {
     return trimAndRemoveJunk(value);
   }
 
+  /**
+   * @param actual The actual number of parsed values
+   * @param expected The expected number of parsed values
+   * @param name The method called this method name
+   * @throws CSVParserException In case actual != expected
+   */
+  public static void validateNumberOfParsedValues(int actual, int expected, String name)
+      throws CSVParserException {
+
+    if (actual != expected) {
+      throw new CSVParserException(
+          "Error... Improper number of parsed values ("
+              + name
+              + ")."
+              + " Actual number of values "
+              + actual
+              + ", Expected number of values "
+              + expected);
+    }
+  }
+
   /** @param name The name of the method call this method */
   private static void validateValue(String name, String value) throws IllegalArgumentException {
 

@@ -47,6 +47,18 @@ public class ModelExtractor {
     return Voyage.createInstance(dto.getDestination());
   }
 
+  public static VesselTrajectory extractVesselTrajectory(
+      int mmsi, String vesselName, String shipType, Voyage voyage) {
+
+    return VesselTrajectory.builder(mmsi)
+        .withVesselName(vesselName)
+        .withShipType(shipType)
+        .withDestination(voyage.getDestination())
+        .withStartDate(voyage.getFirstMeasurement().getDate())
+        .withEndDate(voyage.getLastMeasurement().getDate())
+        .build();
+  }
+
   public static VesselTrajectoryPoint extractVesselTrajectoryPoint(
       NariDynamicDto dto, String vesselId) {
     return VesselTrajectoryPoint.builder()

@@ -40,6 +40,15 @@ public class ReceiverMeasurement {
     this.date = date;
   }
 
+  @Override
+  public String toString() {
+    return "ReceiverMeasurement{" +
+            "eta='" + eta + '\'' +
+            ", toPort=" + toPort +
+            ", date=" + date +
+            '}';
+  }
+
   public static Builder builder() {
     return new Builder();
   }

@@ -147,7 +147,10 @@ public class Vessel {
   @Override
   public String toString() {
     return "Vessel{"
-        + "mmsi="
+        + "id='"
+        + id
+        + '\''
+        + ", mmsi="
         + mmsi
         + ", imo="
         + imo
@@ -165,6 +168,8 @@ public class Vessel {
         + ", country='"
         + country
         + '\''
+        + ", voyageMap="
+        + voyageMap
         + '}';
   }
 

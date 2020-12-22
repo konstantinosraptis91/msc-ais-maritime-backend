@@ -7,13 +7,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 14/12/2020. */
-public class MongoVesselTrajectoryPointDaoTest {
+public class MongoVesselTrajectoryDaoTest {
 
   private final InputStream isSample =
-      MongoVesselTrajectoryPointDaoTest.class.getResourceAsStream(
+      MongoVesselTrajectoryDaoTest.class.getResourceAsStream(
           "/sample/maritime/nari_dynamic_sample.csv");
 
-  @Ignore
   @Test
   public void testInsertMany() throws Exception {
 
@@ -21,7 +20,7 @@ public class MongoVesselTrajectoryPointDaoTest {
         new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_dynamic.csv");
 
     VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
-    dao.insertMany(isSample);
+    dao.insertMany(isBig);
   }
 
   @Test

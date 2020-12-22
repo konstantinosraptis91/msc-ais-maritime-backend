@@ -18,6 +18,8 @@ public class CSVParser {
       throws CSVParserException {
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
+    CSVParserUtils.validateNumberOfParsedValues(data.length, 8, "extractSeaStateForecastDto");
+
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -68,14 +70,7 @@ public class CSVParser {
 
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
-
-    if (data.length != 14) {
-      throw new CSVParserException(
-          "Error... Improper nari static line parsing. "
-              + "Actual number of values "
-              + data.length
-              + ", Expected number of values 14");
-    }
+    CSVParserUtils.validateNumberOfParsedValues(data.length, 14, "extractNariStaticDto");
 
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
@@ -144,6 +139,9 @@ public class CSVParser {
 
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
+    CSVParserUtils.validateNumberOfParsedValues(data.length, 2, "extractMMSICountryCodesDto");
+
+
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -175,6 +173,7 @@ public class CSVParser {
 
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
+    CSVParserUtils.validateNumberOfParsedValues(data.length, 5, "extractMMSICountryCodesDto");
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -210,6 +209,7 @@ public class CSVParser {
 
     // break the line at commas
     final String[] data = CSVParserUtils.parseLine(line);
+    CSVParserUtils.validateNumberOfParsedValues(data.length, 9, "extractMMSICountryCodesDto");
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj

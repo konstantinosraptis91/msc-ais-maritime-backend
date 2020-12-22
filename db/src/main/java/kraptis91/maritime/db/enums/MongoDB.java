@@ -3,7 +3,7 @@ package kraptis91.maritime.db.enums;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import kraptis91.maritime.db.dao.mongodb.codec.VesselCodec;
-import kraptis91.maritime.db.dao.mongodb.codec.VesselTrajectoryPointCodec;
+import kraptis91.maritime.db.dao.mongodb.codec.VesselTrajectoryCodec;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -28,7 +28,7 @@ public enum MongoDB {
     CodecRegistry pojoCodecRegistry =
         CodecRegistries.fromRegistries(
             CodecRegistries.fromCodecs(new VesselCodec()),
-            CodecRegistries.fromCodecs(new VesselTrajectoryPointCodec()),
+            CodecRegistries.fromCodecs(new VesselTrajectoryCodec()),
             MongoClient.getDefaultCodecRegistry(),
             CodecRegistries.fromProviders(pojoCodecProvider));
 

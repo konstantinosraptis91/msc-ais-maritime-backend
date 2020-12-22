@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao;
 
+import kraptis91.maritime.model.VesselTrajectory;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 
 import java.io.InputStream;
@@ -14,7 +15,7 @@ public interface VesselTrajectoryPointDao {
     insertMany(is, 3000);
   }
 
-  void insertMany(List<VesselTrajectoryPoint> points);
+  void insertMany(List<VesselTrajectory> trajectories);
 
   default List<VesselTrajectoryPoint> findVesselTrajectory(String vesselName) {
     return findVesselTrajectory(vesselName, 0, 30);

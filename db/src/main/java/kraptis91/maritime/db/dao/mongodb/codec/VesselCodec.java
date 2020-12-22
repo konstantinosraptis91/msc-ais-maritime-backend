@@ -114,7 +114,7 @@ public class VesselCodec implements Codec<Vessel> {
     // add voyages document
     List<Document> voyages =
         vessel.getVoyageMap().values().stream()
-            .map(this::extractVoyageDocument)
+            .map(VesselCodec::extractVoyageDocument)
             .collect(Collectors.toList());
 
     document.put("voyages", voyages);
@@ -122,7 +122,7 @@ public class VesselCodec implements Codec<Vessel> {
     documentCodec.encode(writer, document, encoderContext);
   }
 
-  public Document extractVoyageDocument(Voyage voyage) {
+  public static Document extractVoyageDocument(Voyage voyage) {
     Document voyageDoc = new Document();
     voyageDoc.put("destination", voyage.getDestination());
     if (!Objects.isNull(voyage.getFirstMeasurement())) {
@@ -138,7 +138,7 @@ public class VesselCodec implements Codec<Vessel> {
     return voyageDoc;
   }
 
-  public Document extractReceiverMeasurementDocument(ReceiverMeasurement measurement) {
+  public static Document extractReceiverMeasurementDocument(ReceiverMeasurement measurement) {
     Document measurementDoc = new Document();
     if (!Objects.isNull(measurement.getEta())) {
       measurementDoc.put("eta", measurement.getEta());

@@ -132,20 +132,13 @@ public class Voyage {
 
   @Override
   public String toString() {
-    return "Voyage{"
-        + "destination='"
-        + destination
-        + '\''
-        + ", startDateTime="
-        + getStartDateTime()
-        + ", endDateTime="
-        + getEndDateTime()
-        + ", duration="
-        + getDuration()
-        + "numberOfMeasurements='"
-        + numberOfMeasurements
-        + '\''
-        + '}';
+    return "Voyage{" +
+            "destination='" + destination + '\'' +
+            ", firstMeasurement=" + firstMeasurement +
+            ", lastMeasurement=" + lastMeasurement +
+            ", duration(ms)=" + getDuration().toMillis() +
+            ", numberOfMeasurements=" + numberOfMeasurements +
+            '}';
   }
 
   // -------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ public class OceanConditionsTest {
   public void testHowToCreateOCObject() {
 
     // create new OceanConditions demo object via model factory
-    OceanConditions oceanConditionsDemo = ModelFactory.createOceanConditionsDemo();
+    OceanConditions oceanConditionsDemo = ModelFactory.createDemoOceanConditionsDemo();
 
     System.out.println(oceanConditionsDemo);
 
