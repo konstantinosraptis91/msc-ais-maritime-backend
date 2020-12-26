@@ -11,7 +11,7 @@ import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectory;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.parser.CSVParser;
-import kraptis91.maritime.parser.dto.NariDynamicDto;
+import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
 
@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 

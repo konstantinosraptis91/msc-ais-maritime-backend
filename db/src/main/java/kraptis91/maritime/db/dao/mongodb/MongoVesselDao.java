@@ -9,7 +9,7 @@ import kraptis91.maritime.db.enums.MongoDBCollection;
 import kraptis91.maritime.model.ReceiverMeasurement;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.parser.CSVParser;
-import kraptis91.maritime.parser.dto.NariStaticDto;
+import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.enums.MMSICountryCode;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.parser.exception.CSVParserException;

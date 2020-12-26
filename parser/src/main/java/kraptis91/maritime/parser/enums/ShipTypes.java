@@ -1,7 +1,7 @@
 package kraptis91.maritime.parser.enums;
 
 import kraptis91.maritime.parser.CSVParser;
-import kraptis91.maritime.parser.dto.ShipTypeListDto;
+import kraptis91.maritime.parser.dto.csv.ShipTypeListDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
 

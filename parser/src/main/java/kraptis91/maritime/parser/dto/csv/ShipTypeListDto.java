@@ -1,4 +1,4 @@
-package kraptis91.maritime.parser.dto;
+package kraptis91.maritime.parser.dto.csv;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 12/12/2020. */
 public class ShipTypeListDto {

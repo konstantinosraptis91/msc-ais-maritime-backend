@@ -1,4 +1,4 @@
-package kraptis91.maritime.parser.dto;
+package kraptis91.maritime.parser.dto.csv;
 
 import java.util.Objects;
 

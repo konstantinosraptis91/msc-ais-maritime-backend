@@ -1,9 +1,9 @@
 package kraptis91.maritime.db.utils;
 
 import kraptis91.maritime.model.*;
-import kraptis91.maritime.parser.dto.NariDynamicDto;
-import kraptis91.maritime.parser.dto.NariStaticDto;
-import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
+import kraptis91.maritime.parser.dto.csv.NariStaticDto;
+import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
 
 import java.util.Date;
 

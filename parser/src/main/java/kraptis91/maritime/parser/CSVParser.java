@@ -1,11 +1,11 @@
 package kraptis91.maritime.parser;
 
-import kraptis91.maritime.parser.dto.*;
+import kraptis91.maritime.parser.dto.csv.*;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.CSVParserUtils;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -141,7 +141,6 @@ public class CSVParser {
     final String[] data = CSVParserUtils.parseLine(line);
     CSVParserUtils.validateNumberOfParsedValues(data.length, 2, "extractMMSICountryCodesDto");
 
-
     // print data after split
     // LOGGER.info("Data extracted: " + Arrays.toString(data));
     // create the dto obj
@@ -250,4 +249,5 @@ public class CSVParser {
 
     return dto;
   }
+
 }

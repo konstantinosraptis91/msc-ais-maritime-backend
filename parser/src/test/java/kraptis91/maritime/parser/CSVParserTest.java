@@ -1,20 +1,17 @@
 package kraptis91.maritime.parser;
 
-//import com.opencsv.CSVParserBuilder;
-//import com.opencsv.CSVReader;
-//import com.opencsv.CSVReaderBuilder;
-import kraptis91.maritime.parser.dto.NariDynamicDto;
-import kraptis91.maritime.parser.dto.NariStaticDto;
-import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+// import com.opencsv.CSVParserBuilder;
+// import com.opencsv.CSVReader;
+// import com.opencsv.CSVReaderBuilder;
+import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
+import kraptis91.maritime.parser.dto.csv.NariStaticDto;
+import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
 import kraptis91.maritime.parser.utils.CSVParserUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
 public class CSVParserTest {
@@ -183,35 +180,36 @@ public class CSVParserTest {
     }
   }
 
-//  @Test
-//  public void testBreakAtCommasWithCSVParser() {
-//
-//    BufferedReader bufferedReader = Files.newBufferedReader(Paths.get());
-//  }
+  //  @Test
+  //  public void testBreakAtCommasWithCSVParser() {
+  //
+  //    BufferedReader bufferedReader = Files.newBufferedReader(Paths.get());
+  //  }
 
-//  @Test
-//  public void testBreakAtCommasWithOpencsv() throws Exception {
-//
-//    String line = "211232180,,DGYN,IZAR,36,16,1,1,4,,,,33558785,1443652712";
-//
-//    com.opencsv.CSVParser csvParser =
-//        new CSVParserBuilder().withSeparator(',').withIgnoreQuotations(false).build();
-//
-//    StringReader reader = new StringReader(line);
-//
-//    com.opencsv.CSVReader csvReader =
-//        new CSVReaderBuilder(reader).withSkipLines(0).withCSVParser(csvParser).build();
-//
-//    long startTime = System.currentTimeMillis();
-//
-//    List<String[]> data = csvReader.readAll();
-//
-//    long endTime = System.currentTimeMillis();
-//
-//    System.out.println("Total time: " + (endTime - startTime) + " ms");
-//
-//    System.out.println(data.get(0).length);
-//
-//    data.forEach(strings -> System.out.println(Arrays.toString(strings)));
-//  }
-}
+  //  @Test
+  //  public void testBreakAtCommasWithOpencsv() throws Exception {
+  //
+  //    String line = "211232180,,DGYN,IZAR,36,16,1,1,4,,,,33558785,1443652712";
+  //
+  //    com.opencsv.CSVParser csvParser =
+  //        new CSVParserBuilder().withSeparator(',').withIgnoreQuotations(false).build();
+  //
+  //    StringReader reader = new StringReader(line);
+  //
+  //    com.opencsv.CSVReader csvReader =
+  //        new CSVReaderBuilder(reader).withSkipLines(0).withCSVParser(csvParser).build();
+  //
+  //    long startTime = System.currentTimeMillis();
+  //
+  //    List<String[]> data = csvReader.readAll();
+  //
+  //    long endTime = System.currentTimeMillis();
+  //
+  //    System.out.println("Total time: " + (endTime - startTime) + " ms");
+  //
+  //    System.out.println(data.get(0).length);
+  //
+  //    data.forEach(strings -> System.out.println(Arrays.toString(strings)));
+  //  }
+
+  }

@@ -7,7 +7,7 @@ import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
 import kraptis91.maritime.model.OceanConditions;
 import kraptis91.maritime.parser.CSVParser;
-import kraptis91.maritime.parser.dto.SeaStateForecastDto;
+import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
 import kraptis91.maritime.db.utils.ModelExtractor;
@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
