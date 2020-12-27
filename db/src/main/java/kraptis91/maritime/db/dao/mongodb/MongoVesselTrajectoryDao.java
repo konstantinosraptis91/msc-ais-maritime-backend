@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class MongoVesselTrajectoryDao implements VesselTrajectoryPointDao {
 
   public static final Logger LOGGER = Logger.getLogger(MongoVesselTrajectoryDao.class.getName());
+  public static final int NUMBER_OF_CHUNKS = 50;
 
   private MongoCollection<VesselTrajectory> vesselTrajectoryMongoCollection;
 
@@ -267,5 +268,9 @@ public class MongoVesselTrajectoryDao implements VesselTrajectoryPointDao {
     //                Aggregates.limit(limit)))
     //        .forEach((Consumer<VesselTrajectoryPoint>) trajectoryPointList::add);
     return trajectoryPointList;
+  }
+
+  public static int calcNumberOfPointsPerTrajectory(int mmsiCounter) {
+    return mmsiCounter / NUMBER_OF_CHUNKS;
   }
 }

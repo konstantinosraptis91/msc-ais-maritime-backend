@@ -20,6 +20,7 @@ public enum MMSICounter {
 
   private final Logger LOGGER = Logger.getLogger(MMSICounter.class.getName());
   private final Map<Integer, Integer> mmsiCounterMap;
+  private int maxMMSICounter = 0;
 
   MMSICounter(InputStream is) {
     mmsiCounterMap = new LinkedHashMap<>();
@@ -38,7 +39,14 @@ public enum MMSICounter {
     }
   }
 
-  public int getCounterForVessel(int mmsi) {
+  public int getMMSICounterForVessel(int mmsi) {
     return mmsiCounterMap.get(mmsi);
+  }
+
+  public int getMaxMMSICounter() {
+    if (maxMMSICounter == 0) {
+      maxMMSICounter = mmsiCounterMap.values().stream().max(Integer::compareTo).orElse(-1);
+    }
+    return maxMMSICounter;
   }
 }

@@ -8,9 +8,9 @@ import java.util.Map;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 26/12/2020. */
 public class JSONParserTest {
 
-  // @Ignore
+  @Ignore
   @Test
-  public void testCountNumberEachMMSIAppears() throws Exception {
+  public void testCreateMMSICounterJSON() throws Exception {
 
     Map<String, Integer> mmsiCounterMap =
         JSONParser.createMMSICounterMap(
@@ -21,4 +21,5 @@ public class JSONParserTest {
 
     JSONParser.writeMapAsJSON(mmsiCounterMap, "D:/Downloads/mmsi-counter-map.json");
   }
+
 }
