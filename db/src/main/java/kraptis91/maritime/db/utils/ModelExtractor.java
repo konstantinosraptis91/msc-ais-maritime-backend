@@ -23,7 +23,7 @@ public class ModelExtractor {
   public static Vessel extractVessel(NariStaticDto dto, String shipType, String country) {
 
     Vessel vessel =
-        Vessel.builder(dto.getMmsi())
+        Vessel.fluentBuilder(dto.getMmsi())
             .withIMO(dto.getImo())
             .withVesselName(dto.getShipName())
             .withCallSign(dto.getCallSign())

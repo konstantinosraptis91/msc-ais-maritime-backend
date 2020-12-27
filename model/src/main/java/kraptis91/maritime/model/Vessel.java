@@ -1,5 +1,9 @@
 package kraptis91.maritime.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.hibernate.validator.constraints.Range;
 
 import javax.annotation.Nullable;
@@ -59,7 +63,7 @@ public class Vessel {
   /** The country in which the vessel belongs. */
   private final String country;
 
-  private Map<Integer, Voyage> voyageMap;
+  @JsonIgnore private Map<Integer, Voyage> voyageMap;
 
   private Vessel(Builder builder) {
     this.mmsi = builder.mmsi;
@@ -76,7 +80,12 @@ public class Vessel {
   // Getters
   // -------------------------------------------------------------------------------------------------------------------
 
-  public int getMmsi() {
+  public List<Voyage> getVoyages() {
+    // return ImmutableMap.copyOf(voyageMap).values().asList();
+    return new ArrayList<>(voyageMap.values());
+  }
+
+  public int getMMSI() {
     return mmsi;
   }
 
@@ -233,7 +242,7 @@ public class Vessel {
     return Objects.equals(this.mmsi, other.mmsi);
   }
 
-  public static Builder builder(int mmsi) {
+  public static Builder fluentBuilder(int mmsi) {
     return new Builder(mmsi);
   }
 

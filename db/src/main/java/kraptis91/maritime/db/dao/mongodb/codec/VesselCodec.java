@@ -62,7 +62,7 @@ public class VesselCodec implements Codec<Vessel> {
             .collect(Collectors.toList());
 
     Vessel vessel =
-        Vessel.builder(document.getInteger("mmsi"))
+        Vessel.fluentBuilder(document.getInteger("mmsi"))
             .withIMO(Optional.ofNullable(document.getInteger("imo")).orElse(0))
             .withVesselName(document.getString("vesselName"))
             .withCallSign(document.getString("callSign"))
@@ -109,7 +109,7 @@ public class VesselCodec implements Codec<Vessel> {
       document.put("imo", vessel.getImo());
     }
 
-    document.put("mmsi", vessel.getMmsi());
+    document.put("mmsi", vessel.getMMSI());
 
     // add voyages document
     List<Document> voyages =
@@ -133,7 +133,7 @@ public class VesselCodec implements Codec<Vessel> {
       voyageDoc.put(
           "lastMeasurement", extractReceiverMeasurementDocument(voyage.getLastMeasurement()));
     }
-    voyageDoc.put("duration", voyage.getDuration().toMillis());
+    voyageDoc.put("duration", voyage.calcDuration().toMillis());
     voyageDoc.put("numberOfMeasurements", voyage.getNumberOfMeasurements());
     return voyageDoc;
   }

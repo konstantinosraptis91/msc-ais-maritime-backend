@@ -170,7 +170,7 @@ public class MongoVesselTrajectoryDao implements VesselTrajectoryPointDao {
                   .map(
                       voyage ->
                           ModelExtractor.extractVesselTrajectory(
-                              tempVessel.getMmsi(),
+                              tempVessel.getMMSI(),
                               tempVessel.getVesselName(),
                               tempVessel.getShipType(),
                               voyage))
@@ -198,14 +198,14 @@ public class MongoVesselTrajectoryDao implements VesselTrajectoryPointDao {
                           }
                         });
 
-                if (trajectoryUUIDMap.containsKey(tempVessel.getMmsi())) {
+                if (trajectoryUUIDMap.containsKey(tempVessel.getMMSI())) {
 
-                  trajectoryUUIDMap.get(tempVessel.getMmsi()).add(uuid);
+                  trajectoryUUIDMap.get(tempVessel.getMMSI()).add(uuid);
                 } else {
 
                   List<String> uuidList = new ArrayList<>();
                   uuidList.add(uuid);
-                  trajectoryUUIDMap.put(tempVessel.getMmsi(), uuidList);
+                  trajectoryUUIDMap.put(tempVessel.getMMSI(), uuidList);
                 }
               });
         }

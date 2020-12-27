@@ -1,5 +1,7 @@
 package kraptis91.maritime.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ public class Voyage {
   private ReceiverMeasurement lastMeasurement;
 
   private int numberOfMeasurements;
+  private long duration;
 
   private Voyage(String destination) {
     this.destination = destination;
@@ -33,19 +36,7 @@ public class Voyage {
     return new Voyage(destination);
   }
 
-  public LocalDateTime getStartDateTime() {
-    return LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(firstMeasurement.getDate().getTime()),
-        TimeZone.getDefault().toZoneId());
-  }
-
-  public LocalDateTime getEndDateTime() {
-    return LocalDateTime.ofInstant(
-        Instant.ofEpochMilli(lastMeasurement.getDate().getTime()),
-        TimeZone.getDefault().toZoneId());
-  }
-
-  public Duration getDuration() {
+  public Duration calcDuration() {
     return Duration.between(
         LocalDateTime.ofInstant(
             Instant.ofEpochMilli(firstMeasurement.getDate().getTime()),
@@ -53,6 +44,14 @@ public class Voyage {
         LocalDateTime.ofInstant(
             Instant.ofEpochMilli(lastMeasurement.getDate().getTime()),
             TimeZone.getDefault().toZoneId()));
+  }
+
+  @JsonProperty("durationInMs")
+  public long getDuration() {
+    if (duration == 0) {
+      duration = calcDuration().toMillis();
+    }
+    return duration;
   }
 
   public void addMeasurement(ReceiverMeasurement measurement) {
@@ -132,13 +131,19 @@ public class Voyage {
 
   @Override
   public String toString() {
-    return "Voyage{" +
-            "destination='" + destination + '\'' +
-            ", firstMeasurement=" + firstMeasurement +
-            ", lastMeasurement=" + lastMeasurement +
-            ", duration(ms)=" + getDuration().toMillis() +
-            ", numberOfMeasurements=" + numberOfMeasurements +
-            '}';
+    return "Voyage{"
+        + "destination='"
+        + destination
+        + '\''
+        + ", firstMeasurement="
+        + firstMeasurement
+        + ", lastMeasurement="
+        + lastMeasurement
+        + ", duration(ms)="
+        + calcDuration().toMillis()
+        + ", numberOfMeasurements="
+        + numberOfMeasurements
+        + '}';
   }
 
   // -------------------------------------------------------------------------------------------------------------------

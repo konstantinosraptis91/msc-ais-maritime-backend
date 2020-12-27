@@ -5,7 +5,7 @@ public class ModelFactory {
 
   public static Vessel createDemoVessel() {
 
-    return Vessel.builder(999999999)
+    return Vessel.fluentBuilder(999999999)
         .withIMO(9999999)
         .withVesselName("__VESSEL_NAME")
         .withCallSign("__SIGN")
