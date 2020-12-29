@@ -14,7 +14,7 @@ public class MMSICounterTest {
         Assert.assertEquals(40436, MMSICounter.INSTANCE.getMMSICounterForVessel(228190600));
     }
 
-    // @Ignore
+    @Ignore
     @Test
     public void testFindMaxMMSICounter() {
 
@@ -24,9 +24,9 @@ public class MMSICounterTest {
 //    System.out.println(MMSICounter.INSTANCE.getMaxMMSICounter() / 50);
 //    System.out.println(MMSICounter.INSTANCE.getMaxMMSICounter() % 50);
 
-        System.out.println("Counter for mmsi " + mmsi + " is " + MMSICounter.INSTANCE_SAMPLE.getMMSICounterForVessel(mmsi));
-        System.out.println("Div " + MMSICounter.INSTANCE_SAMPLE.getMMSICounterForVessel(mmsi) / 50);
-        System.out.println("Mod " + MMSICounter.INSTANCE_SAMPLE.getMMSICounterForVessel(mmsi) % 50);
+        System.out.println("Counter for mmsi " + mmsi + " is " + MMSICounter.INSTANCE.getMMSICounterForVessel(mmsi));
+        System.out.println("Div " + MMSICounter.INSTANCE.getMMSICounterForVessel(mmsi) / 50);
+        System.out.println("Mod " + MMSICounter.INSTANCE.getMMSICounterForVessel(mmsi) % 50);
     }
 
 }
