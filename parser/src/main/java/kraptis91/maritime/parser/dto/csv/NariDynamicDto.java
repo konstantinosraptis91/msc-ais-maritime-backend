@@ -13,11 +13,11 @@ public class NariDynamicDto {
   private double lat;
   private long t;
 
-  public int getMmsi() {
+  public int getMMSI() {
     return mmsi;
   }
 
-  public void setMmsi(int mmsi) {
+  public void setMMSI(int mmsi) {
     this.mmsi = mmsi;
   }
 

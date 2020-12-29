@@ -2,7 +2,7 @@ package kraptis91.maritime.retriever.impl;
 
 import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.VesselDao;
-import kraptis91.maritime.db.dao.VesselTrajectoryPointDao;
+import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
@@ -15,13 +15,13 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
 
   @Override
   public List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi, int skip, int limit) {
-    VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
     return dao.findVesselTrajectory(mmsi, skip, limit);
   }
 
   @Override
   public List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName, int skip, int limit) {
-    VesselTrajectoryPointDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
     return dao.findVesselTrajectory(vesselName, skip, limit);
   }
 

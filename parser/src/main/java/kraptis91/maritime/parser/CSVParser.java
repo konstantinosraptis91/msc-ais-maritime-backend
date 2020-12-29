@@ -221,7 +221,7 @@ public class CSVParser {
 
         switch (i) {
           case 0:
-            dto.setMmsi(CSVParserUtils.parseInt(data[i]));
+            dto.setMMSI(CSVParserUtils.parseInt(data[i]));
             break;
 
           case 3:

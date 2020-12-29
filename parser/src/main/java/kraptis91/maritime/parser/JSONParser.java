@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,11 +17,11 @@ import java.util.Map;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 26/12/2020. */
 public class JSONParser {
 
-  public static Map<String, Integer> createMMSICounterMap(String filename) throws IOException {
+  public static Map<String, Integer> createMMSICounterMap(Path path) throws IOException {
 
     final Map<String, Integer> mmsiCounterMap = new LinkedHashMap<>();
 
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename))) {
+    try (BufferedReader reader = Files.newBufferedReader(path)) {
 
       String line;
       String mmsi;
