@@ -1,6 +1,7 @@
 package kraptis91.maritime.db.dao;
 
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.VesselTrajectoryPointListChunk;
 
 import java.io.InputStream;
 import java.util.List;
@@ -14,17 +15,9 @@ public interface VesselTrajectoryChunkDao {
     insertMany(is, 15000);
   }
 
-  void insertMany(List<VesselTrajectoryChunk> trajectories);
+  void insertMany(List<VesselTrajectoryPointListChunk> trajectoryPointListChunkList);
 
-  default List<VesselTrajectoryChunk> findVesselTrajectory(String vesselName) {
-    return findVesselTrajectory(vesselName, 0, 30);
-  }
+  List<VesselTrajectoryChunk> findVesselTrajectory(String vesselName);
 
-  List<VesselTrajectoryChunk> findVesselTrajectory(String vesselName, int skip, int limit);
-
-  default List<VesselTrajectoryChunk> findVesselTrajectory(int mmsi) {
-    return findVesselTrajectory(mmsi, 0, 30);
-  }
-
-  List<VesselTrajectoryChunk> findVesselTrajectory(int mmsi, int skip, int limit);
+  List<VesselTrajectoryChunk> findVesselTrajectory(int mmsi);
 }

@@ -29,7 +29,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
   @Test
   public void testFindVesselTrajectoryChunksByVesselName() {
     VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
-    dao.findVesselTrajectory("F/V EL AMANECER", 0, 100).forEach(System.out::println);
+    dao.findVesselTrajectory("F/V EL AMANECER").forEach(System.out::println);
   }
 
   @Test

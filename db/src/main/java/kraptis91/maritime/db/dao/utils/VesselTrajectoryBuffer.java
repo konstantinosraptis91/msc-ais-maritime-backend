@@ -2,9 +2,9 @@ package kraptis91.maritime.db.dao.utils;
 
 import com.google.common.collect.ImmutableList;
 import kraptis91.maritime.model.ModelExtractor;
-import kraptis91.maritime.model.ModelBuilder;
+import kraptis91.maritime.model.ModelFactory;
 import kraptis91.maritime.model.Vessel;
-import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.VesselTrajectoryPointListChunk;
 import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 
 import java.util.*;
@@ -13,13 +13,13 @@ import java.util.logging.Logger;
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 27/12/2020.
  */
-public class VesselTrajectoryBuffer implements ModelBuilder {
+public class VesselTrajectoryBuffer {
 
     public static final Logger LOGGER =
             Logger.getLogger(VesselTrajectoryBuffer.class.getName());
 
-    private final Map<Integer, VesselTrajectoryChunk> incompletedChunkMap;
-    private final List<VesselTrajectoryChunk> completedChunkList = new ArrayList<>();
+    private final Map<Integer, VesselTrajectoryPointListChunk> incompletedChunkMap;
+    private final List<VesselTrajectoryPointListChunk> completedChunkList = new ArrayList<>();
 
     // total vessel trajectory points in completedChunkList chunks
     private int pointsInChunkListCounter = 0;
@@ -36,7 +36,7 @@ public class VesselTrajectoryBuffer implements ModelBuilder {
 
     public void addPoint(NariDynamicDto dto, Vessel vessel) {
 
-        VesselTrajectoryChunk chunk;
+        VesselTrajectoryPointListChunk chunk;
 
         if (incompletedChunkMap.containsKey(dto.getMMSI())) {
 
@@ -55,7 +55,7 @@ public class VesselTrajectoryBuffer implements ModelBuilder {
                 pointsInChunkListCounter += chunk.getNumberOfPoints();
 
                 // create a new chunk for that mmsi and add it to map
-                chunk = createVesselTrajectoryChunk(
+                chunk = ModelFactory.createSimpleVesselTrajectoryPointListChunk(
                         dto.getMMSI(), vessel.getVesselName(), vessel.getShipType());
                 chunk.getPointList().add(
                         ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
@@ -65,7 +65,7 @@ public class VesselTrajectoryBuffer implements ModelBuilder {
 
         } else {
 
-            chunk = createVesselTrajectoryChunk(
+            chunk = ModelFactory.createSimpleVesselTrajectoryPointListChunk(
                     dto.getMMSI(), vessel.getVesselName(), vessel.getShipType());
             chunk.getPointList().add(
                     ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
@@ -84,11 +84,11 @@ public class VesselTrajectoryBuffer implements ModelBuilder {
         pointsInChunkListCounter = 0;
     }
 
-    public List<VesselTrajectoryChunk> getCompletedChunkList() {
+    public List<VesselTrajectoryPointListChunk> getCompletedChunkList() {
         return ImmutableList.copyOf(completedChunkList);
     }
 
-    public List<VesselTrajectoryChunk> getIncompletedChunkList() {
+    public List<VesselTrajectoryPointListChunk> getIncompletedChunkList() {
         incompletedChunkMap.values().forEach(this::finalizeChunk);
         return new ArrayList<>(incompletedChunkMap.values());
     }
@@ -97,7 +97,7 @@ public class VesselTrajectoryBuffer implements ModelBuilder {
         incompletedChunkMap.clear();
     }
 
-    private void finalizeChunk(VesselTrajectoryChunk chunk) {
+    private void finalizeChunk(VesselTrajectoryPointListChunk chunk) {
         chunk.setStartDate(new Date(chunk.calcStartDateTimestamp()));
         chunk.setEndDate(new Date(chunk.calcEndDateTimestamp()));
         chunk.setAvgGeoPoint(chunk.calcAvgGeoPoint());

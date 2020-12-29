@@ -1,7 +1,8 @@
 package kraptis91.maritime.db.dao.mongodb.codec;
 
 import kraptis91.maritime.model.GeoPoint;
-import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.VesselTrajectoryChunkBuilder;
+import kraptis91.maritime.model.VesselTrajectoryPointListChunk;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
@@ -20,20 +21,20 @@ import java.util.stream.Collectors;
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 15/12/2020.
  */
-public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> {
+public class VesselTrajectoryPointListChunkCodec implements Codec<VesselTrajectoryPointListChunk> {
 
     private final Codec<Document> documentCodec;
 
-    public VesselTrajectoryChunkCodec() {
+    public VesselTrajectoryPointListChunkCodec() {
         documentCodec = new DocumentCodec();
     }
 
-    public VesselTrajectoryChunkCodec(Codec<Document> codec) {
+    public VesselTrajectoryPointListChunkCodec(Codec<Document> codec) {
         documentCodec = codec;
     }
 
     @Override
-    public VesselTrajectoryChunk decode(BsonReader reader, DecoderContext decoderContext) {
+    public VesselTrajectoryPointListChunk decode(BsonReader reader, DecoderContext decoderContext) {
 
         Document document = documentCodec.decode(reader, decoderContext);
 
@@ -46,15 +47,16 @@ public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> 
         final GeoPoint avgGeoPoint = extractGeoPoint(document.get("avgGeoPoint", Document.class));
         final double avgSpeed = document.getDouble("avgSpeed");
 
-        VesselTrajectoryChunk trajectory =
-                VesselTrajectoryChunk.fluentBuilder(mmsi)
+        VesselTrajectoryPointListChunk trajectory =
+                new VesselTrajectoryChunkBuilder(mmsi)
                         .withVesselName(vesselName)
                         .withShipType(shipType)
                         .withStartDate(startDate)
                         .withEndDate(endDate)
                         .withAvgGeoPoint(avgGeoPoint)
                         .withAvgSpeed(avgSpeed)
-                        .build();
+                        .withNPoints(nPoints)
+                        .buildPointListChunk();
 
         List<Document> pointDocs = document.getList("points", Document.class);
 
@@ -62,7 +64,7 @@ public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> 
                 .getPointList()
                 .addAll(
                         pointDocs.stream()
-                                .map(VesselTrajectoryChunkCodec::extractVesselTrajectoryPoint)
+                                .map(VesselTrajectoryPointListChunkCodec::extractVesselTrajectoryPoint)
                                 .collect(Collectors.toList()));
 
         return trajectory;
@@ -84,7 +86,7 @@ public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> 
 
     @Override
     public void encode(
-            BsonWriter writer, VesselTrajectoryChunk trajectory, EncoderContext encoderContext) {
+            BsonWriter writer, VesselTrajectoryPointListChunk trajectory, EncoderContext encoderContext) {
 
         final Document document = new Document();
         document.put("_id", new ObjectId());
@@ -109,7 +111,7 @@ public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> 
 
         List<Document> pointList =
                 trajectory.getPointList().stream()
-                        .map(VesselTrajectoryChunkCodec::extractVesselTrajectoryPointDocument)
+                        .map(VesselTrajectoryPointListChunkCodec::extractVesselTrajectoryPointDocument)
                         .collect(Collectors.toList());
 
         document.put("points", pointList);
@@ -139,7 +141,7 @@ public class VesselTrajectoryChunkCodec implements Codec<VesselTrajectoryChunk> 
     }
 
     @Override
-    public Class<VesselTrajectoryChunk> getEncoderClass() {
-        return VesselTrajectoryChunk.class;
+    public Class<VesselTrajectoryPointListChunk> getEncoderClass() {
+        return VesselTrajectoryPointListChunk.class;
     }
 }

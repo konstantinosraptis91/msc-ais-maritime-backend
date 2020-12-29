@@ -3,8 +3,11 @@ package kraptis91.maritime.model;
 import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
+import org.bson.Document;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 11/12/2020.
@@ -57,4 +60,32 @@ public class ModelExtractor {
                 .withVesselId(vesselId)
                 .build();
     }
+
+    public static @NotNull VesselTrajectoryChunk extractVesselTrajectoryChunk(Document document) {
+
+        final int mmsi = document.getInteger("mmsi");
+        final String vesselName = document.getString("vesselName");
+        final String shipType = document.getString("shipType");
+        final Date startDate = document.getDate("startDate");
+        final Date endDate = document.getDate("endDate");
+        final GeoPoint avgGeoPoint = extractGeoPoint(document.get("avgGeoPoint", Document.class));
+        final double avgSpeed = document.getDouble("avgSpeed");
+        final int nPoints = document.getInteger("nPoints");
+
+        return new VesselTrajectoryChunkBuilder(mmsi)
+                .withVesselName(vesselName)
+                .withShipType(shipType)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .withAvgGeoPoint(avgGeoPoint)
+                .withAvgSpeed(avgSpeed)
+                .withNPoints(nPoints)
+                .buildChunk();
+    }
+
+    public static GeoPoint extractGeoPoint(Document geoPointDoc) {
+        List<Double> coordinates = geoPointDoc.getList("coordinates", Double.class);
+        return GeoPoint.of(coordinates.get(0), coordinates.get(1));
+    }
+
 }
