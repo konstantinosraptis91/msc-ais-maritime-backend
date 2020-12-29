@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 26/12/2020. */
 public enum MMSICounter {
   INSTANCE(MMSICounter.class.getResourceAsStream("/json/mmsi-counter-map.json"));
-  // INSTANCE_SAMPLE(MMSICounter.class.getResourceAsStream("/json/mmsi-counter-map-sample.json"));
 
   private final Logger LOGGER = Logger.getLogger(MMSICounter.class.getName());
   private final Map<Integer, Integer> mmsiCounterMap;

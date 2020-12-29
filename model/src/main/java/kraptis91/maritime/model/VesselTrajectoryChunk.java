@@ -1,5 +1,6 @@
 package kraptis91.maritime.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kraptis91.maritime.model.utils.TrajectoryChunkUtils;
 import kraptis91.maritime.parser.enums.MMSICounter;
 
@@ -18,6 +19,7 @@ public class VesselTrajectoryChunk {
     protected Date endDate;
     protected GeoPoint avgGeoPoint;
     protected double avgSpeed;
+    @JsonIgnore
     protected final int chunkFixedSize;
     protected int nPoints;
 

@@ -1,6 +1,7 @@
 package kraptis91.maritime.retriever;
 
 import kraptis91.maritime.model.Vessel;
+import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
 
 import java.util.List;
@@ -13,9 +14,9 @@ public interface MaritimeDataRetriever {
 
   Optional<String> getVesselDestination(String vesselName);
 
-  List<VesselTrajectoryPoint> getVesselTrajectory(int mmsi, int skip, int limit);
+  List<VesselTrajectoryChunk> getVesselTrajectory(int mmsi);
 
-  List<VesselTrajectoryPoint> getVesselTrajectory(String vesselName, int skip, int limit);
+  List<VesselTrajectoryChunk> getVesselTrajectory(String vesselName);
 
   Optional<Vessel> getVesselByMMSI(int mmsi);
 
@@ -32,4 +33,9 @@ public interface MaritimeDataRetriever {
    * @return The vessel list
    */
   List<Vessel> getVesselsByType(String shipType, int skip, int limit);
+
+  List<Vessel> getVessels(int skip, int limit);
+
+  List<String> getShipTypes();
+
 }
