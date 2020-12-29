@@ -1,6 +1,5 @@
-package kraptis91.maritime.db.utils;
+package kraptis91.maritime.model;
 
-import kraptis91.maritime.model.*;
 import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
@@ -48,17 +47,6 @@ public class ModelExtractor {
     public static Voyage extractVoyage(NariStaticDto dto) {
         return Voyage.createInstance(dto.getDestination());
     }
-
-//    public static VesselTrajectoryChunk extractVesselTrajectory(
-//            int mmsi, String vesselName, String shipType, Voyage voyage) {
-//
-//        return VesselTrajectoryChunk.builder(mmsi)
-//                .withVesselName(vesselName)
-//                .withShipType(shipType)
-//                .withStartDate(voyage.getFirstMeasurement().getDate())
-//                .withEndDate(voyage.getLastMeasurement().getDate())
-//                .build();
-//    }
 
     public static VesselTrajectoryPoint extractVesselTrajectoryPoint(NariDynamicDto dto,
                                                                      String vesselId) {

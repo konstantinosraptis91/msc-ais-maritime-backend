@@ -14,7 +14,7 @@ import kraptis91.maritime.parser.enums.MMSICountryCode;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.db.utils.ModelExtractor;
+import kraptis91.maritime.model.ModelExtractor;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
