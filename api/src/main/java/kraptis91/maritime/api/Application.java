@@ -3,6 +3,7 @@ package kraptis91.maritime.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.json.JavalinJackson;
 import kraptis91.maritime.api.controller.VesselController;
 import kraptis91.maritime.api.enums.ServerConfig;
@@ -11,7 +12,9 @@ import kraptis91.maritime.api.enums.ServerConfig;
 public class Application {
 
   public static void main(String[] args) {
-    Javalin app = Javalin.create().start(ServerConfig.INSTANCE.getPort());
+    Javalin app = Javalin.create(JavalinConfig::enableCorsForAllOrigins)
+            .start(ServerConfig.INSTANCE.getPort());
+
     app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
     app.get("/vessels/shiptype/:shiptype", VesselController.getVesselsByShipType);
     app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
