@@ -63,6 +63,29 @@ public class ModelExtractor {
 
     public static @NotNull VesselTrajectoryChunk extractVesselTrajectoryChunk(Document document) {
 
+//        final int mmsi = document.getInteger("mmsi");
+//        final String vesselName = document.getString("vesselName");
+//        final String shipType = document.getString("shipType");
+//        final Date startDate = document.getDate("startDate");
+//        final Date endDate = document.getDate("endDate");
+//        final GeoPoint avgGeoPoint = extractGeoPoint(document.get("avgGeoPoint", Document.class));
+//        final double avgSpeed = document.getDouble("avgSpeed");
+//        final int nPoints = document.getInteger("nPoints");
+//
+//        return new VesselTrajectoryChunkBuilder(mmsi)
+//                .withVesselName(vesselName)
+//                .withShipType(shipType)
+//                .withStartDate(startDate)
+//                .withEndDate(endDate)
+//                .withAvgGeoPoint(avgGeoPoint)
+//                .withAvgSpeed(avgSpeed)
+//                .withNPoints(nPoints)
+//                .buildChunk();
+        return extractVesselTrajectoryPointListChunk(document);
+    }
+
+    public static @NotNull VesselTrajectoryPointListChunk extractVesselTrajectoryPointListChunk(Document document) {
+
         final int mmsi = document.getInteger("mmsi");
         final String vesselName = document.getString("vesselName");
         final String shipType = document.getString("shipType");
@@ -73,14 +96,23 @@ public class ModelExtractor {
         final int nPoints = document.getInteger("nPoints");
 
         return new VesselTrajectoryChunkBuilder(mmsi)
-                .withVesselName(vesselName)
-                .withShipType(shipType)
-                .withStartDate(startDate)
-                .withEndDate(endDate)
-                .withAvgGeoPoint(avgGeoPoint)
-                .withAvgSpeed(avgSpeed)
-                .withNPoints(nPoints)
-                .buildChunk();
+            .withVesselName(vesselName)
+            .withShipType(shipType)
+            .withStartDate(startDate)
+            .withEndDate(endDate)
+            .withAvgGeoPoint(avgGeoPoint)
+            .withAvgSpeed(avgSpeed)
+            .withNPoints(nPoints)
+            .buildPointListChunk();
+    }
+
+    public static VesselTrajectoryPoint extractVesselTrajectoryPoint(Document pointDoc) {
+        return VesselTrajectoryPoint.builder()
+            .withCoordinates(extractGeoPoint(pointDoc.get("geoPoint", Document.class)))
+            .withSpeed(pointDoc.getDouble("speed"))
+            .withTimestamp(pointDoc.getLong("timestamp"))
+            .withVesselId(pointDoc.getObjectId("vesselId").toHexString())
+            .build();
     }
 
     public static GeoPoint extractGeoPoint(Document geoPointDoc) {

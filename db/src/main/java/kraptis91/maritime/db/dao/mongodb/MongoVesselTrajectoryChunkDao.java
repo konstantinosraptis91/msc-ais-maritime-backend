@@ -3,7 +3,6 @@ package kraptis91.maritime.db.dao.mongodb;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
-import kraptis91.maritime.db.dao.utils.DocumentBuilder;
 import kraptis91.maritime.db.dao.utils.VesselBuffer;
 import kraptis91.maritime.db.dao.utils.VesselTrajectoryBuffer;
 import kraptis91.maritime.db.enums.MongoDB;

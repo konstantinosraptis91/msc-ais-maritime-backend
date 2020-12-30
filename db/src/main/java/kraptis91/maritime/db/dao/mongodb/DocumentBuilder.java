@@ -1,4 +1,4 @@
-package kraptis91.maritime.db.dao.utils;
+package kraptis91.maritime.db.dao.mongodb;
 
 
 import org.bson.Document;
@@ -19,5 +19,4 @@ public interface DocumentBuilder {
                         .append("coordinates", 2))
                 .append("avgSpeed", 1);
     }
-
 }
