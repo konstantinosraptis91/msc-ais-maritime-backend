@@ -31,7 +31,7 @@ public class Application {
         app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
 
         app.get("/ports", PortController.getPorts);
-        app.get("/ports/:code", PortController.getPortsByCountryCode);
+        app.get("/ports/country/:code", PortController.getPortsByCountryCode);
 
         JavalinJackson.configure(
             new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL));
