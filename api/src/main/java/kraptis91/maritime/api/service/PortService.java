@@ -19,7 +19,7 @@ public class PortService {
 
     public List<Port> getPortsByCountryCode(String countryCode) {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getPortsByCountryCode(countryCode);
+        return dataRetriever.getPortsByCountryCode(countryCode.toUpperCase());
     }
 
 }
