@@ -1,9 +1,7 @@
 package kraptis91.maritime.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Range;
 
 import javax.annotation.Nullable;
@@ -37,6 +35,7 @@ public class Vessel {
       min = 1,
       max = 9999999,
       message = "Invalid ship identification number. The IMO should be a 7 digit number.")
+  @JsonInclude(JsonInclude.Include.NON_DEFAULT)
   private final int imo;
 
   /** Name of the vessel (max 20 characters). */
