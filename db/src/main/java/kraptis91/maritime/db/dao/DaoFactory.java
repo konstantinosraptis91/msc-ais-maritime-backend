@@ -16,7 +16,7 @@ public class DaoFactory {
     return new MongoVesselDao();
   }
 
-  public static VesselTrajectoryChunkDao createMongoVesselTrajectoryPointDao() {
+  public static VesselTrajectoryChunkDao createMongoVesselTrajectoryChunkDao() {
     return new MongoVesselTrajectoryChunkDao();
   }
 

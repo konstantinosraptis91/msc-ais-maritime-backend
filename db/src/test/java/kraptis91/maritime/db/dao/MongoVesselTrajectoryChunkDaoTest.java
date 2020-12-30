@@ -22,19 +22,19 @@ public class MongoVesselTrajectoryChunkDaoTest {
     InputStream isBig =
         new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_dynamic.csv");
 
-    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
     dao.insertMany(isBig);
   }
 
   @Test
   public void testFindVesselTrajectoryChunksByVesselName() {
-    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
     dao.findVesselTrajectory("F/V EL AMANECER").forEach(System.out::println);
   }
 
   @Test
   public void testFindVesselTrajectoryByMMSI() {
-    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+    VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
     dao.findVesselTrajectory(228157000).forEach(System.out::println);
   }
 }

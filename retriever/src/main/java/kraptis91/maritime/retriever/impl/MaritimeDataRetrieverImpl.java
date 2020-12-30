@@ -20,13 +20,13 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
 
     @Override
     public List<VesselTrajectoryChunk> getVesselTrajectory(int mmsi) {
-        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         return dao.findVesselTrajectory(mmsi);
     }
 
     @Override
     public List<VesselTrajectoryChunk> getVesselTrajectory(String vesselName) {
-        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryPointDao();
+        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         return dao.findVesselTrajectory(vesselName);
     }
 

@@ -63,28 +63,12 @@ public class ModelExtractor {
     }
 
     public static @NotNull VesselTrajectoryChunk extractVesselTrajectoryChunk(Document document) {
-        return extractVesselTrajectoryPointListChunk(document);
+        return BuilderFactory.createVesselTrajectoryChunkBuilder(document)
+            .buildChunk();
     }
 
     public static @NotNull VesselTrajectoryPointListChunk extractVesselTrajectoryPointListChunk(Document document) {
-
-        final int mmsi = document.getInteger("mmsi");
-        final String vesselName = document.getString("vesselName");
-        final String shipType = document.getString("shipType");
-        final Date startDate = document.getDate("startDate");
-        final Date endDate = document.getDate("endDate");
-        final GeoPoint avgGeoPoint = extractGeoPoint(document.get("avgGeoPoint", Document.class));
-        final double avgSpeed = document.getDouble("avgSpeed");
-        final int nPoints = document.getInteger("nPoints");
-
-        return new VesselTrajectoryChunkBuilder(mmsi)
-            .withVesselName(vesselName)
-            .withShipType(shipType)
-            .withStartDate(startDate)
-            .withEndDate(endDate)
-            .withAvgGeoPoint(avgGeoPoint)
-            .withAvgSpeed(avgSpeed)
-            .withNPoints(nPoints)
+        return BuilderFactory.createVesselTrajectoryChunkBuilder(document)
             .buildPointListChunk();
     }
 
