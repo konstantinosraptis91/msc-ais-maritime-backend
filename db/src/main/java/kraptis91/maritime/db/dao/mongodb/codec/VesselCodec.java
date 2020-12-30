@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao.mongodb.codec;
 
+import kraptis91.maritime.db.dao.mongodb.DocumentExtractor;
 import kraptis91.maritime.model.ReceiverMeasurement;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.Voyage;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 14/12/2020. */
-public class VesselCodec implements Codec<Vessel> {
+public class VesselCodec implements Codec<Vessel>, DocumentExtractor {
 
   private final Codec<Document> documentCodec;
 
@@ -114,40 +115,12 @@ public class VesselCodec implements Codec<Vessel> {
     // add voyages document
     List<Document> voyages =
         vessel.getVoyageMap().values().stream()
-            .map(VesselCodec::extractVoyageDocument)
+            .map(this::extractVoyageDocument)
             .collect(Collectors.toList());
 
     document.put("voyages", voyages);
 
     documentCodec.encode(writer, document, encoderContext);
-  }
-
-  public static Document extractVoyageDocument(Voyage voyage) {
-    Document voyageDoc = new Document();
-    voyageDoc.put("destination", voyage.getDestination());
-    if (!Objects.isNull(voyage.getFirstMeasurement())) {
-      voyageDoc.put(
-          "firstMeasurement", extractReceiverMeasurementDocument(voyage.getFirstMeasurement()));
-    }
-    if (!Objects.isNull(voyage.getLastMeasurement())) {
-      voyageDoc.put(
-          "lastMeasurement", extractReceiverMeasurementDocument(voyage.getLastMeasurement()));
-    }
-    voyageDoc.put("duration", voyage.calcDuration().toMillis());
-    voyageDoc.put("numberOfMeasurements", voyage.getNumberOfMeasurements());
-    return voyageDoc;
-  }
-
-  public static Document extractReceiverMeasurementDocument(ReceiverMeasurement measurement) {
-    Document measurementDoc = new Document();
-    if (!Objects.isNull(measurement.getEta())) {
-      measurementDoc.put("eta", measurement.getEta());
-    }
-    if (measurement.getToPort() != 0) {
-      measurementDoc.put("toPort", measurement.getToPort());
-    }
-    measurementDoc.put("t", measurement.getDate().getTime());
-    return measurementDoc;
   }
 
   @Override

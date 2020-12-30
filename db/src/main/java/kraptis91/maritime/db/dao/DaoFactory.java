@@ -1,6 +1,7 @@
 package kraptis91.maritime.db.dao;
 
 import kraptis91.maritime.db.dao.mongodb.MongoOceanConditionsDao;
+import kraptis91.maritime.db.dao.mongodb.MongoPortDao;
 import kraptis91.maritime.db.dao.mongodb.MongoVesselDao;
 import kraptis91.maritime.db.dao.mongodb.MongoVesselTrajectoryChunkDao;
 
@@ -18,4 +19,9 @@ public class DaoFactory {
   public static VesselTrajectoryChunkDao createMongoVesselTrajectoryPointDao() {
     return new MongoVesselTrajectoryChunkDao();
   }
+
+  public static PortDao createMongoPortDao() {
+    return new MongoPortDao();
+  }
+
 }

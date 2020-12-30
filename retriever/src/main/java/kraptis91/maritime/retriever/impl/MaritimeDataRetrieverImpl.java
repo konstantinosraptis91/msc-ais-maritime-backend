@@ -1,11 +1,12 @@
 package kraptis91.maritime.retriever.impl;
 
 import kraptis91.maritime.db.dao.DaoFactory;
+import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
+import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
-import kraptis91.maritime.model.VesselTrajectoryPoint;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
@@ -74,5 +75,17 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     @Override
     public List<String> getShipTypes() {
         return ShipTypes.INSTANCE.getShipTypes();
+    }
+
+    @Override
+    public List<Port> getPorts(int skip, int limit) {
+        PortDao dao = DaoFactory.createMongoPortDao();
+        return dao.findPorts(skip, limit);
+    }
+
+    @Override
+    public List<Port> getPortsByCountryCode(String countryCode) {
+        PortDao dao = DaoFactory.createMongoPortDao();
+        return dao.findPortsByCountryCode(countryCode);
     }
 }

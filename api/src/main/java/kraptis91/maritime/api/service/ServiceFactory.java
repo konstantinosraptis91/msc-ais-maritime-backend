@@ -8,4 +8,8 @@ public class ServiceFactory {
     public static VesselService createVesselService() {
         return new VesselService();
     }
+
+    public static PortService createPortService() {
+        return new PortService();
+    }
 }

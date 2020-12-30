@@ -6,9 +6,7 @@ import kraptis91.maritime.parser.exception.CSVParserException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public enum WorldPorts {
 
-    INSTANCE("csv/world-ports.csv");
+    INSTANCE("/csv/world-ports.csv");
 
     public final Logger LOGGER = java.util.logging.Logger.getLogger(WorldPorts.class.getName());
     private final List<PortDto> portDtoList;
@@ -30,8 +28,8 @@ public enum WorldPorts {
 
         portDtoList = new ArrayList<>();
 
-        try (BufferedReader reader = Files.newBufferedReader(
-            Paths.get(ClassLoader.getSystemResource(filename).toURI()))) {
+        try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(WorldPorts.class.getResourceAsStream(filename)))) {
 
             LOGGER.info("Initializing World Ports from " + filename + " START");
 
@@ -56,7 +54,7 @@ public enum WorldPorts {
                 portDtoList.add(dto);
             }
 
-        } catch (IOException | CSVParserException | URISyntaxException e) {
+        } catch (IOException | CSVParserException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

@@ -4,7 +4,8 @@ package kraptis91.maritime.db.enums;
 public enum MongoDBCollection {
   OCEAN_CONDITIONS("oceanConditions"),
   VESSELS("vessels"),
-  VESSEL_TRAJECTORY("vesselTrajectoryChunks");
+  VESSEL_TRAJECTORY("vesselTrajectoryChunks"),
+  WORLD_PORTS("worldPorts");
 
   private final String name;
 

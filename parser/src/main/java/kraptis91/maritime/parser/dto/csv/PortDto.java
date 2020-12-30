@@ -41,4 +41,14 @@ public class PortDto {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    @Override
+    public String toString() {
+        return "PortDto{" +
+            "name='" + name + '\'' +
+            ", country='" + country + '\'' +
+            ", latitude=" + latitude +
+            ", longitude=" + longitude +
+            '}';
+    }
 }

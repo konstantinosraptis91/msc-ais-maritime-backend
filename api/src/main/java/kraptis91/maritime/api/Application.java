@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.core.JavalinConfig;
 import io.javalin.plugin.json.JavalinJackson;
+import kraptis91.maritime.api.controller.PortController;
 import kraptis91.maritime.api.controller.VesselController;
 import kraptis91.maritime.api.enums.ServerConfig;
 
@@ -28,6 +29,9 @@ public class Application {
         app.get("/vessels/destination/:destination", VesselController.getVesselByDestination);
         app.get("/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
         app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
+
+        app.get("/ports", PortController.getPorts);
+        app.get("/ports/:code", PortController.getPortsByCountryCode);
 
         JavalinJackson.configure(
             new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL));

@@ -1,5 +1,6 @@
 package kraptis91.maritime.retriever;
 
+import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.VesselTrajectoryPoint;
@@ -37,5 +38,9 @@ public interface MaritimeDataRetriever {
   List<Vessel> getVessels(int skip, int limit);
 
   List<String> getShipTypes();
+
+  List<Port> getPorts(int skip, int limit);
+
+  List<Port> getPortsByCountryCode(String countryCode);
 
 }
