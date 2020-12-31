@@ -1,7 +1,9 @@
 package kraptis91.maritime.api.service;
 
+import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.parser.enums.CountryCode;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 import kraptis91.maritime.retriever.RetrieverFactory;
 
@@ -61,5 +63,22 @@ public class VesselService {
     public List<String> getShipTypes() {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
         return dataRetriever.getShipTypes();
+    }
+
+    public List<PlainVessel> getPlainVesselsByType(String shipType, int skip, int limit) {
+        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
+        return dataRetriever.getPlainVesselsByType(shipType, skip, limit);
+    }
+
+    public List<PlainVessel> getPlainVesselByCountryCode(String countryCode, int skip, int limit) {
+        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
+        return dataRetriever.getPlainVesselByCountryCode(
+            CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
+    }
+
+    public List<PlainVessel> getPlainVessels(String shipType, String countryCode, int skip, int limit) {
+        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
+        return dataRetriever.getPlainVessels(
+            shipType, CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
     }
 }

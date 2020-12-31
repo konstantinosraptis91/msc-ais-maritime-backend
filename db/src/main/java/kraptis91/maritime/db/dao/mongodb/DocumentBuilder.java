@@ -10,13 +10,22 @@ public interface DocumentBuilder {
 
     default Document createVesselTrajectoryChunkDocument() {
         return new Document().append("mmsi", 1)
-                .append("vesselName", 1)
-                .append("shipType", 1)
-                .append("startDate", 1)
-                .append("endDate", 1)
-                .append("nPoints", 1)
-                .append("avgGeoPoint", new Document()
-                        .append("coordinates", 2))
-                .append("avgSpeed", 1);
+            .append("vesselName", 1)
+            .append("shipType", 1)
+            .append("startDate", 1)
+            .append("endDate", 1)
+            .append("nPoints", 1)
+            .append("avgGeoPoint", new Document()
+                .append("coordinates", 2))
+            .append("avgSpeed", 1);
     }
+
+    default Document createPlainVesselDocument() {
+        return new Document().append("mmsi", 1)
+            .append("vesselName", 1)
+            .append("shipType", 1)
+            .append("country", 1)
+            .append("_id", 0);
+    }
+
 }

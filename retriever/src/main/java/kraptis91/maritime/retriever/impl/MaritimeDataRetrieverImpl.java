@@ -1,10 +1,10 @@
 package kraptis91.maritime.retriever.impl;
 
-import com.google.common.collect.BiMap;
 import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
+import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
@@ -96,5 +96,25 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     @Override
     public List<CountryCodeMapDto> getCountryCodeMapDtoList() {
         return CountryCodeMap.INSTANCE.getCountryCodeMapDtoList();
+    }
+
+    @Override
+    public List<PlainVessel> getPlainVesselsByType(String shipType, int skip, int limit) {
+        VesselDao dao = DaoFactory.createMongoVesselDao();
+        return dao.findPlainVesselsByType(shipType, skip, limit);
+    }
+
+    @Override
+    public List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit) {
+        VesselDao dao = DaoFactory.createMongoVesselDao();
+        return dao.findPlainVesselByCountryName(
+            CountryCodeMap.INSTANCE.getCountryNameByCode(countryCode), skip, limit);
+    }
+
+    @Override
+    public List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit) {
+        VesselDao dao = DaoFactory.createMongoVesselDao();
+        return dao.findPlainVessels(
+            shipType, CountryCodeMap.INSTANCE.getCountryNameByCode(countryCode), skip, limit);
     }
 }

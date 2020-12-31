@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao;
 
+import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Vessel;
 
 import java.io.InputStream;
@@ -33,6 +34,12 @@ public interface VesselDao {
     }
 
     List<Vessel> findVesselsByType(String shipType, int skip, int limit);
+
+    List<PlainVessel> findPlainVesselsByType(String shipType, int skip, int limit);
+
+    List<PlainVessel> findPlainVesselByCountryName(String country, int skip, int limit);
+
+    List<PlainVessel> findPlainVessels(String shipType, String name, int skip, int limit);
 
     default List<Vessel> findVesselsByDestination(String destination) {
         return findVesselsByDestination(destination, 0, 30);

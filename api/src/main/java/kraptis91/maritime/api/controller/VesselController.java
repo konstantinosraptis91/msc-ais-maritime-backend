@@ -78,4 +78,32 @@ public class VesselController {
                 ServiceFactory.createVesselService()
                     .getVesselTrajectory(
                         ctx.pathParam("mmsi", Integer.class).get()));
+
+    public static Handler getPlainVesselsByShipType =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createVesselService()
+                    .getPlainVesselsByType(
+                        ctx.pathParam("type"),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
+
+    public static Handler getPlainVesselsByCountryCode =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createVesselService()
+                    .getPlainVesselByCountryCode(
+                        ctx.pathParam("code"),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
+
+    public static Handler getPlainVessels =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createVesselService()
+                    .getPlainVessels(
+                        ctx.pathParam("type"),
+                        ctx.pathParam("code"),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
 }

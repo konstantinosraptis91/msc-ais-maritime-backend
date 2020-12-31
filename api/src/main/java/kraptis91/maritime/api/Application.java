@@ -21,8 +21,10 @@ public class Application {
 
         app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
         app.get("/vessels", VesselController.getVessels);
-        app.get("/vessels/shiptypes", VesselController.getShipTypes);
-        app.get("/vessels/shiptype/:shiptype", VesselController.getVesselsByShipType);
+        app.get("/vessels/types", VesselController.getShipTypes);
+        app.get("/vessels/type/:type", VesselController.getPlainVesselsByShipType);
+        app.get("/vessels/country/:code", VesselController.getPlainVesselsByCountryCode);
+        app.get("/vessels/type/:type/country/:code", VesselController.getPlainVessels);
         app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
         app.get("/vessels/name/:name", VesselController.getVesselByName);
         app.get("/vessels/destination/name/:name", VesselController.getVesselDestinationByName);

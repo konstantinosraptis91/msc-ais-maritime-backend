@@ -81,6 +81,15 @@ public class ModelExtractor {
             .build();
     }
 
+    public static @NotNull PlainVessel extractPlainVessel(Document plainVesselDoc) {
+        return PlainVessel.builder()
+            .withMMSI(plainVesselDoc.getInteger("mmsi"))
+            .withVesselName(plainVesselDoc.getString("vesselName"))
+            .withShipType(plainVesselDoc.getString("shipType"))
+            .withCountry(plainVesselDoc.getString("country"))
+            .build();
+    }
+
     public static GeoPoint extractGeoPoint(Document geoPointDoc) {
         List<Double> coordinates = geoPointDoc.getList("coordinates", Double.class);
         return GeoPoint.of(coordinates.get(0), coordinates.get(1));
