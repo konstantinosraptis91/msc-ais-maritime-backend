@@ -14,7 +14,7 @@ public class VesselController {
             ctx.json(
                 ServiceFactory.createVesselService()
                     .getVesselsByShipType(
-                        ctx.pathParam("shiptype"),
+                        ctx.pathParam("type"),
                         ctx.header("skip", Integer.class).get(),
                         ctx.header("limit", Integer.class).get()));
 
