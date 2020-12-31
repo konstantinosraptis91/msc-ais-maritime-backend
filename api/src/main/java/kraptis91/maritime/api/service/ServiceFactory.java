@@ -12,4 +12,8 @@ public class ServiceFactory {
     public static PortService createPortService() {
         return new PortService();
     }
+
+    public static CountryService createCountryService() {
+        return new CountryService();
+    }
 }

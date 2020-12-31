@@ -1,5 +1,6 @@
 package kraptis91.maritime.retriever.impl;
 
+import com.google.common.collect.BiMap;
 import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
@@ -7,6 +8,9 @@ import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
+import kraptis91.maritime.parser.enums.CountryCode;
+import kraptis91.maritime.parser.enums.CountryCodeMap;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
@@ -87,5 +91,10 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     public List<Port> getPortsByCountryCode(String countryCode) {
         PortDao dao = DaoFactory.createMongoPortDao();
         return dao.findPortsByCountryCode(countryCode);
+    }
+
+    @Override
+    public List<CountryCodeMapDto> getCountryCodeMapDtoList() {
+        return CountryCodeMap.INSTANCE.getCountryCodeMapDtoList();
     }
 }
