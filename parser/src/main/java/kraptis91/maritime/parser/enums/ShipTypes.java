@@ -24,6 +24,7 @@ public enum ShipTypes {
     public final Logger LOGGER = java.util.logging.Logger.getLogger(ShipTypes.class.getName());
     private final List<ShipTypeListDto> shipTypeListDtoList;
     private final List<String> shipTypeList;
+    private List<String> distinctShipTypesList;
 
     ShipTypes(String resource) {
 
@@ -68,8 +69,13 @@ public enum ShipTypes {
         return dto -> shipType >= dto.getShipTypeMin() && shipType <= dto.getShipTypeMax();
     }
 
-    public List<String> getShipTypes() {
-        return shipTypeList;
+    public List<String> getDistinctShipTypes() {
+        if (Objects.isNull(distinctShipTypesList)) {
+            distinctShipTypesList = shipTypeList.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        }
+        return distinctShipTypesList;
     }
 
     public String getShipType(final int shipType) {

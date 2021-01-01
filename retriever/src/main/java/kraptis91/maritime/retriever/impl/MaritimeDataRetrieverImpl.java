@@ -78,7 +78,7 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
 
     @Override
     public List<String> getShipTypes() {
-        return ShipTypes.INSTANCE.getShipTypes();
+        return ShipTypes.INSTANCE.getDistinctShipTypes();
     }
 
     @Override

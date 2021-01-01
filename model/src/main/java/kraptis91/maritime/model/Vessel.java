@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 1/12/2020.
  */
@@ -27,7 +29,7 @@ public class Vessel extends PlainVessel {
         min = 1,
         max = 9999999,
         message = "Invalid ship identification number. The IMO should be a 7 digit number.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonInclude(Include.NON_DEFAULT)
     private final int imo;
 
     /**

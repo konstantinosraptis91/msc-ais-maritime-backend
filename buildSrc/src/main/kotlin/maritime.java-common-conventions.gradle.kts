@@ -35,6 +35,9 @@ dependencies {
     // testing
     testImplementation("junit:junit:4.13")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
+    // jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.12.0")
 }
 
 tasks.test {
