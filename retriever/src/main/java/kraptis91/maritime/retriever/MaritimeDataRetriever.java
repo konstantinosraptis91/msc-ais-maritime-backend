@@ -4,6 +4,7 @@ import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.keplergl.KeplerGlCollection;
 import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
 import kraptis91.maritime.parser.enums.CountryCode;
 
@@ -52,4 +53,6 @@ public interface MaritimeDataRetriever {
   List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit);
 
   List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit);
+
+  KeplerGlCollection getKeplerGlVesselTrajectoryCollection(int mmsi);
 }

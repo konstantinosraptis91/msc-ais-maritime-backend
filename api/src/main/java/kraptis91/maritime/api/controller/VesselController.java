@@ -79,6 +79,13 @@ public class VesselController {
                     .getVesselTrajectory(
                         ctx.pathParam("mmsi", Integer.class).get()));
 
+    public static Handler getKeplerGlVesselTrajectoryByMMSI =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createVesselService()
+                    .getKeplerGlVesselTrajectory(
+                        ctx.pathParam("mmsi", Integer.class).get()));
+
     public static Handler getPlainVesselsByShipType =
         ctx ->
             ctx.json(

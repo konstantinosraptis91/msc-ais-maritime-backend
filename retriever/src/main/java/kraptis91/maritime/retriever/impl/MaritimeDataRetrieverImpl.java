@@ -8,6 +8,10 @@ import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.keplergl.KeplerGlCollection;
+import kraptis91.maritime.model.keplergl.KeplerGlFeature;
+import kraptis91.maritime.model.keplergl.KeplerGlFeatureGeometryPoint;
+import kraptis91.maritime.model.keplergl.KeplerGlFeatureProperties;
 import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
 import kraptis91.maritime.parser.enums.CountryCode;
 import kraptis91.maritime.parser.enums.CountryCodeMap;
@@ -16,6 +20,7 @@ import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 6/12/2020.
@@ -116,5 +121,29 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
         VesselDao dao = DaoFactory.createMongoVesselDao();
         return dao.findPlainVessels(
             shipType, CountryCodeMap.INSTANCE.getCountryNameByCode(countryCode), skip, limit);
+    }
+
+    @Override
+    public KeplerGlCollection getKeplerGlVesselTrajectoryCollection(int mmsi) {
+        List<VesselTrajectoryChunk> chunks = getVesselTrajectory(mmsi);
+
+        List<KeplerGlFeature> features = chunks.stream().map(chunk -> KeplerGlFeature.builder()
+            .withGeometryPoint(KeplerGlFeatureGeometryPoint.of(chunk.getAvgGeoPoint()))
+            .withFeatureProperties(KeplerGlFeatureProperties.builder()
+                .withStartDate(chunk.getFormattedStartDate())
+                .withEndDate(chunk.getFormattedEndDate())
+                .withNPoints(chunk.getNumberOfPoints())
+                .withAvgSpeed(chunk.getAvgSpeed())
+                .withMMSI(chunk.getMmsi())
+                .withVesselName(chunk.getVesselName())
+                .withShipType(chunk.getShipType())
+                .build())
+            .build())
+            .collect(Collectors.toList());
+
+        KeplerGlCollection keplerGlCollection = KeplerGlCollection.newInstance();
+        keplerGlCollection.getFeatureList().addAll(features);
+
+        return keplerGlCollection;
     }
 }

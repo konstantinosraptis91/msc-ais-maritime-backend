@@ -3,6 +3,7 @@ package kraptis91.maritime.api.service;
 import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
+import kraptis91.maritime.model.keplergl.KeplerGlCollection;
 import kraptis91.maritime.parser.enums.CountryCode;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 import kraptis91.maritime.retriever.RetrieverFactory;
@@ -23,6 +24,11 @@ public class VesselService {
     public List<VesselTrajectoryChunk> getVesselTrajectory(String vesselName) {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
         return dataRetriever.getVesselTrajectory(vesselName);
+    }
+
+    public KeplerGlCollection getKeplerGlVesselTrajectory(int mmsi) {
+        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
+        return dataRetriever.getKeplerGlVesselTrajectoryCollection(mmsi);
     }
 
     public List<Vessel> getVesselsByDestination(String destination, int skip, int limit) {
@@ -81,4 +87,5 @@ public class VesselService {
         return dataRetriever.getPlainVessels(
             shipType, CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
     }
+
 }
