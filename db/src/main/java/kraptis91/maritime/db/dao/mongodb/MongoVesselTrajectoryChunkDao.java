@@ -1,10 +1,14 @@
 package kraptis91.maritime.db.dao.mongodb;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Position;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
+import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import kraptis91.maritime.db.dao.utils.VesselBuffer;
 import kraptis91.maritime.db.dao.utils.VesselTrajectoryBuffer;
 import kraptis91.maritime.db.enums.MongoDB;
@@ -21,11 +25,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 13/12/2020.
@@ -143,6 +147,7 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
         return trajectoryPointList;
     }
 
+    @Override
     public List<Integer> findNearVesselsMMSIList(double longitude,
                                                  double latitude,
                                                  double maxDistance,
@@ -158,20 +163,59 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
         return nearVesselsMMSIList;
     }
 
-//    @Override
-//    public List<PlainVessel> findNearVessels(double longitude,
-//                                             double latitude,
-//                                             double maxDistance,
-//                                             double minDistance) {
-//
-//        final List<PlainVessel> nearVesselsList = new ArrayList<>();
-//        final Point refPoint = new Point(new Position(longitude, latitude));
-//
-//        createDocumentCollection()
-//            .distinct("mmsi", Filters.near("avgGeoPoint", refPoint, maxDistance, minDistance), PlainVessel.class)
-//            .forEach((Consumer<PlainVessel>) nearVesselsList::add);
-//
-//        return nearVesselsList;
-//    }
+    @Override
+    public List<Integer> findNearVesselsMMSIList(NearQueryOptions options) {
+
+        final List<Integer> nearVesselsMMSIList = new ArrayList<>();
+        createDocumentCollection()
+            .aggregate(
+                Arrays.asList(
+                    // geoNear spherical geometry for 2d sphere
+                    createGeoNearSphericalGeometryDocument(
+                        options.getLongitude(), options.getLatitude(), options.getMaxDistance()),
+                    // projection
+                    Aggregates.project(Projections.fields(
+                        Projections.excludeId(),
+                        Projections.include("mmsi", "vesselName", "shipType"))),
+                    // group
+                    Aggregates.group("$mmsi", Accumulators.first("mmsi", "$mmsi")),
+                    // skip
+                    Aggregates.skip(options.getSkip()),
+                    // limit
+                    Aggregates.limit(options.getLimit())))
+            .map(document -> document.getInteger("mmsi"))
+            .forEach((Consumer<Integer>) nearVesselsMMSIList::add);
+
+        return nearVesselsMMSIList;
+    }
+
+    @Override
+    public List<PlainVessel> findNearVessels(NearQueryOptions options) {
+
+        final List<PlainVessel> nearVessels = new ArrayList<>();
+        createDocumentCollection()
+            .aggregate(
+                Arrays.asList(
+                    // geoNear spherical geometry for 2d sphere
+                    createGeoNearSphericalGeometryDocument(
+                        options.getLongitude(), options.getLatitude(), options.getMaxDistance()),
+                    // group
+                    Aggregates.group("$mmsi",
+                        Accumulators.first("mmsi", "$mmsi"),
+                        Accumulators.first("vesselName", "$vesselName"),
+                        Accumulators.first("shipType", "$shipType")),
+                    // projection
+                    Aggregates.project(Projections.fields(
+                        Projections.excludeId(),
+                        Projections.include("mmsi", "vesselName", "shipType"))),
+                    // skip
+                    Aggregates.skip(options.getSkip()),
+                    // limit
+                    Aggregates.limit(options.getLimit())))
+            .map(ModelExtractor::extractPlainVessel)
+            .forEach((Consumer<PlainVessel>) nearVessels::add);
+
+        return nearVessels;
+    }
 
 }

@@ -23,4 +23,14 @@ public class PortController {
                     .getPortsByCountryCode(
                         ctx.pathParam("code")));
 
+    public static Handler getNearPorts =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createPortService()
+                    .getNearPorts(
+                        ctx.pathParam("lon", Double.class).get(),
+                        ctx.pathParam("lat", Double.class).get(),
+                        ctx.pathParam("dist", Double.class).get(),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
 }

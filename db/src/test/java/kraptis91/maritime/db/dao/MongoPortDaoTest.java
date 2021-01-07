@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao;
 
+import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import kraptis91.maritime.model.ModelExtractor;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.parser.enums.WorldPorts;
@@ -23,6 +24,22 @@ public class MongoPortDaoTest {
 
         PortDao dao = DaoFactory.createMongoPortDao();
         dao.insertMany(ports);
+    }
+
+    @Test
+    public void testFindNearPorts() {
+
+        PortDao dao = DaoFactory.createMongoPortDao();
+
+        dao.findNearPorts(NearQueryOptions.builder()
+            .withLongitude(3.116667)
+            .withLatitude(42.516667)
+            .withMaxDistance(500000)
+            .withMinDistance(0)
+            .skip(0)
+            .limit(30)
+            .build())
+            .forEach(System.out::println);
     }
 
 }

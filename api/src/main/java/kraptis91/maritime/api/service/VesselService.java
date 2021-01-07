@@ -88,10 +88,11 @@ public class VesselService {
             shipType, CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
     }
 
-    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance) {
+    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance,
+                                            int skip, int limit) {
 
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getNearVessels(longitude, latitude, maxDistance, 0);
+        return dataRetriever.getNearVessels(longitude, latitude, maxDistance, 0, skip, limit);
     }
 
 

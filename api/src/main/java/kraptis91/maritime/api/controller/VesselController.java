@@ -86,7 +86,9 @@ public class VesselController {
                     .getNearVessels(
                         ctx.pathParam("lon", Double.class).get(),
                         ctx.pathParam("lat", Double.class).get(),
-                        ctx.pathParam("dist", Double.class).get()));
+                        ctx.pathParam("dist", Double.class).get(),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
 
     public static Handler getKeplerGlVesselTrajectoryByMMSI =
         ctx ->

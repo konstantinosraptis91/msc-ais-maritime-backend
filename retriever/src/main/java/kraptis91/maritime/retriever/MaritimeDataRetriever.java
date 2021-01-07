@@ -48,6 +48,10 @@ public interface MaritimeDataRetriever {
 
     List<Port> getPortsByCountryCode(String countryCode);
 
+    List<Port> getNearPorts(double longitude, double latitude,
+                            double maxDistance, double minDistance,
+                            int skip, int limit);
+
     List<CountryCodeMapDto> getCountryCodeMapDtoList();
 
     List<PlainVessel> getPlainVesselsByType(String shipType, int skip, int limit);
@@ -59,5 +63,6 @@ public interface MaritimeDataRetriever {
     KeplerGlCollection getKeplerGlVesselTrajectoryCollection(int mmsi);
 
     List<PlainVessel> getNearVessels(double longitude, double latitude,
-                                     double maxDistance, double minDistance);
+                                     double maxDistance, double minDistance,
+                                     int skip, int limit);
 }

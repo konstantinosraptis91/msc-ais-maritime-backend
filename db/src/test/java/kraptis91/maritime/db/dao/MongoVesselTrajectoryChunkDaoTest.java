@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao;
 
+import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -44,6 +45,34 @@ public class MongoVesselTrajectoryChunkDaoTest {
     public void testFindNearVesselsByMMSI() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         dao.findNearVesselsMMSIList(3.116667, 42.516667, 500000, 0)
+            .forEach(System.out::println);
+    }
+
+    @Test
+    public void testFindNearVesselsByMMSIWithOptionParam() {
+        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+        dao.findNearVesselsMMSIList(NearQueryOptions.builder()
+            .withLongitude(3.116667)
+            .withLatitude(42.516667)
+            .withMaxDistance(500000)
+            .withMinDistance(0)
+            .skip(0)
+            .limit(30)
+            .build())
+            .forEach(System.out::println);
+    }
+
+    @Test
+    public void testFindNearVessels() {
+        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+        dao.findNearVessels(NearQueryOptions.builder()
+            .withLongitude(3.116667)
+            .withLatitude(42.516667)
+            .withMaxDistance(500000)
+            .withMinDistance(0)
+            .skip(0)
+            .limit(30)
+            .build())
             .forEach(System.out::println);
     }
 

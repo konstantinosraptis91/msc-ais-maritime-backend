@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.dao;
 
+import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.VesselTrajectoryPointListChunk;
@@ -26,5 +27,7 @@ public interface VesselTrajectoryChunkDao {
 
     List<Integer> findNearVesselsMMSIList(double longitude, double latitude, double maxDistance, double minDistance);
 
-//    List<PlainVessel> findNearVessels(double longitude, double latitude, double maxDistance, double minDistance);
+    List<Integer> findNearVesselsMMSIList(NearQueryOptions options);
+
+    List<PlainVessel> findNearVessels(NearQueryOptions options);
 }

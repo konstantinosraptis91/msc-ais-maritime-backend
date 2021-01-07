@@ -6,7 +6,7 @@ package kraptis91.maritime.model;
 public class Port {
 
     private final String name;
-    private final String country;
+    private String country;
     private final GeoPoint geoPoint;
 
     private Port(Builder builder) {
@@ -25,6 +25,10 @@ public class Port {
 
     public GeoPoint getGeoPoint() {
         return geoPoint;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public static Builder builder() {
@@ -66,4 +70,12 @@ public class Port {
 
     }
 
+    @Override
+    public String toString() {
+        return "Port{" +
+            "name='" + name + '\'' +
+            ", country='" + country + '\'' +
+            ", geoPoint=" + geoPoint +
+            '}';
+    }
 }

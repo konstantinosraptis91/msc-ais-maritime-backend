@@ -4,6 +4,8 @@ import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
+import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
+import kraptis91.maritime.db.dao.mongodb.query.utils.QueryOptions;
 import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
@@ -91,13 +93,38 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     @Override
     public List<Port> getPorts(int skip, int limit) {
         PortDao dao = DaoFactory.createMongoPortDao();
-        return dao.findPorts(skip, limit);
+        return dao.findPorts(skip, limit).stream()
+            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
+                CountryCode.valueOf(port.getCountry()))))
+            .collect(Collectors.toList());
     }
 
     @Override
     public List<Port> getPortsByCountryCode(String countryCode) {
         PortDao dao = DaoFactory.createMongoPortDao();
-        return dao.findPortsByCountryCode(countryCode);
+        return dao.findPortsByCountryCode(countryCode).stream()
+            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
+                CountryCode.valueOf(port.getCountry()))))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Port> getNearPorts(double longitude, double latitude, double maxDistance, double minDistance,
+                                   int skip, int limit) {
+        PortDao dao = DaoFactory.createMongoPortDao();
+        return dao.findNearPorts(
+            NearQueryOptions.builder()
+                .withLongitude(longitude)
+                .withLatitude(latitude)
+                .withMaxDistance(maxDistance)
+                .withMinDistance(minDistance)
+                .skip(skip)
+                .limit(limit)
+                .build())
+            .stream()
+            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
+                CountryCode.valueOf(port.getCountry()))))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -140,11 +167,20 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     }
 
     @Override
-    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance, double minDistance) {
+    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance, double minDistance,
+                                            int skip, int limit) {
         final VesselTrajectoryChunkDao trajectoryChunkDao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         final VesselDao vesselDao = DaoFactory.createMongoVesselDao();
 
-        return trajectoryChunkDao.findNearVesselsMMSIList(longitude, latitude, maxDistance, minDistance)
+        return trajectoryChunkDao.findNearVesselsMMSIList(
+            NearQueryOptions.builder()
+                .withLongitude(longitude)
+                .withLatitude(latitude)
+                .withMaxDistance(maxDistance)
+                .withMinDistance(minDistance)
+                .skip(skip)
+                .limit(limit)
+                .build())
             .stream()
             .map(vesselDao::findPlainVesselByMMSI)
             .flatMap(Optional::stream)
