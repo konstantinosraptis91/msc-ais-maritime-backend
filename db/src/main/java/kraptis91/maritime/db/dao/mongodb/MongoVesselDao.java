@@ -166,7 +166,18 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
 
     @Override
     public Optional<Vessel> findVesselByMMSI(int mmsi) {
-        return Optional.ofNullable(createVesselCollection().find(Filters.eq("mmsi", mmsi)).first());
+        return Optional.ofNullable(createVesselCollection()
+            .find(Filters.eq("mmsi", mmsi)).first());
+    }
+
+    @Override
+    public Optional<PlainVessel> findPlainVesselByMMSI(int mmsi) {
+        return Optional.ofNullable(
+            createDocumentCollection()
+                .find(Filters.eq("mmsi", mmsi))
+                .projection(createPlainVesselDocument())
+                .map(ModelExtractor::extractPlainVessel)
+                .first());
     }
 
     @Override

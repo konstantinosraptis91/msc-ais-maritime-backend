@@ -51,6 +51,8 @@ public interface VesselDao {
 
     Optional<Vessel> findVesselByMMSI(int mmsi);
 
+    Optional<PlainVessel> findPlainVesselByMMSI(int mmsi);
+
     Optional<Vessel> findVesselByName(String vesselName);
 
     Optional<String> findVesselDestination(String vesselName);

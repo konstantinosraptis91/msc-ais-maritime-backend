@@ -28,4 +28,9 @@ public interface DocumentBuilder {
             .append("_id", 0);
     }
 
+    default Document createMMSIDocument() {
+        return new Document().append("mmsi", 1)
+            .append("_id", 0);
+    }
+
 }

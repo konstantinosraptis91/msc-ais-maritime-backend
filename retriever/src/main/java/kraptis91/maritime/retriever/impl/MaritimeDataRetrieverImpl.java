@@ -10,8 +10,6 @@ import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.keplergl.KeplerGlCollection;
 import kraptis91.maritime.model.keplergl.KeplerGlFeature;
-import kraptis91.maritime.model.keplergl.KeplerGlFeatureGeometryPoint;
-import kraptis91.maritime.model.keplergl.KeplerGlFeatureProperties;
 import kraptis91.maritime.model.keplergl.adapters.KeplerGlFeatureAdapter;
 import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
 import kraptis91.maritime.parser.enums.CountryCode;
@@ -21,12 +19,15 @@ import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 6/12/2020.
  */
 public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
+
+    public static Logger LOGGER = Logger.getLogger(MaritimeDataRetrieverImpl.class.getName());
 
     @Override
     public List<VesselTrajectoryChunk> getVesselTrajectory(int mmsi) {
@@ -136,5 +137,17 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
         keplerGlCollection.getFeatureList().addAll(features);
 
         return keplerGlCollection;
+    }
+
+    @Override
+    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance, double minDistance) {
+        final VesselTrajectoryChunkDao trajectoryChunkDao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+        final VesselDao vesselDao = DaoFactory.createMongoVesselDao();
+
+        return trajectoryChunkDao.findNearVesselsMMSIList(longitude, latitude, maxDistance, minDistance)
+            .stream()
+            .map(vesselDao::findPlainVesselByMMSI)
+            .flatMap(Optional::stream)
+            .collect(Collectors.toList());
     }
 }

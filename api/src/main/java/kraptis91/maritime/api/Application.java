@@ -33,6 +33,7 @@ public class Application {
         app.get("/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
         app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
         app.get("/vessels/trajectory/keplergl/mmsi/:mmsi", VesselController.getKeplerGlVesselTrajectoryByMMSI);
+        app.get("/vessels/near/lon/:lon/lat/:lat/dist/:dist", VesselController.getNearVessels);
 
         app.get("/ports", PortController.getPorts);
         app.get("/ports/country/:code", PortController.getPortsByCountryCode);

@@ -1,19 +1,9 @@
 package kraptis91.maritime.db.dao;
 
-import kraptis91.maritime.model.ReceiverMeasurement;
-import kraptis91.maritime.model.Vessel;
-import kraptis91.maritime.model.Voyage;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 8/12/2020.
@@ -52,23 +42,20 @@ public class VesselDaoTest {
 
     @Ignore
     @Test
-    public void testVesselByMMSI() throws Exception {
+    public void testFindVesselByMMSI() throws Exception {
 
         VesselDao dao = DaoFactory.createMongoVesselDao();
         System.out.println(dao.findVesselByMMSI(228157000));
         dao.findVesselByMMSI(228051000).ifPresent(vessel ->
             System.out.println(vessel.getVoyages().get(0).getFirstMeasurement().getFormattedDate()));
+    }
 
+    @Ignore
+    @Test
+    public void testFindPlainVesselByMMSI() {
 
-//        long t = 1443650723;
-//        ZoneId zone = ZoneId.of("UTC");
-//        DateTimeFormatter df = DateTimeFormatter
-//            .ofPattern("dd/MM/yyyy hh:mm:ss")
-//            .withZone(zone);
-//        String fDate = df.format(Instant.ofEpochSecond(t));
-//        System.out.println(fDate);
-
-
+        VesselDao dao = DaoFactory.createMongoVesselDao();
+        dao.findPlainVesselByMMSI(244995000).ifPresent(System.out::println);
     }
 
 }

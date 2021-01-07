@@ -79,6 +79,15 @@ public class VesselController {
                     .getVesselTrajectory(
                         ctx.pathParam("mmsi", Integer.class).get()));
 
+    public static Handler getNearVessels =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createVesselService()
+                    .getNearVessels(
+                        ctx.pathParam("lon", Double.class).get(),
+                        ctx.pathParam("lat", Double.class).get(),
+                        ctx.pathParam("dist", Double.class).get()));
+
     public static Handler getKeplerGlVesselTrajectoryByMMSI =
         ctx ->
             ctx.json(
