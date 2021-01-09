@@ -37,7 +37,8 @@ public class Application {
 
         app.get("/ports", PortController.getPorts);
         app.get("/ports/country/:code", PortController.getPortsByCountryCode);
-        app.get("/ports/near/lon/:lon/lat/:lat/dist/:dist", PortController.getNearPorts);
+        app.get("/ports/near/lon/:lon/lat/:lat/dist/:dist", PortController.getNearPortsByReferencePoint);
+        app.get("/ports/near/vessel/mmsi/:mmsi/dist/:dist", PortController.getNearPortsByMMSI);
 
         app.get("/countries", CountryController.getCountriesWith2ACodes);
 

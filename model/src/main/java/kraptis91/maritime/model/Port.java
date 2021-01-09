@@ -1,5 +1,7 @@
 package kraptis91.maritime.model;
 
+import java.util.Objects;
+
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 30/12/2020.
  */
@@ -68,6 +70,34 @@ public class Port {
             return new Port(this);
         }
 
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.country);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Port other = (Port) obj;
+
+        return Objects.equals(this.name, other.name)
+            && Objects.equals(this.country, other.country);
     }
 
     @Override

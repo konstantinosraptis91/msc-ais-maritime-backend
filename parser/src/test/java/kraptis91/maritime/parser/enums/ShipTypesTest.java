@@ -8,6 +8,6 @@ public class ShipTypesTest {
 
   @Test
   public void testGetShipType() throws Exception {
-    Assert.assertEquals("Sailing Vessel", ShipTypes.INSTANCE.getShipType(10));
+    Assert.assertEquals("Reserved", ShipTypes.INSTANCE.getShipType(10));
   }
 }

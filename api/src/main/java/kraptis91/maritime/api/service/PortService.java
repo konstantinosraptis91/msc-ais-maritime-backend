@@ -21,11 +21,16 @@ public class PortService {
         return dataRetriever.getPortsByCountryCode(countryCode.toUpperCase());
     }
 
-    public List<Port> getNearPorts(double longitude, double latitude, double maxDistance,
-                                   int skip, int limit) {
+    public List<Port> getNearPortsByReferencePoint(double longitude, double latitude, double maxDistance,
+                                                   int skip, int limit) {
 
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getNearPorts(longitude, latitude, maxDistance, 0, skip, limit);
+        return dataRetriever.getNearPortsByReferencePoint(longitude, latitude, maxDistance, 0, skip, limit);
+    }
+
+    public List<Port> getNearPortsByMMSI(int mmsi, double maxDistance, int skip, int limit) {
+        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
+        return dataRetriever.getNearPortsByMMSI(mmsi, maxDistance, skip, limit);
     }
 
 }

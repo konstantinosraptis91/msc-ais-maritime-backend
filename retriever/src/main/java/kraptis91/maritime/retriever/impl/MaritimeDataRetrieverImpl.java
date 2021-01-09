@@ -5,7 +5,6 @@ import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
 import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
-import kraptis91.maritime.db.dao.mongodb.query.utils.QueryOptions;
 import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
@@ -19,8 +18,7 @@ import kraptis91.maritime.parser.enums.CountryCodeMap;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -109,8 +107,9 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     }
 
     @Override
-    public List<Port> getNearPorts(double longitude, double latitude, double maxDistance, double minDistance,
-                                   int skip, int limit) {
+    public List<Port> getNearPortsByReferencePoint(double longitude, double latitude,
+                                                   double maxDistance, double minDistance,
+                                                   int skip, int limit) {
         PortDao dao = DaoFactory.createMongoPortDao();
         return dao.findNearPorts(
             NearQueryOptions.builder()
@@ -125,6 +124,32 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
             .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
                 CountryCode.valueOf(port.getCountry()))))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Port> getNearPortsByMMSI(int mmsi, double maxDistance, int skip, int limit) {
+
+        PortDao dao = DaoFactory.createMongoPortDao();
+        final Set<Port> nearPortsSet = new HashSet<>();
+
+        getVesselTrajectory(mmsi).forEach(chunk ->
+            nearPortsSet.addAll(
+                dao.findNearPorts(
+                    NearQueryOptions.builder()
+                        .withLongitude(chunk.getAvgGeoPoint().getCoordinates().get(0))
+                        .withLatitude(chunk.getAvgGeoPoint().getCoordinates().get(1))
+                        .withMaxDistance(maxDistance)
+                        .withMinDistance(0)
+                        .skip(skip)
+                        .limit(limit)
+                        .build())
+                    .stream().peek(port -> port.setCountry(
+                    CountryCodeMap.INSTANCE.getCountryNameByCode(
+                        CountryCode.valueOf(port.getCountry()))))
+                    .collect(Collectors.toList())
+            ));
+
+        return new ArrayList<>(nearPortsSet);
     }
 
     @Override

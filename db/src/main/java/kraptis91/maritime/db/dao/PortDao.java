@@ -24,5 +24,4 @@ public interface PortDao {
                              int limit);
 
     List<Port> findNearPorts(NearQueryOptions options);
-
 }

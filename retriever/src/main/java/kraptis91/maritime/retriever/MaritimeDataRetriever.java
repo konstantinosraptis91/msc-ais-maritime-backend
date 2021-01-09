@@ -48,9 +48,11 @@ public interface MaritimeDataRetriever {
 
     List<Port> getPortsByCountryCode(String countryCode);
 
-    List<Port> getNearPorts(double longitude, double latitude,
-                            double maxDistance, double minDistance,
-                            int skip, int limit);
+    List<Port> getNearPortsByReferencePoint(double longitude, double latitude,
+                                            double maxDistance, double minDistance,
+                                            int skip, int limit);
+
+    List<Port> getNearPortsByMMSI(int mmsi, double maxDistance, int skip, int limit);
 
     List<CountryCodeMapDto> getCountryCodeMapDtoList();
 

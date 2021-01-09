@@ -23,13 +23,23 @@ public class PortController {
                     .getPortsByCountryCode(
                         ctx.pathParam("code")));
 
-    public static Handler getNearPorts =
+    public static Handler getNearPortsByReferencePoint =
         ctx ->
             ctx.json(
                 ServiceFactory.createPortService()
-                    .getNearPorts(
+                    .getNearPortsByReferencePoint(
                         ctx.pathParam("lon", Double.class).get(),
                         ctx.pathParam("lat", Double.class).get(),
+                        ctx.pathParam("dist", Double.class).get(),
+                        ctx.header("skip", Integer.class).get(),
+                        ctx.header("limit", Integer.class).get()));
+
+    public static Handler getNearPortsByMMSI =
+        ctx ->
+            ctx.json(
+                ServiceFactory.createPortService()
+                    .getNearPortsByMMSI(
+                        ctx.pathParam("mmsi", Integer.class).get(),
                         ctx.pathParam("dist", Double.class).get(),
                         ctx.header("skip", Integer.class).get(),
                         ctx.header("limit", Integer.class).get()));
