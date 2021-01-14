@@ -25,40 +25,40 @@ public class VesselTrajectoryPointListChunk extends VesselTrajectoryChunk {
 
     public static GeoPoint calcAvgGeoPoint(List<GeoPoint> geoPointList) {
         return GeoPoint.of(
-                geoPointList.stream()
-                        .mapToDouble(p -> p.getCoordinates().get(0)) // longitude
-                        .average()
-                        .orElse(Double.NaN),
-                geoPointList.stream()
-                        .mapToDouble(p -> p.getCoordinates().get(1)) // latitude
-                        .average()
-                        .orElse(Double.NaN));
+            geoPointList.stream()
+                .mapToDouble(p -> p.getCoordinates().get(0)) // longitude
+                .average()
+                .orElse(Double.NaN),
+            geoPointList.stream()
+                .mapToDouble(p -> p.getCoordinates().get(1)) // latitude
+                .average()
+                .orElse(Double.NaN));
     }
 
     public GeoPoint calcAvgGeoPoint() {
         return calcAvgGeoPoint(
-                pointList.stream().map(VesselTrajectoryPoint::getGeoPoint).collect(Collectors.toList()));
+            pointList.stream().map(VesselTrajectoryPoint::getGeoPoint).collect(Collectors.toList()));
     }
 
     public double calcAvgSpeed() {
         return pointList.stream()
-                .mapToDouble(VesselTrajectoryPoint::getSpeed)
-                .average()
-                .orElse(Double.NaN);
+            .mapToDouble(VesselTrajectoryPoint::getSpeed)
+            .average()
+            .orElse(Double.NaN);
     }
 
     public long calcStartDateTimestamp() {
         return pointList.stream()
-                .mapToLong(VesselTrajectoryPoint::getTimestamp)
-                .min()
-                .orElse(-1);
+            .mapToLong(VesselTrajectoryPoint::getTimestamp)
+            .min()
+            .orElse(-1);
     }
 
     public long calcEndDateTimestamp() {
         return pointList.stream()
-                .mapToLong(VesselTrajectoryPoint::getTimestamp)
-                .max()
-                .orElse(-1);
+            .mapToLong(VesselTrajectoryPoint::getTimestamp)
+            .max()
+            .orElse(-1);
     }
 
     @Override
@@ -69,16 +69,17 @@ public class VesselTrajectoryPointListChunk extends VesselTrajectoryChunk {
     @Override
     public String toString() {
         return "VesselTrajectoryPointListChunk{" +
-                "mmsi=" + mmsi +
-                ", vesselName='" + vesselName + '\'' +
-                ", shipType='" + shipType + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", avgGeoPoint=" + avgGeoPoint +
-                ", avgSpeed=" + avgSpeed +
-                ", chunkFixedSize=" + chunkFixedSize +
-                ", nPoints=" + nPoints +
-                ", pointList=" + pointList +
-                '}';
+            "mmsi=" + mmsi +
+            ", vesselName='" + vesselName + '\'' +
+            ", country='" + country + '\'' +
+            ", shipType='" + shipType + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", avgGeoPoint=" + avgGeoPoint +
+            ", avgSpeed=" + avgSpeed +
+            ", chunkFixedSize=" + chunkFixedSize +
+            ", nPoints=" + nPoints +
+            ", pointList=" + pointList +
+            '}';
     }
 }

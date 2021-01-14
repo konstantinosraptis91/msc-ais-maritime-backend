@@ -20,7 +20,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
         MongoVesselTrajectoryChunkDaoTest.class.getResourceAsStream(
             "/sample/maritime/nari_dynamic_sample_2.csv");
 
-    @Ignore
+    // @Ignore
     @Test
     public void testInsertMany() throws Exception {
 

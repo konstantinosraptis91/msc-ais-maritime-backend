@@ -85,6 +85,8 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
                 final Vessel vessel = vesselBuffer.getIfExistsOrGetFromDB(dto.getMMSI());
 
                 if (trajectoryBuffer.isCompletedListFull()) {
+                    LOGGER.info("Completed list is full, inserting "
+                        + trajectoryBuffer.getCompletedChunkList().size() + " chunks in db.");
                     insertMany(trajectoryBuffer.getCompletedChunkList());
                     trajectoryBuffer.clearCompletedChunkList();
                 }
@@ -203,17 +205,21 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
                     Aggregates.group("$mmsi",
                         Accumulators.first("mmsi", "$mmsi"),
                         Accumulators.first("vesselName", "$vesselName"),
+                        Accumulators.first("country", "$country"),
                         Accumulators.first("shipType", "$shipType")),
                     // projection
                     Aggregates.project(Projections.fields(
                         Projections.excludeId(),
-                        Projections.include("mmsi", "vesselName", "shipType"))),
+                        Projections.include("mmsi", "vesselName", "country", "shipType"))),
                     // skip
                     Aggregates.skip(options.getSkip()),
                     // limit
                     Aggregates.limit(options.getLimit())))
             .map(ModelExtractor::extractPlainVessel)
             .forEach((Consumer<PlainVessel>) nearVessels::add);
+
+        LOGGER.info("Found " + nearVessels.size() + " vessels near ["
+            + options.getLongitude() + ", " + options.getLatitude() + "]");
 
         return nearVessels;
     }

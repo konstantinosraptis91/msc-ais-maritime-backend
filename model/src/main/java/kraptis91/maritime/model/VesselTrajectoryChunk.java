@@ -19,6 +19,7 @@ import java.util.Objects;
     {
         "mmsi",
         "vesselName",
+        "country",
         "shipType",
         "startDate",
         "endDate",
@@ -31,6 +32,7 @@ public class VesselTrajectoryChunk {
     protected final int mmsi;
     protected final String vesselName;
     protected final String shipType;
+    protected final String country;
     @JsonIgnore
     protected Date startDate;
     @JsonIgnore
@@ -55,6 +57,7 @@ public class VesselTrajectoryChunk {
     VesselTrajectoryChunk(VesselTrajectoryChunkBuilder builder) {
         this.mmsi = builder.getMMSI();
         this.vesselName = builder.getVesselName();
+        this.country = builder.getCountry();
         this.shipType = builder.getShipType();
         this.startDate = builder.getStartDate();
         this.endDate = builder.getEndDate();
@@ -117,6 +120,10 @@ public class VesselTrajectoryChunk {
         return endDate;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
     @JsonProperty("startDate")
     public String getFormattedStartDate() {
         if (Objects.isNull(formattedStartDate)
@@ -142,6 +149,7 @@ public class VesselTrajectoryChunk {
         return "VesselTrajectoryChunk{" +
             "mmsi=" + mmsi +
             ", vesselName='" + vesselName + '\'' +
+            ", country='" + country + '\'' +
             ", shipType='" + shipType + '\'' +
             ", startDate=" + getFormattedStartDate() +
             ", endDate=" + getFormattedEndDate() +

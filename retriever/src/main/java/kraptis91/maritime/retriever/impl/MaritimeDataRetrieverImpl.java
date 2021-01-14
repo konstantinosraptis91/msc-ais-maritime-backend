@@ -156,12 +156,13 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     }
 
     @Override
-    public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance, double minDistance,
+    public List<PlainVessel> getNearVessels(double longitude, double latitude,
+                                            double maxDistance, double minDistance,
                                             int skip, int limit) {
-        final VesselTrajectoryChunkDao trajectoryChunkDao = DaoFactory.createMongoVesselTrajectoryChunkDao();
-        final VesselDao vesselDao = DaoFactory.createMongoVesselDao();
 
-        return trajectoryChunkDao.findNearVesselsMMSIList(
+        final VesselTrajectoryChunkDao trajectoryChunkDao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+
+        return trajectoryChunkDao.findNearVessels(
             NearQueryOptions.builder()
                 .withLongitude(longitude)
                 .withLatitude(latitude)
@@ -169,10 +170,6 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
                 .withMinDistance(minDistance)
                 .skip(skip)
                 .limit(limit)
-                .build())
-            .stream()
-            .map(vesselDao::findPlainVesselByMMSI)
-            .flatMap(Optional::stream)
-            .collect(Collectors.toList());
+                .build());
     }
 }

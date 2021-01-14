@@ -9,6 +9,7 @@ public class VesselTrajectoryChunkBuilder {
 
     private final int mmsi;
     private String vesselName;
+    private String country;
     private String shipType;
     private Date startDate;
     private Date endDate;
@@ -22,6 +23,11 @@ public class VesselTrajectoryChunkBuilder {
 
     public VesselTrajectoryChunkBuilder withVesselName(String vesselName) {
         this.vesselName = vesselName;
+        return this;
+    }
+
+    public VesselTrajectoryChunkBuilder withCountry(String country) {
+        this.country = country;
         return this;
     }
 
@@ -69,6 +75,10 @@ public class VesselTrajectoryChunkBuilder {
 
     public String getVesselName() {
         return vesselName;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public String getShipType() {

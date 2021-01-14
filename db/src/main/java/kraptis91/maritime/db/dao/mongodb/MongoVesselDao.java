@@ -175,17 +175,6 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
             createVesselCollection().find(Filters.eq("vesselName", vesselName)).first());
     }
 
-//    @Override
-//    public List<Vessel> findVesselsByDestination(String destination, int skip, int limit) {
-//        final List<Vessel> vesselList = new ArrayList<>();
-//        createVesselCollection()
-//            .find(Filters.eq("destination", destination))
-//            .skip(skip)
-//            .limit(limit)
-//            .forEach((Consumer<Vessel>) vesselList::add);
-//        return vesselList;
-//    }
-
     @Override
     public List<Vessel> findVessels(int skip, int limit) {
         final List<Vessel> vesselList = new ArrayList<>();

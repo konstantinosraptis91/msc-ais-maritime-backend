@@ -16,7 +16,7 @@ public interface VesselTrajectoryChunkDao {
     void insertMany(InputStream csvStream, int capacity) throws Exception;
 
     default void insertMany(InputStream is) throws Exception {
-        insertMany(is, 15000);
+        insertMany(is, 150000);
     }
 
     void insertMany(List<VesselTrajectoryPointListChunk> trajectoryPointListChunkList);

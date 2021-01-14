@@ -62,6 +62,10 @@ public class VesselTrajectoryPointListChunkCodec implements Codec<VesselTrajecto
             document.put("vesselName", trajectory.getVesselName());
         }
 
+        if (!Objects.isNull(trajectory.getCountry())) {
+            document.put("country", trajectory.getCountry());
+        }
+
         if (!Objects.isNull(trajectory.getShipType())) {
             document.put("shipType", trajectory.getShipType());
         }

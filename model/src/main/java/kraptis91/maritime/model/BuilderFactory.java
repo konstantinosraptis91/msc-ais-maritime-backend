@@ -13,6 +13,7 @@ public class BuilderFactory {
 
         final int mmsi = document.getInteger("mmsi");
         final String vesselName = document.getString("vesselName");
+        final String country = document.getString("country");
         final String shipType = document.getString("shipType");
         final Date startDate = document.getDate("startDate");
         final Date endDate = document.getDate("endDate");
@@ -22,6 +23,7 @@ public class BuilderFactory {
 
         return new VesselTrajectoryChunkBuilder(mmsi)
             .withVesselName(vesselName)
+            .withCountry(country)
             .withShipType(shipType)
             .withStartDate(startDate)
             .withEndDate(endDate)

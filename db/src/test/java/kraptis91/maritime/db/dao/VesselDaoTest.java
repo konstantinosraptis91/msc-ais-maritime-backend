@@ -40,7 +40,7 @@ public class VesselDaoTest {
                 System.out::println, () -> System.out.println("Cannot find vessel with mmsi " + mmsi));
     }
 
-    @Ignore
+    // @Ignore
     @Test
     public void testFindVesselByMMSI() throws Exception {
 

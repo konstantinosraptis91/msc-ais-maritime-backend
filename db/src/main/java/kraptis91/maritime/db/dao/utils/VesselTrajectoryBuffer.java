@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class VesselTrajectoryBuffer {
 
     public static final Logger LOGGER =
-            Logger.getLogger(VesselTrajectoryBuffer.class.getName());
+        Logger.getLogger(VesselTrajectoryBuffer.class.getName());
 
     private final Map<Integer, VesselTrajectoryPointListChunk> incompletedChunkMap;
     private final List<VesselTrajectoryPointListChunk> completedChunkList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class VesselTrajectoryBuffer {
             if (chunk.getNumberOfPoints() < chunk.getChunkFixedSize()) {
 
                 chunk.getPointList().add(
-                        ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
+                    ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
             } else {
 
                 // chunk is full remove it and add it as completed in completed list
@@ -56,9 +56,9 @@ public class VesselTrajectoryBuffer {
 
                 // create a new chunk for that mmsi and add it to map
                 chunk = ModelFactory.createSimpleVesselTrajectoryPointListChunk(
-                        dto.getMMSI(), vessel.getVesselName(), vessel.getShipType());
+                    dto.getMMSI(), vessel.getVesselName(), vessel.getCountry(), vessel.getShipType());
                 chunk.getPointList().add(
-                        ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
+                    ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
 
                 incompletedChunkMap.put(dto.getMMSI(), chunk);
             }
@@ -66,9 +66,9 @@ public class VesselTrajectoryBuffer {
         } else {
 
             chunk = ModelFactory.createSimpleVesselTrajectoryPointListChunk(
-                    dto.getMMSI(), vessel.getVesselName(), vessel.getShipType());
+                dto.getMMSI(), vessel.getVesselName(), vessel.getCountry(), vessel.getShipType());
             chunk.getPointList().add(
-                    ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
+                ModelExtractor.extractVesselTrajectoryPoint(dto, vessel.getId()));
 
             incompletedChunkMap.put(dto.getMMSI(), chunk);
         }

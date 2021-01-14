@@ -8,13 +8,13 @@ public class ModelFactory {
     public static Vessel createDemoVessel() {
 
         return Vessel.fluentBuilder(999999999)
-                .withIMO(9999999)
-                .withVesselName("__VESSEL_NAME")
-                .withCallSign("__SIGN")
-                .withDraught(25.5)
-                .withShipType("__SHIP_TYPE_NAME")
-                .withCountry("__COUNTRY_NAME")
-                .build();
+            .withIMO(9999999)
+            .withVesselName("__VESSEL_NAME")
+            .withCallSign("__SIGN")
+            .withDraught(25.5)
+            .withShipType("__SHIP_TYPE_NAME")
+            .withCountry("__COUNTRY_NAME")
+            .build();
     }
 
     /**
@@ -23,20 +23,23 @@ public class ModelFactory {
     public static OceanConditions createDemoOceanConditionsDemo() {
 
         return new OceanConditions.Builder(45.55, 50.4, 122121878)
-                .withBottomDepth(77.99)
-                .withTidalEffect(99.99)
-                .withSeaHeight(15.5)
-                .withMeanWaveLength(33)
-                .build();
+            .withBottomDepth(77.99)
+            .withTidalEffect(99.99)
+            .withSeaHeight(15.5)
+            .withMeanWaveLength(33)
+            .build();
     }
 
     public static VesselTrajectoryPointListChunk createSimpleVesselTrajectoryPointListChunk(int mmsi,
                                                                                             String vesselName,
+                                                                                            String country,
                                                                                             String shipType) {
+
         return new VesselTrajectoryChunkBuilder(mmsi)
-                .withVesselName(vesselName)
-                .withShipType(shipType)
-                .buildPointListChunk();
+            .withVesselName(vesselName)
+            .withCountry(country)
+            .withShipType(shipType)
+            .buildPointListChunk();
     }
 
 }
