@@ -40,24 +40,6 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
         return dao.findVesselTrajectory(vesselName);
     }
 
-//    @Override
-//    public List<Vessel> getVesselsByDestination(String destination, int skip, int limit) {
-//        VesselDao dao = DaoFactory.createMongoVesselDao();
-//        return dao.findVesselsByDestination(destination, skip, limit);
-//    }
-
-    @Override
-    public Optional<String> getVesselDestination(int mmsi) {
-        VesselDao dao = DaoFactory.createMongoVesselDao();
-        return dao.findVesselDestination(mmsi);
-    }
-
-    @Override
-    public Optional<String> getVesselDestination(String vesselName) {
-        VesselDao dao = DaoFactory.createMongoVesselDao();
-        return dao.findVesselDestination(vesselName);
-    }
-
     @Override
     public List<Vessel> getVesselsByType(String shipType, int skip, int limit) {
         VesselDao dao = DaoFactory.createMongoVesselDao();

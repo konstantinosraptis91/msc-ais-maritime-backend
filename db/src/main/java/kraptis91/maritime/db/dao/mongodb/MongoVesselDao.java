@@ -143,26 +143,6 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
     }
 
     @Override
-    public Optional<String> findVesselDestination(String vesselName) {
-        return Optional.ofNullable(
-            createDocumentCollection()
-                .find(Filters.eq("vesselName", vesselName))
-                .projection(new Document().append("destination", 1))
-                .first())
-            .map(d -> d.getString("destination"));
-    }
-
-    @Override
-    public Optional<String> findVesselDestination(int mmsi) {
-        return Optional.ofNullable(
-            createDocumentCollection()
-                .find(Filters.eq("mmsi", mmsi))
-                .projection(new Document().append("destination", 1))
-                .first())
-            .map(d -> d.getString("destination"));
-    }
-
-    @Override
     public Optional<Vessel> findVesselByMMSI(int mmsi) {
         return Optional.ofNullable(createVesselCollection()
             .find(Filters.eq("mmsi", mmsi)).first());

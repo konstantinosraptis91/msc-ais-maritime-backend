@@ -15,10 +15,6 @@ import java.util.Optional;
  */
 public interface MaritimeDataRetriever {
 
-    Optional<String> getVesselDestination(int mmsi);
-
-    Optional<String> getVesselDestination(String vesselName);
-
     List<VesselTrajectoryChunk> getVesselTrajectory(int mmsi);
 
     List<VesselTrajectoryChunk> getVesselTrajectory(String vesselName);
@@ -26,8 +22,6 @@ public interface MaritimeDataRetriever {
     Optional<Vessel> getVesselByMMSI(int mmsi);
 
     Optional<Vessel> getVesselByName(String vesselName);
-
-//    List<Vessel> getVesselsByDestination(String destination, int skip, int limit);
 
     /**
      * Get vessels by type.
@@ -57,11 +51,7 @@ public interface MaritimeDataRetriever {
 
     List<PlainVessel> getPlainVesselsByType(String shipType, int skip, int limit);
 
-    // List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit);
-
     List<PlainVessel> getPlainVesselByCountryCode(String countryCode, int skip, int limit);
-
-    // List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit);
 
     List<PlainVessel> getPlainVessels(String shipType, String countryCode, int skip, int limit);
 

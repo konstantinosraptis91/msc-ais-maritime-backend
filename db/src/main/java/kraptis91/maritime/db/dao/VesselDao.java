@@ -23,15 +23,7 @@ public interface VesselDao {
 
     void insertMany(List<Vessel> vesselList);
 
-    default List<Vessel> findVessels() {
-        return findVessels(0, 30);
-    }
-
     List<Vessel> findVessels(int skip, int limit);
-
-    default List<Vessel> findVesselsByType(String shipType) {
-        return findVesselsByType(shipType, 0, 30);
-    }
 
     List<Vessel> findVesselsByType(String shipType, int skip, int limit);
 
@@ -41,12 +33,6 @@ public interface VesselDao {
 
     List<PlainVessel> findPlainVessels(String shipType, String countryCode, int skip, int limit);
 
-//    default List<Vessel> findVesselsByDestination(String destination) {
-//        return findVesselsByDestination(destination, 0, 30);
-//    }
-
-//    List<Vessel> findVesselsByDestination(String destination, int skip, int limit);
-
     Optional<String> findObjectIdAsString(int mmsi);
 
     Optional<Vessel> findVesselByMMSI(int mmsi);
@@ -54,8 +40,4 @@ public interface VesselDao {
     Optional<PlainVessel> findPlainVesselByMMSI(int mmsi);
 
     Optional<Vessel> findVesselByName(String vesselName);
-
-    Optional<String> findVesselDestination(String vesselName);
-
-    Optional<String> findVesselDestination(int mmsi);
 }
