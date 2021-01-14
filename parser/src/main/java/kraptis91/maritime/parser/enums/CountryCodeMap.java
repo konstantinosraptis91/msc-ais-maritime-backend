@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumHashBiMap;
 import com.google.common.collect.ImmutableList;
+import kraptis91.maritime.codelists.enums.CountryCode;
 import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
 
 import java.io.BufferedReader;

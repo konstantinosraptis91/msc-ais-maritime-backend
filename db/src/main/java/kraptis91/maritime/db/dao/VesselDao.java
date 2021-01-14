@@ -37,15 +37,15 @@ public interface VesselDao {
 
     List<PlainVessel> findPlainVesselsByType(String shipType, int skip, int limit);
 
-    List<PlainVessel> findPlainVesselByCountryName(String country, int skip, int limit);
+    List<PlainVessel> findPlainVesselByCountryCode(String countryCode, int skip, int limit);
 
-    List<PlainVessel> findPlainVessels(String shipType, String name, int skip, int limit);
+    List<PlainVessel> findPlainVessels(String shipType, String countryCode, int skip, int limit);
 
-    default List<Vessel> findVesselsByDestination(String destination) {
-        return findVesselsByDestination(destination, 0, 30);
-    }
+//    default List<Vessel> findVesselsByDestination(String destination) {
+//        return findVesselsByDestination(destination, 0, 30);
+//    }
 
-    List<Vessel> findVesselsByDestination(String destination, int skip, int limit);
+//    List<Vessel> findVesselsByDestination(String destination, int skip, int limit);
 
     Optional<String> findObjectIdAsString(int mmsi);
 

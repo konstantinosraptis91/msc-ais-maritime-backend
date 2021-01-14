@@ -30,27 +30,6 @@ public class VesselController {
                 .getVesselByName(ctx.pathParam("name"))
                 .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
 
-    public static Handler getVesselDestinationByName =
-        ctx ->
-            ServiceFactory.createVesselService()
-                .getVesselDestination(ctx.pathParam("name"))
-                .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
-
-    public static Handler getVesselDestinationByMMSI =
-        ctx ->
-            ServiceFactory.createVesselService()
-                .getVesselDestination(ctx.pathParam("mmsi", Integer.class).get())
-                .ifPresentOrElse(ctx::json, () -> ctx.status(HttpStatus.NOT_FOUND_404));
-
-    public static Handler getVesselByDestination =
-        ctx ->
-            ctx.json(
-                ServiceFactory.createVesselService()
-                    .getVesselsByDestination(
-                        ctx.pathParam("destination"),
-                        ctx.header("skip", Integer.class).get(),
-                        ctx.header("limit", Integer.class).get()));
-
     public static Handler getVessels =
         ctx ->
             ctx.json(

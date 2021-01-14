@@ -1,4 +1,4 @@
-package kraptis91.maritime.parser.enums;
+package kraptis91.maritime.codelists.enums;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 31/12/2020.

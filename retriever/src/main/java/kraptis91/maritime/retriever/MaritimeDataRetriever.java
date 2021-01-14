@@ -1,12 +1,11 @@
 package kraptis91.maritime.retriever;
 
+import kraptis91.maritime.codelists.CodelistMapDto;
 import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Port;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.keplergl.KeplerGlCollection;
-import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
-import kraptis91.maritime.parser.enums.CountryCode;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public interface MaritimeDataRetriever {
 
     Optional<Vessel> getVesselByName(String vesselName);
 
-    List<Vessel> getVesselsByDestination(String destination, int skip, int limit);
+//    List<Vessel> getVesselsByDestination(String destination, int skip, int limit);
 
     /**
      * Get vessels by type.
@@ -54,13 +53,17 @@ public interface MaritimeDataRetriever {
 
     List<Port> getNearPortsByMMSI(int mmsi, double maxDistance, int skip, int limit);
 
-    List<CountryCodeMapDto> getCountryCodeMapDtoList();
+    List<CodelistMapDto> getCountryCodeMapList();
 
     List<PlainVessel> getPlainVesselsByType(String shipType, int skip, int limit);
 
-    List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit);
+    // List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit);
 
-    List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit);
+    List<PlainVessel> getPlainVesselByCountryCode(String countryCode, int skip, int limit);
+
+    // List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit);
+
+    List<PlainVessel> getPlainVessels(String shipType, String countryCode, int skip, int limit);
 
     KeplerGlCollection getKeplerGlVesselTrajectoryCollection(int mmsi);
 

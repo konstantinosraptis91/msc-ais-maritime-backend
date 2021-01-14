@@ -1,5 +1,7 @@
 package kraptis91.maritime.retriever.impl;
 
+import kraptis91.maritime.codelists.CodelistMapDto;
+import kraptis91.maritime.codelists.CodelistsOfBiMap;
 import kraptis91.maritime.db.dao.DaoFactory;
 import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.VesselDao;
@@ -12,9 +14,6 @@ import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.keplergl.KeplerGlCollection;
 import kraptis91.maritime.model.keplergl.KeplerGlFeature;
 import kraptis91.maritime.model.keplergl.adapters.KeplerGlFeatureAdapter;
-import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
-import kraptis91.maritime.parser.enums.CountryCode;
-import kraptis91.maritime.parser.enums.CountryCodeMap;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 
@@ -41,11 +40,11 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
         return dao.findVesselTrajectory(vesselName);
     }
 
-    @Override
-    public List<Vessel> getVesselsByDestination(String destination, int skip, int limit) {
-        VesselDao dao = DaoFactory.createMongoVesselDao();
-        return dao.findVesselsByDestination(destination, skip, limit);
-    }
+//    @Override
+//    public List<Vessel> getVesselsByDestination(String destination, int skip, int limit) {
+//        VesselDao dao = DaoFactory.createMongoVesselDao();
+//        return dao.findVesselsByDestination(destination, skip, limit);
+//    }
 
     @Override
     public Optional<String> getVesselDestination(int mmsi) {
@@ -91,19 +90,13 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     @Override
     public List<Port> getPorts(int skip, int limit) {
         PortDao dao = DaoFactory.createMongoPortDao();
-        return dao.findPorts(skip, limit).stream()
-            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
-                CountryCode.valueOf(port.getCountry()))))
-            .collect(Collectors.toList());
+        return dao.findPorts(skip, limit);
     }
 
     @Override
     public List<Port> getPortsByCountryCode(String countryCode) {
         PortDao dao = DaoFactory.createMongoPortDao();
-        return dao.findPortsByCountryCode(countryCode).stream()
-            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
-                CountryCode.valueOf(port.getCountry()))))
-            .collect(Collectors.toList());
+        return dao.findPortsByCountryCode(countryCode);
     }
 
     @Override
@@ -119,11 +112,7 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
                 .withMinDistance(minDistance)
                 .skip(skip)
                 .limit(limit)
-                .build())
-            .stream()
-            .peek(port -> port.setCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
-                CountryCode.valueOf(port.getCountry()))))
-            .collect(Collectors.toList());
+                .build());
     }
 
     @Override
@@ -142,19 +131,14 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
                         .withMinDistance(0)
                         .skip(skip)
                         .limit(limit)
-                        .build())
-                    .stream().peek(port -> port.setCountry(
-                    CountryCodeMap.INSTANCE.getCountryNameByCode(
-                        CountryCode.valueOf(port.getCountry()))))
-                    .collect(Collectors.toList())
-            ));
+                        .build())));
 
         return new ArrayList<>(nearPortsSet);
     }
 
     @Override
-    public List<CountryCodeMapDto> getCountryCodeMapDtoList() {
-        return CountryCodeMap.INSTANCE.getCountryCodeMapDtoList();
+    public List<CodelistMapDto> getCountryCodeMapList() {
+        return CodelistsOfBiMap.COUNTRY_CODE_MAP.getCodelistMapDtoList();
     }
 
     @Override
@@ -164,17 +148,15 @@ public class MaritimeDataRetrieverImpl implements MaritimeDataRetriever {
     }
 
     @Override
-    public List<PlainVessel> getPlainVesselByCountryCode(CountryCode countryCode, int skip, int limit) {
+    public List<PlainVessel> getPlainVesselByCountryCode(String countryCode, int skip, int limit) {
         VesselDao dao = DaoFactory.createMongoVesselDao();
-        return dao.findPlainVesselByCountryName(
-            CountryCodeMap.INSTANCE.getCountryNameByCode(countryCode), skip, limit);
+        return dao.findPlainVesselByCountryCode(countryCode, skip, limit);
     }
 
     @Override
-    public List<PlainVessel> getPlainVessels(String shipType, CountryCode countryCode, int skip, int limit) {
+    public List<PlainVessel> getPlainVessels(String shipType, String countryCode, int skip, int limit) {
         VesselDao dao = DaoFactory.createMongoVesselDao();
-        return dao.findPlainVessels(
-            shipType, CountryCodeMap.INSTANCE.getCountryNameByCode(countryCode), skip, limit);
+        return dao.findPlainVessels(shipType, countryCode, skip, limit);
     }
 
     @Override

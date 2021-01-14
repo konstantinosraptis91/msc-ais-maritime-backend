@@ -1,6 +1,6 @@
 package kraptis91.maritime.api.service;
 
-import kraptis91.maritime.parser.dto.json.CountryCodeMapDto;
+import kraptis91.maritime.codelists.CodelistMapDto;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 import kraptis91.maritime.retriever.RetrieverFactory;
 
@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class CountryService {
 
-    public List<CountryCodeMapDto> getCountryCodeMapDtoList() {
+    public List<CodelistMapDto> getCountryCodeMapDtoList() {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getCountryCodeMapDtoList();
+        return dataRetriever.getCountryCodeMapList();
     }
 
 }

@@ -1,9 +1,11 @@
 package kraptis91.maritime.model;
 
+import kraptis91.maritime.codelists.enums.CountryCode;
 import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.dto.csv.PortDto;
 import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
+import kraptis91.maritime.parser.enums.CountryCodeMap;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
@@ -106,7 +108,9 @@ public class ModelExtractor {
     public static Port extractPort(PortDto dto) {
         return Port.builder()
             .withName(dto.getName())
-            .withCountry(dto.getCountry())
+            .withCountry(CountryCodeMap.INSTANCE.getCountryNameByCode(
+                CountryCode.valueOf(dto.getCountry())
+            ))
             .withCoordinates(GeoPoint.of(dto.getLongitude(), dto.getLatitude()))
             .build();
     }

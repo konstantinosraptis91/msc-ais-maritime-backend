@@ -4,7 +4,6 @@ import kraptis91.maritime.model.PlainVessel;
 import kraptis91.maritime.model.Vessel;
 import kraptis91.maritime.model.VesselTrajectoryChunk;
 import kraptis91.maritime.model.keplergl.KeplerGlCollection;
-import kraptis91.maritime.parser.enums.CountryCode;
 import kraptis91.maritime.retriever.MaritimeDataRetriever;
 import kraptis91.maritime.retriever.RetrieverFactory;
 
@@ -31,24 +30,9 @@ public class VesselService {
         return dataRetriever.getKeplerGlVesselTrajectoryCollection(mmsi);
     }
 
-    public List<Vessel> getVesselsByDestination(String destination, int skip, int limit) {
-        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getVesselsByDestination(destination, skip, limit);
-    }
-
     public List<Vessel> getVessels(int skip, int limit) {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
         return dataRetriever.getVessels(skip, limit);
-    }
-
-    public Optional<String> getVesselDestination(int mmsi) {
-        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getVesselDestination(mmsi);
-    }
-
-    public Optional<String> getVesselDestination(String vesselName) {
-        MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getVesselDestination(vesselName);
     }
 
     public List<Vessel> getVesselsByShipType(String shipType, int skip, int limit) {
@@ -78,14 +62,12 @@ public class VesselService {
 
     public List<PlainVessel> getPlainVesselByCountryCode(String countryCode, int skip, int limit) {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getPlainVesselByCountryCode(
-            CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
+        return dataRetriever.getPlainVesselByCountryCode(countryCode, skip, limit);
     }
 
     public List<PlainVessel> getPlainVessels(String shipType, String countryCode, int skip, int limit) {
         MaritimeDataRetriever dataRetriever = RetrieverFactory.createMaritimeDataRetriever();
-        return dataRetriever.getPlainVessels(
-            shipType, CountryCode.valueOf(countryCode.toUpperCase()), skip, limit);
+        return dataRetriever.getPlainVessels(shipType, countryCode, skip, limit);
     }
 
     public List<PlainVessel> getNearVessels(double longitude, double latitude, double maxDistance,

@@ -27,9 +27,6 @@ public class Application {
         app.get("/vessels/type/:type/country/:code", VesselController.getPlainVessels);
         app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
         app.get("/vessels/name/:name", VesselController.getVesselByName);
-        app.get("/vessels/destination/name/:name", VesselController.getVesselDestinationByName);
-        app.get("/vessels/destination/mmsi/:mmsi", VesselController.getVesselDestinationByMMSI);
-        app.get("/vessels/destination/:destination", VesselController.getVesselByDestination);
         app.get("/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
         app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
         app.get("/vessels/trajectory/keplergl/mmsi/:mmsi", VesselController.getKeplerGlVesselTrajectoryByMMSI);

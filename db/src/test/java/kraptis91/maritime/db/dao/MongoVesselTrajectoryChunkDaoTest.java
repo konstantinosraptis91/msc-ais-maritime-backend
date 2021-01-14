@@ -1,6 +1,7 @@
 package kraptis91.maritime.db.dao;
 
 import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
         MongoVesselTrajectoryChunkDaoTest.class.getResourceAsStream(
             "/sample/maritime/nari_dynamic_sample_2.csv");
 
+    @Ignore
     @Test
     public void testInsertMany() throws Exception {
 

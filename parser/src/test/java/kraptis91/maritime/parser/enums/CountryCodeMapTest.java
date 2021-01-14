@@ -1,5 +1,6 @@
 package kraptis91.maritime.parser.enums;
 
+import kraptis91.maritime.codelists.enums.CountryCode;
 import org.junit.Assert;
 import org.junit.Test;
 

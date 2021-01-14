@@ -3,19 +3,17 @@ package kraptis91.maritime.db.dao.mongodb;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import jakarta.validation.constraints.NotEmpty;
+import kraptis91.maritime.codelists.CodelistsOfBiMap;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
-import kraptis91.maritime.model.PlainVessel;
-import kraptis91.maritime.model.ReceiverMeasurement;
-import kraptis91.maritime.model.Vessel;
+import kraptis91.maritime.model.*;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.enums.MMSICountryCode;
 import kraptis91.maritime.parser.enums.ShipTypes;
 import kraptis91.maritime.parser.exception.CSVParserException;
 import kraptis91.maritime.parser.utils.InputStreamUtils;
-import kraptis91.maritime.model.ModelExtractor;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
@@ -197,16 +195,16 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
             createVesselCollection().find(Filters.eq("vesselName", vesselName)).first());
     }
 
-    @Override
-    public List<Vessel> findVesselsByDestination(String destination, int skip, int limit) {
-        final List<Vessel> vesselList = new ArrayList<>();
-        createVesselCollection()
-            .find(Filters.eq("destination", destination))
-            .skip(skip)
-            .limit(limit)
-            .forEach((Consumer<Vessel>) vesselList::add);
-        return vesselList;
-    }
+//    @Override
+//    public List<Vessel> findVesselsByDestination(String destination, int skip, int limit) {
+//        final List<Vessel> vesselList = new ArrayList<>();
+//        createVesselCollection()
+//            .find(Filters.eq("destination", destination))
+//            .skip(skip)
+//            .limit(limit)
+//            .forEach((Consumer<Vessel>) vesselList::add);
+//        return vesselList;
+//    }
 
     @Override
     public List<Vessel> findVessels(int skip, int limit) {
@@ -233,24 +231,41 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
     }
 
     @Override
-    public List<PlainVessel> findPlainVesselByCountryName(String country, int skip, int limit) {
+    public List<PlainVessel> findPlainVesselByCountryCode(String countryCode, int skip, int limit) {
+
         final List<PlainVessel> vesselList = new ArrayList<>();
-        createDocumentCollection()
-            .find(Filters.eq("country", country))
-            .projection(createPlainVesselDocument())
-            .skip(skip)
-            .limit(limit)
-            .map(ModelExtractor::extractPlainVessel)
-            .forEach((Consumer<PlainVessel>) vesselList::add);
+        String codeToUpperCase = countryCode.toUpperCase();
+
+        try {
+            createDocumentCollection()
+                .find(Filters.eq("country",
+                    CodelistsOfBiMap.COUNTRY_CODE_MAP.getOptionalValueForId(codeToUpperCase)
+                        .orElseThrow(() -> new NoSuchElementException(
+                            "ERROR... Country code bimap does not contain country code " + codeToUpperCase))
+                ))
+                .projection(createPlainVesselDocument())
+                .skip(skip)
+                .limit(limit)
+                .map(ModelExtractor::extractPlainVessel)
+                .forEach((Consumer<PlainVessel>) vesselList::add);
+        } catch (NoSuchElementException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
         return vesselList;
     }
 
     @Override
-    public List<PlainVessel> findPlainVessels(String shipType, String country, int skip, int limit) {
+    public List<PlainVessel> findPlainVessels(String shipType, String countryCode, int skip, int limit) {
+
         final List<PlainVessel> vesselList = new ArrayList<>();
+        String codeToUpperCase = countryCode.toUpperCase();
+
         createDocumentCollection()
             .find(Filters.and(
-                Filters.eq("country", country),
+                Filters.eq("country",
+                    CodelistsOfBiMap.COUNTRY_CODE_MAP.getOptionalValueForId(codeToUpperCase)
+                        .orElseThrow(() -> new NoSuchElementException(
+                            "ERROR... Country code bimap does not contain country code " + codeToUpperCase))),
                 Filters.eq("shipType", shipType)
             ))
             .projection(createPlainVesselDocument())
