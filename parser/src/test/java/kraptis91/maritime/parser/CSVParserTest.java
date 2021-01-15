@@ -3,6 +3,7 @@ package kraptis91.maritime.parser;
 // import com.opencsv.CSVParserBuilder;
 // import com.opencsv.CSVReader;
 // import com.opencsv.CSVReaderBuilder;
+
 import kraptis91.maritime.parser.dto.csv.NariDynamicDto;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
 import kraptis91.maritime.parser.dto.csv.SeaStateForecastDto;
@@ -10,8 +11,10 @@ import kraptis91.maritime.parser.utils.CSVParserUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.*;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 9/12/2020. */
 public class CSVParserTest {
@@ -51,6 +54,7 @@ public class CSVParserTest {
     }
   }
 
+  @Ignore
   @Test
   public void testExtractNariStaticDto() throws Exception {
 
@@ -128,6 +132,7 @@ public class CSVParserTest {
     System.out.println("Lines read " + linesRead);
   }
 
+  @Ignore
   @Test
   public void testBreakAtCommas() throws Exception {
     //        String line =

@@ -26,6 +26,7 @@ public class MongoPortDaoTest {
         dao.insertMany(ports);
     }
 
+    @Ignore
     @Test
     public void testFindNearPorts() {
 

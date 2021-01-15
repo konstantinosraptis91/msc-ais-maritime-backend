@@ -30,6 +30,7 @@ public class JSONParserTest {
         JSONParser.writeMapAsJSON(mmsiCounterMap, "D:/Downloads/mmsi-counter-map-sample.json");
     }
 
+    @Ignore
     @Test
     public void testCreateNariDynamicSample2() throws Exception {
 

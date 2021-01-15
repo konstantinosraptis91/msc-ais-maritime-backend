@@ -20,7 +20,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
         MongoVesselTrajectoryChunkDaoTest.class.getResourceAsStream(
             "/sample/maritime/nari_dynamic_sample_2.csv");
 
-    // @Ignore
+    @Ignore
     @Test
     public void testInsertMany() throws Exception {
 
@@ -31,18 +31,21 @@ public class MongoVesselTrajectoryChunkDaoTest {
         dao.insertMany(isBig);
     }
 
+    @Ignore
     @Test
     public void testFindVesselTrajectoryChunksByVesselName() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         dao.findVesselTrajectory("F/V EL AMANECER").forEach(System.out::println);
     }
 
+    @Ignore
     @Test
     public void testFindVesselTrajectoryByMMSI() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         dao.findVesselTrajectory(228157000).forEach(System.out::println);
     }
 
+    @Ignore
     @Test
     public void testFindNearVesselsByMMSI() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
@@ -50,6 +53,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
             .forEach(System.out::println);
     }
 
+    @Ignore
     @Test
     public void testFindNearVesselsByMMSIWithOptionParam() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
@@ -64,6 +68,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
             .forEach(System.out::println);
     }
 
+    @Ignore
     @Test
     public void testFindNearVessels() {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();

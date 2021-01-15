@@ -5,11 +5,13 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import kraptis91.maritime.db.enums.MongoDB;
 import org.bson.Document;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 30/11/2020. */
 public class MongoDBTest {
 
+  @Ignore
   @Test
   public void testMaritimeInstance() throws Exception {
     // System.out.println(MongoDB.MARITIME.getDatabase().listCollectionNames().first());

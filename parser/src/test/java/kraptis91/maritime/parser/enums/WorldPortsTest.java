@@ -1,6 +1,6 @@
 package kraptis91.maritime.parser.enums;
 
-import kraptis91.maritime.parser.dto.csv.PortDto;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -10,12 +10,14 @@ public class WorldPortsTest {
 
     @Test
     public void testGetPortNames() {
-        WorldPorts.INSTANCE.getPortNames().forEach(System.out::println);
+        // WorldPorts.INSTANCE.getPortNames().forEach(System.out::println);
+        Assert.assertFalse(WorldPorts.INSTANCE.getPortNames().isEmpty());
     }
 
     @Test
     public void testGetPortDto() {
-        WorldPorts.INSTANCE.getPortDtoList().forEach(dto -> System.out.println(dto.toString()));
+        // WorldPorts.INSTANCE.getPortDtoList().forEach(dto -> System.out.println(dto.toString()));
+        Assert.assertFalse(WorldPorts.INSTANCE.getPortDtoList().isEmpty());
     }
 
 }
