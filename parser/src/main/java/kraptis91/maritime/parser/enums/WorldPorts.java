@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -27,12 +26,12 @@ public enum WorldPorts {
 
     WorldPorts(String filename) {
 
+        LOGGER.info("Initializing World Ports from internal resource: " + filename);
+
         portDtoList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
             new InputStreamReader(WorldPorts.class.getResourceAsStream(filename)))) {
-
-            LOGGER.info("Initializing World Ports from " + filename + " START");
 
             final CSVParser parser = new CSVParser();
 

@@ -9,10 +9,12 @@ import kraptis91.maritime.db.dao.PortDao;
 import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
+import kraptis91.maritime.db.enums.TransactionStatus;
 import kraptis91.maritime.model.Port;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,9 +34,24 @@ public class MongoPortDao implements PortDao, DocumentBuilder {
     }
 
     @Override
-    public void insertMany(List<Port> ports) {
-        MongoCollection<Port> collection = createWorldPortCollection();
-        collection.insertMany(ports);
+    public void insertMany(List<Port> portList) {
+
+        LOGGER.info("Inserting " + portList.size() + " ports to db START.");
+        long startTime = System.currentTimeMillis();
+        TransactionStatus status = TransactionStatus.FAILED;
+
+        if (!portList.isEmpty()) {
+            MongoCollection<Port> collection = createWorldPortCollection();
+            collection.insertMany(portList);
+            status = TransactionStatus.SUCCESS;
+        } else {
+            LOGGER.log(Level.WARNING, "Trying to insert an empty port list to db...");
+        }
+
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Inserting " + portList.size()
+            + " ports to db FINISH at [" + (endTime - startTime) + "]"
+            + " with status: " + status.name());
     }
 
     @Override
@@ -45,6 +62,9 @@ public class MongoPortDao implements PortDao, DocumentBuilder {
             .skip(skip)
             .limit(limit)
             .forEach((Consumer<Port>) portList::add);
+
+        LOGGER.info("Found " + portList.size() + " ports");
+
         return portList;
     }
 
@@ -52,24 +72,22 @@ public class MongoPortDao implements PortDao, DocumentBuilder {
     public List<Port> findPortsByCountryCode(String countryCode) {
 
         final List<Port> portList = new ArrayList<>();
-        String country;
+        String codeToUpperCase = countryCode.toUpperCase();
 
         try {
-            String codeToUpperCase = countryCode.toUpperCase();
-            if (CodelistsOfBiMap.COUNTRY_CODE_MAP.containsKey(codeToUpperCase)) {
-                country = CodelistsOfBiMap.COUNTRY_CODE_MAP.getValueForId(codeToUpperCase);
-            } else {
-                throw new IllegalArgumentException("ERROR... Country code bimap does not contain " + codeToUpperCase);
-            }
-
-        } catch (IllegalArgumentException e) {
+            createWorldPortCollection()
+                .find(Filters.eq("country",
+                    CodelistsOfBiMap.COUNTRY_CODE_MAP.getOptionalValueForId(codeToUpperCase)
+                        .orElseThrow(() -> new NoSuchElementException(
+                            "ERROR... Country code bimap does not contain country code " + codeToUpperCase))))
+                .forEach((Consumer<Port>) portList::add);
+        } catch (NoSuchElementException e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
-            return portList;
         }
 
-        createWorldPortCollection()
-            .find(Filters.eq("country", country))
-            .forEach((Consumer<Port>) portList::add);
+        LOGGER.info("Found " + portList.size()
+            + " ports for countryCode: " + countryCode);
+
         return portList;
     }
 
@@ -80,13 +98,19 @@ public class MongoPortDao implements PortDao, DocumentBuilder {
                                     double minDistance, int skip, int limit) {
 
         final Point refPoint = new Point(new Position(longitude, latitude));
-        final List<Port> portList = new ArrayList<>();
+        final List<Port> nearPorts = new ArrayList<>();
         createWorldPortCollection()
             .find(Filters.near("geoPoint", refPoint, maxDistance, minDistance))
             .skip(skip)
             .limit(limit)
-            .forEach((Consumer<Port>) portList::add);
-        return portList;
+            .forEach((Consumer<Port>) nearPorts::add);
+
+        LOGGER.info("Found " + nearPorts.size() + " ports near ["
+            + longitude + ", " + latitude + "] at max distance: "
+            + maxDistance + " meters, min distance: "
+            + minDistance + " meters");
+
+        return nearPorts;
     }
 
     @Override

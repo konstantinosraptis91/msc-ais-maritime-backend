@@ -7,6 +7,7 @@ import kraptis91.maritime.codelists.CodelistsOfBiMap;
 import kraptis91.maritime.db.dao.VesselDao;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
+import kraptis91.maritime.db.enums.TransactionStatus;
 import kraptis91.maritime.model.*;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.csv.NariStaticDto;
@@ -118,18 +119,44 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
 
     @Override
     public void insertMany(@NotEmpty Set<Vessel> vesselSet) {
-        // LOGGER.info("Inserting data to db START.");
-        MongoCollection<Vessel> collection = createVesselCollection();
-        collection.insertMany(new ArrayList<>(vesselSet));
-        // LOGGER.info("Inserting data to db END.");
+
+        LOGGER.info("Inserting " + vesselSet.size() + " vessels to db START.");
+        long startTime = System.currentTimeMillis();
+        TransactionStatus status = TransactionStatus.FAILED;
+
+        if (!vesselSet.isEmpty()) {
+            MongoCollection<Vessel> collection = createVesselCollection();
+            collection.insertMany(new ArrayList<>(vesselSet));
+            status = TransactionStatus.SUCCESS;
+        } else {
+            LOGGER.log(Level.WARNING, "Trying to insert an empty vessel set to db...");
+        }
+
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Inserting " + vesselSet.size()
+            + " vessels to db FINISH at [" + (endTime - startTime) + "]"
+            + " with status: " + status.name());
     }
 
     @Override
     public void insertMany(@NotEmpty List<Vessel> vesselList) {
-        // LOGGER.info("Inserting data to db START.");
-        MongoCollection<Vessel> collection = createVesselCollection();
-        collection.insertMany(vesselList);
-        // LOGGER.info("Inserting data to db END.");
+
+        LOGGER.info("Inserting " + vesselList.size() + " vessels to db START.");
+        long startTime = System.currentTimeMillis();
+        TransactionStatus status = TransactionStatus.FAILED;
+
+        if (!vesselList.isEmpty()) {
+            MongoCollection<Vessel> collection = createVesselCollection();
+            collection.insertMany(vesselList);
+            status = TransactionStatus.SUCCESS;
+        } else {
+            LOGGER.log(Level.WARNING, "Trying to insert an empty vessel list to db...");
+        }
+
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Inserting " + vesselList.size()
+            + " vessels to db FINISH at [" + (endTime - startTime) + "]"
+            + " with status: " + status.name());
     }
 
     @Override
@@ -160,19 +187,27 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
 
     @Override
     public List<Vessel> findVesselsByType(String shipType, int skip, int limit) {
+
         final List<Vessel> vesselList = new ArrayList<>();
+
         createVesselCollection()
             .find(Filters.eq("shipType", shipType))
             .skip(skip)
             .limit(limit)
             .forEach((Consumer<Vessel>) vesselList::add);
+
+        LOGGER.info("Found " + vesselList.size()
+            + " vessels with ship type: " + shipType);
+
         return vesselList;
     }
 
     @Override
     public Optional<Vessel> findVesselByName(String vesselName) {
         return Optional.ofNullable(
-            createVesselCollection().find(Filters.eq("vesselName", vesselName)).first());
+            createVesselCollection()
+                .find(Filters.eq("vesselName", vesselName))
+                .first());
     }
 
     @Override
@@ -183,12 +218,17 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
             .skip(skip)
             .limit(limit)
             .forEach((Consumer<Vessel>) vesselList::add);
+
+        LOGGER.info("Found " + vesselList.size() + " vessels");
+
         return vesselList;
     }
 
     @Override
     public List<PlainVessel> findPlainVesselsByType(String shipType, int skip, int limit) {
+
         final List<PlainVessel> vesselList = new ArrayList<>();
+
         createDocumentCollection()
             .find(Filters.eq("shipType", shipType))
             .projection(createPlainVesselDocument())
@@ -196,6 +236,10 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
             .limit(limit)
             .map(ModelExtractor::extractPlainVessel)
             .forEach((Consumer<PlainVessel>) vesselList::add);
+
+        LOGGER.info("Found " + vesselList.size()
+            + " plain vessels with ship type: " + shipType);
+
         return vesselList;
     }
 
@@ -220,6 +264,10 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
         } catch (NoSuchElementException e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
+
+        LOGGER.info("Found " + vesselList.size()
+            + " plain vessels for countryCode: " + countryCode);
+
         return vesselList;
     }
 
@@ -229,19 +277,28 @@ public class MongoVesselDao implements VesselDao, DocumentBuilder {
         final List<PlainVessel> vesselList = new ArrayList<>();
         String codeToUpperCase = countryCode.toUpperCase();
 
-        createDocumentCollection()
-            .find(Filters.and(
-                Filters.eq("country",
-                    CodelistsOfBiMap.COUNTRY_CODE_MAP.getOptionalValueForId(codeToUpperCase)
-                        .orElseThrow(() -> new NoSuchElementException(
-                            "ERROR... Country code bimap does not contain country code " + codeToUpperCase))),
-                Filters.eq("shipType", shipType)
-            ))
-            .projection(createPlainVesselDocument())
-            .skip(skip)
-            .limit(limit)
-            .map(ModelExtractor::extractPlainVessel)
-            .forEach((Consumer<PlainVessel>) vesselList::add);
+        try {
+            createDocumentCollection()
+                .find(Filters.and(
+                    Filters.eq("country",
+                        CodelistsOfBiMap.COUNTRY_CODE_MAP.getOptionalValueForId(codeToUpperCase)
+                            .orElseThrow(() -> new NoSuchElementException(
+                                "ERROR... Country code bimap does not contain country code " + codeToUpperCase))),
+                    Filters.eq("shipType", shipType)
+                ))
+                .projection(createPlainVesselDocument())
+                .skip(skip)
+                .limit(limit)
+                .map(ModelExtractor::extractPlainVessel)
+                .forEach((Consumer<PlainVessel>) vesselList::add);
+        } catch (NoSuchElementException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+
+        LOGGER.info("Found " + vesselList.size()
+            + " plain vessels for countryCode: " + countryCode
+            + ", with ship type: " + shipType);
+
         return vesselList;
     }
 }

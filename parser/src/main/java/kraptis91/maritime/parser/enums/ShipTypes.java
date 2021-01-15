@@ -3,13 +3,14 @@ package kraptis91.maritime.parser.enums;
 import kraptis91.maritime.parser.CSVParser;
 import kraptis91.maritime.parser.dto.csv.ShipTypeListDto;
 import kraptis91.maritime.parser.exception.CSVParserException;
-import kraptis91.maritime.parser.utils.InputStreamUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,20 +29,20 @@ public enum ShipTypes {
 
     ShipTypes(String resource) {
 
+        LOGGER.info("Initializing Ship Types from internal resource: " + resource);
+
         shipTypeListDtoList = new ArrayList<>();
 
-        try {
-            LOGGER.info("Initializing Ship Types from " + resource + " START");
-            final InputStream is = ShipTypes.class.getResourceAsStream(resource);
-            final BufferedReader bufferedReader =
-                new BufferedReader(new InputStreamReader(InputStreamUtils.getBufferedInputStream(is)));
+        try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(ShipTypes.class.getResourceAsStream(resource)))) {
+
             final CSVParser parser = new CSVParser();
 
             String line;
             ShipTypeListDto dto;
             boolean isFirstLine = true;
 
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
 
                 // omit first line
                 if (isFirstLine) {

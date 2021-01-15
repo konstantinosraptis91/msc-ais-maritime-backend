@@ -13,6 +13,7 @@ import kraptis91.maritime.db.dao.utils.VesselBuffer;
 import kraptis91.maritime.db.dao.utils.VesselTrajectoryBuffer;
 import kraptis91.maritime.db.enums.MongoDB;
 import kraptis91.maritime.db.enums.MongoDBCollection;
+import kraptis91.maritime.db.enums.TransactionStatus;
 import kraptis91.maritime.db.exceptions.DataException;
 import kraptis91.maritime.model.*;
 import kraptis91.maritime.parser.CSVParser;
@@ -117,36 +118,57 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
 
     @Override
     public void insertMany(List<VesselTrajectoryPointListChunk> trajectoryChunks) {
-        // LOGGER.info("Inserting data to db START.");
+
+        LOGGER.info("Inserting " + trajectoryChunks.size() + " chunks to db START.");
+        long startTime = System.currentTimeMillis();
+        TransactionStatus status = TransactionStatus.FAILED;
+
         if (!trajectoryChunks.isEmpty()) {
             MongoCollection<VesselTrajectoryPointListChunk> collection = createVesselTrajectoryCollection();
             collection.insertMany(trajectoryChunks);
+            status = TransactionStatus.SUCCESS;
         } else {
             LOGGER.log(Level.WARNING, "Trying to insert an empty trajectory chunk list to db...");
         }
-        // LOGGER.info("Inserting data to db END.");
+
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Inserting " + trajectoryChunks.size()
+            + " chunks to db FINISH at [" + (endTime - startTime) + "]"
+            + " with status: " + status.name());
     }
 
     @Override
     public List<VesselTrajectoryChunk> findVesselTrajectory(String vesselName) {
-        final List<VesselTrajectoryChunk> trajectoryPointList = new ArrayList<>();
+
+        final List<VesselTrajectoryChunk> trajectoryChunks = new ArrayList<>();
+
         createDocumentCollection()
             .find(Filters.eq("vesselName", vesselName))
             .projection(createVesselTrajectoryChunkDocument())
             .map(ModelExtractor::extractVesselTrajectoryChunk)
-            .forEach((Consumer<VesselTrajectoryChunk>) trajectoryPointList::add);
-        return trajectoryPointList;
+            .forEach((Consumer<VesselTrajectoryChunk>) trajectoryChunks::add);
+
+        LOGGER.info("Found " + trajectoryChunks.size()
+            + " chunks for vessel with vessel name: " + vesselName);
+
+        return trajectoryChunks;
     }
 
     @Override
     public List<VesselTrajectoryChunk> findVesselTrajectory(int mmsi) {
-        final List<VesselTrajectoryChunk> trajectoryPointList = new ArrayList<>();
+
+        final List<VesselTrajectoryChunk> trajectoryChunks = new ArrayList<>();
+
         createDocumentCollection()
             .find(Filters.eq("mmsi", mmsi))
             .projection(createVesselTrajectoryChunkDocument())
             .map(ModelExtractor::extractVesselTrajectoryChunk)
-            .forEach((Consumer<VesselTrajectoryChunk>) trajectoryPointList::add);
-        return trajectoryPointList;
+            .forEach((Consumer<VesselTrajectoryChunk>) trajectoryChunks::add);
+
+        LOGGER.info("Found " + trajectoryChunks.size()
+            + " chunks for vessel with mmsi: " + mmsi);
+
+        return trajectoryChunks;
     }
 
     @Override
@@ -161,6 +183,11 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
         createDocumentCollection()
             .distinct("mmsi", Filters.near("avgGeoPoint", refPoint, maxDistance, minDistance), Integer.class)
             .forEach((Consumer<Integer>) nearVesselsMMSIList::add);
+
+        LOGGER.info("Found " + nearVesselsMMSIList.size() + " vessels mmsi near ["
+            + longitude + ", " + latitude + "] at max distance: "
+            + maxDistance + " meters, min distance: "
+            + minDistance + " meters");
 
         return nearVesselsMMSIList;
     }
@@ -187,6 +214,11 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
                     Aggregates.limit(options.getLimit())))
             .map(document -> document.getInteger("mmsi"))
             .forEach((Consumer<Integer>) nearVesselsMMSIList::add);
+
+        LOGGER.info("Found " + nearVesselsMMSIList.size() + " vessels mmsi near ["
+            + options.getLongitude() + ", " + options.getLatitude() + "] at max distance: "
+            + options.getMaxDistance() + " meters, min distance: "
+            + options.getMinDistance() + " meters");
 
         return nearVesselsMMSIList;
     }
@@ -219,7 +251,9 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
             .forEach((Consumer<PlainVessel>) nearVessels::add);
 
         LOGGER.info("Found " + nearVessels.size() + " vessels near ["
-            + options.getLongitude() + ", " + options.getLatitude() + "]");
+            + options.getLongitude() + ", " + options.getLatitude() + "] at max distance: "
+            + options.getMaxDistance() + " meters, min distance: "
+            + options.getMinDistance() + " meters");
 
         return nearVessels;
     }
