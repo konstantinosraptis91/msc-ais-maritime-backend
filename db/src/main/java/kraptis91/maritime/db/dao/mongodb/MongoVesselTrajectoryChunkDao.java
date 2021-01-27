@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Position;
+import com.mongodb.client.result.DeleteResult;
 import kraptis91.maritime.db.dao.VesselTrajectoryChunkDao;
 import kraptis91.maritime.db.dao.mongodb.query.utils.NearQueryOptions;
 import kraptis91.maritime.db.dao.utils.VesselBuffer;
@@ -52,6 +53,25 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
             .getDatabase()
             .getCollection(
                 MongoDBCollection.VESSEL_TRAJECTORY.getCollectionName(), Document.class);
+    }
+
+    @Override
+    public void drop() {
+        MongoCollection<VesselTrajectoryPointListChunk> collection = createVesselTrajectoryCollection();
+        collection.drop();
+    }
+
+    @Override
+    public long deleteMany() {
+        MongoCollection<VesselTrajectoryPointListChunk> collection = createVesselTrajectoryCollection();
+        DeleteResult result = collection.deleteMany(new Document());
+        return result.getDeletedCount();
+    }
+
+    @Override
+    public long count() {
+        MongoCollection<VesselTrajectoryPointListChunk> collection = createVesselTrajectoryCollection();
+        return collection.countDocuments();
     }
 
     @Override
@@ -133,8 +153,8 @@ public class MongoVesselTrajectoryChunkDao implements VesselTrajectoryChunkDao, 
 
         long endTime = System.currentTimeMillis();
         LOGGER.info("Inserting " + trajectoryChunks.size()
-            + " chunks to db FINISH at [" + (endTime - startTime) + "]"
-            + " with status: " + status.name());
+            + " chunks to db FINISH at " + (endTime - startTime) + " ms"
+            + " with status: [" + status.name() + "]");
     }
 
     @Override

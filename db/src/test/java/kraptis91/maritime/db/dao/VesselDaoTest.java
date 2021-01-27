@@ -3,6 +3,7 @@ package kraptis91.maritime.db.dao;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -21,12 +22,11 @@ public class VesselDaoTest {
         //        new FileInputStream(
         //            DirectoryUtils.getDefaultDownloadsDirectory() + "/ais-data/nari_static.csv");
 
-        //    InputStream isBig =
-        //        new
-        // FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
+        InputStream isBig =
+            new FileInputStream("D:/NetbeansProjects/maritime-nosql/data/ais-data/nari_static.csv");
 
         VesselDao dao = DaoFactory.createMongoVesselDao();
-        dao.insertMany(isSample);
+        dao.insertMany(isBig);
     }
 
     @Ignore

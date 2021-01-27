@@ -19,6 +19,12 @@ public interface VesselTrajectoryChunkDao {
         insertMany(is, 150000);
     }
 
+    void drop() throws Exception;
+
+    long deleteMany() throws Exception;
+
+    long count() throws Exception;
+
     void insertMany(List<VesselTrajectoryPointListChunk> trajectoryPointListChunkList);
 
     List<VesselTrajectoryChunk> findVesselTrajectory(String vesselName);

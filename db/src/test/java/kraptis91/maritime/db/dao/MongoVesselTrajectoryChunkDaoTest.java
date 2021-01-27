@@ -20,7 +20,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
         MongoVesselTrajectoryChunkDaoTest.class.getResourceAsStream(
             "/sample/maritime/nari_dynamic_sample_2.csv");
 
-    @Ignore
+    // @Ignore
     @Test
     public void testInsertMany() throws Exception {
 
@@ -30,6 +30,21 @@ public class MongoVesselTrajectoryChunkDaoTest {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
         dao.insertMany(isBig);
     }
+
+    // @Ignore
+    @Test
+    public void testCount() throws Exception {
+        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+        System.out.println("Number of Documents in vesselTrajectoryChunks collection: " + dao.count());
+    }
+
+    // @Ignore
+//    @Test
+//    public void testDeleteMany() throws Exception {
+//        VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();
+//        System.out.println("Deleting all in the vesselTrajectoryChunks collection: ");
+//        System.out.println("Documents deleted: " + dao.deleteMany());
+//    }
 
     @Ignore
     @Test
