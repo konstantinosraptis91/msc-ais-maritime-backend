@@ -13,3 +13,16 @@ dependencies {
 application {
     mainClass.set("kraptis91.maritime.api.Application")
 }
+
+tasks.register<Jar>("uberJar") {
+    archiveClassifier.set("uber")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.get().output)
+    manifest {
+        attributes(mapOf("Main-Class" to "ms.ais.weather.api.Application"))
+    }
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
