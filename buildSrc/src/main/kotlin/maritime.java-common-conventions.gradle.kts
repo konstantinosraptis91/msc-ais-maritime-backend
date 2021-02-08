@@ -3,23 +3,8 @@ plugins {
     `maven-publish`
 }
 
-group = "kraptis91.maritime"
-version = "1.0"
-
-allprojects {
-
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                from(components["java"])
-            }
-        }
-    }
-
-}
-
 repositories {
-    // mavenLocal()
+    mavenLocal()
     mavenCentral()
     jcenter()
 }
