@@ -17,7 +17,8 @@ public class ServerConfig {
 
     static {
         final String confFileName = "server.conf";
-        final String confFilePath = SystemUtils.getUserDir().getParentFile().getParent()
+        final String confFilePath = SystemUtils.getUserDir()
+            // .getParentFile().getParent()
             + "/" + confFileName;
 
         LOGGER.info("Mongo DB conf file name: " + confFileName);
