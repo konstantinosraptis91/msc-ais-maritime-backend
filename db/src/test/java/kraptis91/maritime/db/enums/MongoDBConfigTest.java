@@ -1,5 +1,6 @@
 package kraptis91.maritime.db.enums;
 
+import kraptis91.maritime.db.dao.mongodb.conf.MongoDBConfig;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class MongoDBConfigTest {
   @Ignore
   @Test
   public void testGetPasswordAsCharArray() throws Exception {
-    for (char c : MongoDBConfig.INSTANCE.getPassword()) {
+    for (char c : MongoDBConfig.getPassword()) {
       System.out.println(c);
     }
   }

@@ -8,6 +8,7 @@ import kraptis91.maritime.db.dao.mongodb.codec.OceanConditionsCodec;
 import kraptis91.maritime.db.dao.mongodb.codec.PortCodec;
 import kraptis91.maritime.db.dao.mongodb.codec.VesselCodec;
 import kraptis91.maritime.db.dao.mongodb.codec.VesselTrajectoryPointListChunkCodec;
+import kraptis91.maritime.db.dao.mongodb.conf.MongoDBConfig;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -71,15 +72,15 @@ public enum MongoDB {
 
     private String createConnectionString() {
 
-        return MongoDBConfig.INSTANCE.useRemote()
+        return MongoDBConfig.useRemote()
             ? "mongodb://"
             //+ MongoDBConfig.INSTANCE.getUser()
             //+ ":"
             //+ String.valueOf(MongoDBConfig.INSTANCE.getPassword())
             //+ "@"
-            + MongoDBConfig.INSTANCE.getHost()
+            + MongoDBConfig.getHost()
             + ":"
-            + MongoDBConfig.INSTANCE.getPort()
-            : "mongodb://" + MongoDBConfig.INSTANCE.getHost() + ":" + MongoDBConfig.INSTANCE.getPort();
+            + MongoDBConfig.getPort()
+            : "mongodb://" + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort();
     }
 }
