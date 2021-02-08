@@ -19,25 +19,27 @@ public class Application {
         Javalin app = Javalin.create(JavalinConfig::enableCorsForAllOrigins)
             .start(ServerConfig.getPort());
 
-        app.get("/", ctx -> ctx.result("Server Is Up and Running..."));
-        app.get("/vessels", VesselController.getVessels);
-        app.get("/vessels/types", VesselController.getShipTypes);
-        app.get("/vessels/type/:type", VesselController.getPlainVesselsByShipType);
-        app.get("/vessels/country/:code", VesselController.getPlainVesselsByCountryCode);
-        app.get("/vessels/type/:type/country/:code", VesselController.getPlainVessels);
-        app.get("/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
-        app.get("/vessels/name/:name", VesselController.getVesselByName);
-        app.get("/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
-        app.get("/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
-        app.get("/vessels/trajectory/keplergl/mmsi/:mmsi", VesselController.getKeplerGlVesselTrajectoryByMMSI);
-        app.get("/vessels/near/lon/:lon/lat/:lat/dist/:dist", VesselController.getNearVessels);
+        final String baseURL = "/msc/ais/maritime/api";
 
-        app.get("/ports", PortController.getPorts);
-        app.get("/ports/country/:code", PortController.getPortsByCountryCode);
-        app.get("/ports/near/lon/:lon/lat/:lat/dist/:dist", PortController.getNearPortsByReferencePoint);
-        app.get("/ports/near/vessel/mmsi/:mmsi/dist/:dist", PortController.getNearPortsByMMSI);
+        app.get(baseURL + "/", ctx -> ctx.result("Server Is Up and Running..."));
+        app.get(baseURL + "/vessels", VesselController.getVessels);
+        app.get(baseURL + "/vessels/types", VesselController.getShipTypes);
+        app.get(baseURL + "/vessels/type/:type", VesselController.getPlainVesselsByShipType);
+        app.get(baseURL + "/vessels/country/:code", VesselController.getPlainVesselsByCountryCode);
+        app.get(baseURL + "/vessels/type/:type/country/:code", VesselController.getPlainVessels);
+        app.get(baseURL + "/vessels/mmsi/:mmsi", VesselController.getVesselByMMSI);
+        app.get(baseURL + "/vessels/name/:name", VesselController.getVesselByName);
+        app.get(baseURL + "/vessels/trajectory/name/:name", VesselController.getVesselTrajectoryByName);
+        app.get(baseURL + "/vessels/trajectory/mmsi/:mmsi", VesselController.getVesselTrajectoryByMMSI);
+        app.get(baseURL + "/vessels/trajectory/keplergl/mmsi/:mmsi", VesselController.getKeplerGlVesselTrajectoryByMMSI);
+        app.get(baseURL + "/vessels/near/lon/:lon/lat/:lat/dist/:dist", VesselController.getNearVessels);
 
-        app.get("/countries", CountryController.getCountriesWith2ACodes);
+        app.get(baseURL + "/ports", PortController.getPorts);
+        app.get(baseURL + "/ports/country/:code", PortController.getPortsByCountryCode);
+        app.get(baseURL + "/ports/near/lon/:lon/lat/:lat/dist/:dist", PortController.getNearPortsByReferencePoint);
+        app.get(baseURL + "/ports/near/vessel/mmsi/:mmsi/dist/:dist", PortController.getNearPortsByMMSI);
+
+        app.get(baseURL + "/countries", CountryController.getCountriesWith2ACodes);
 
         JavalinJackson.configure(
             new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL));
