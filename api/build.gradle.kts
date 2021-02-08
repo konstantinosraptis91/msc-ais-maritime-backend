@@ -19,7 +19,7 @@ tasks.register<Jar>("uberJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.get().output)
     manifest {
-        attributes(mapOf("Main-Class" to "ms.ais.weather.api.Application"))
+        attributes(mapOf("Main-Class" to "kraptis91.maritime.api.Application"))
     }
     dependsOn(configurations.runtimeClasspath)
     from({
