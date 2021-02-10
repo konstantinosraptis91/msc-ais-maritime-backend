@@ -31,7 +31,7 @@ public class MongoVesselTrajectoryChunkDaoTest {
         dao.insertMany(isBig);
     }
 
-    // @Ignore
+    @Ignore
     @Test
     public void testCount() throws Exception {
         VesselTrajectoryChunkDao dao = DaoFactory.createMongoVesselTrajectoryChunkDao();

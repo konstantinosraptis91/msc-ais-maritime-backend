@@ -58,29 +58,30 @@ public enum MongoDB {
         return database;
     }
 
-//    private String createConnectionString() {
-//
-//        return MongoDBConfig.INSTANCE.useRemote()
-//            ? "mongodb+srv://"
-//            + MongoDBConfig.INSTANCE.getUser()
-//            + ":"
-//            + String.valueOf(MongoDBConfig.INSTANCE.getPassword())
-//            + "@"
-//            + MongoDBConfig.INSTANCE.getHost()
-//            : "mongodb://" + MongoDBConfig.INSTANCE.getHost() + ":" + MongoDBConfig.INSTANCE.getPort();
-//    }
-
     private String createConnectionString() {
 
         return MongoDBConfig.useRemote()
+            // ? "mongodb+srv://"
             ? "mongodb://"
-            //+ MongoDBConfig.INSTANCE.getUser()
-            //+ ":"
-            //+ String.valueOf(MongoDBConfig.INSTANCE.getPassword())
-            //+ "@"
-            + MongoDBConfig.getHost()
+            + MongoDBConfig.getUser()
             + ":"
-            + MongoDBConfig.getPort()
+            + String.valueOf(MongoDBConfig.getPassword())
+            + "@"
+            + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort()
             : "mongodb://" + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort();
     }
+
+//    private String createConnectionString() {
+//
+//        return MongoDBConfig.useRemote()
+//            ? "mongodb://"
+//            //+ MongoDBConfig.INSTANCE.getUser()
+//            //+ ":"
+//            //+ String.valueOf(MongoDBConfig.INSTANCE.getPassword())
+//            //+ "@"
+//            + MongoDBConfig.getHost()
+//            + ":"
+//            + MongoDBConfig.getPort()
+//            : "mongodb://" + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort();
+//    }
 }
