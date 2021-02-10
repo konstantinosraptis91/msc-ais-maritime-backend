@@ -15,6 +15,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 30/11/2020.
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public enum MongoDB {
     MARITIME("maritime");
 
+    private final Logger LOGGER = Logger.getLogger(MongoDB.class.getName());
     private final MongoDatabase database;
 
     MongoDB(String dbName) {
@@ -59,6 +61,7 @@ public enum MongoDB {
     }
 
     private String createConnectionString() {
+        LOGGER.info("Connection string is: " + MongoDBConfig.getConnectionString());
         return MongoDBConfig.getConnectionString();
     }
 
