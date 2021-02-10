@@ -19,7 +19,8 @@ public interface DocumentBuilder {
             .append("nPoints", 1)
             .append("avgGeoPoint", new Document()
                 .append("coordinates", 2))
-            .append("avgSpeed", 1);
+            .append("avgSpeed", 1)
+            .append("_id", 0);
     }
 
     default Document createPlainVesselDocument() {
@@ -48,7 +49,8 @@ public interface DocumentBuilder {
                     .append("coordinates", Arrays.asList(longitude, latitude)))
                 .append("$maxDistance", maxDistance))
             .append("key", "avgGeoPoint")
-            .append("distanceField", "dist.calculated"));
+            .append("distanceField", "dist.calculated"))
+            .append("_id", 0);
     }
 
 }
