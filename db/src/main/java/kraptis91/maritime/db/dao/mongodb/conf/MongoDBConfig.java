@@ -33,22 +33,10 @@ public class MongoDBConfig {
 
     }
 
-    public static String getUser() {
-        return useRemote() ? getRemoteConfig().getString("user") : getLocalConfig().getString("user");
-    }
-
-    public static char[] getPassword() {
+    public static String getConnectionString() {
         return useRemote()
-            ? getRemoteConfig().getString("password").toCharArray()
-            : getLocalConfig().getString("password").toCharArray();
-    }
-
-    public static String getHost() {
-        return useRemote() ? getRemoteConfig().getString("host") : getLocalConfig().getString("host");
-    }
-
-    public static int getPort() {
-        return useRemote() ? getRemoteConfig().getInt("port") : getLocalConfig().getInt("port");
+            ? getRemoteConfig().getString("connectionString")
+            : getLocalConfig().getString("connectionString");
     }
 
     public static boolean useRemote() {
