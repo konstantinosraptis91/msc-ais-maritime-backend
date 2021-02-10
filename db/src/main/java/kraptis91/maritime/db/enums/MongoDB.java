@@ -59,29 +59,7 @@ public enum MongoDB {
     }
 
     private String createConnectionString() {
-
-        return MongoDBConfig.useRemote()
-            // ? "mongodb+srv://"
-            ? "mongodb://"
-            + MongoDBConfig.getUser()
-            + ":"
-            + String.valueOf(MongoDBConfig.getPassword())
-            + "@"
-            + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort()
-            : "mongodb://" + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort();
+        return MongoDBConfig.getConnectionString();
     }
 
-//    private String createConnectionString() {
-//
-//        return MongoDBConfig.useRemote()
-//            ? "mongodb://"
-//            //+ MongoDBConfig.INSTANCE.getUser()
-//            //+ ":"
-//            //+ String.valueOf(MongoDBConfig.INSTANCE.getPassword())
-//            //+ "@"
-//            + MongoDBConfig.getHost()
-//            + ":"
-//            + MongoDBConfig.getPort()
-//            : "mongodb://" + MongoDBConfig.getHost() + ":" + MongoDBConfig.getPort();
-//    }
 }
