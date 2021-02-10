@@ -49,8 +49,7 @@ public interface DocumentBuilder {
                     .append("coordinates", Arrays.asList(longitude, latitude)))
                 .append("$maxDistance", maxDistance))
             .append("key", "avgGeoPoint")
-            .append("distanceField", "dist.calculated"))
-            .append("_id", 0);
+            .append("distanceField", "dist.calculated"));
     }
 
 }
